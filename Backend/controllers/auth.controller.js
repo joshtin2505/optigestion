@@ -13,7 +13,8 @@ export const register = async (req, res) => {
             firstName, 
             lastName, 
             userType, 
-            departament, job, 
+            departament, 
+            job, 
             departamentId, 
             user, 
             id,
@@ -47,11 +48,7 @@ export const login = async (req, res) => {
         const token = await crateAccessToken({idDB: userFound._id})
 
         res.cookie('token',token)
-        res.json({
-            idDB: userFound._id,
-            user: userFound.user,
-            password: userFound.password
-        })
+        res.send('Loged')
     } catch (error) {
         res.status(500).json({message: error.message})
     }
@@ -62,4 +59,20 @@ export const logout = (req, res) => {
         expires: new Date(Date.now(0))
     })
     res.status(200).json({message: 'Sesión cerrada'})
+}
+export const profile = async (req,res) => {
+    const userFound = await User.findById(req.user.idDB)
+    if (!userFound) return res.status(400).json({
+        message: 'El usuario no encontrado',
+    })
+    
+    return res.json({
+        id: userFound.id,
+        user: userFound.user,
+        password: userFound.password,
+        firstName: userFound.firstName,
+        lastName: userFound.lastName,
+        job: userFound.job,
+        departament: userFound.departament
+    })
 }

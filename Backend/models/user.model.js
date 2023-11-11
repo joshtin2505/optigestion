@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema({
     userType: {
         type: Number,
         required: true,
-        trim: true
     },
     departament: {
         type: String,
