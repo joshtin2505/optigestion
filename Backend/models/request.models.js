@@ -11,7 +11,7 @@ const reqSchema = new mongoose.Schema({
     },
     state:{
         type: Number,
-        required: true
+        default: 0,
     },
     employeeId:{
         type: Number,
@@ -27,7 +27,7 @@ const reqSchema = new mongoose.Schema({
     },
     operativeComments:{
         type: String,
-        required: true
+        trim: true
     },
     date:{
         type: Date,

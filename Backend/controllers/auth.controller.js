@@ -48,7 +48,12 @@ export const login = async (req, res) => {
         if(!isMatch) return res.status(400).json({message: 'La contraseña es incorrecta'})
 
 
-        const token = await crateAccessToken({idDB: userFound._id, employeeId: userFound.id, departamentId: userFound.departamentId, fullName: userFound.firstName + ' ' + userFound.lastName})
+        const token = await crateAccessToken(
+            {idDB: userFound._id, 
+                employeeId: userFound.id,
+                departamentId: userFound.departamentId,
+                fullName: userFound.firstName + ' ' + userFound.lastName
+            })
 
         res.cookie('token',token)
         res.send('Loged')
@@ -69,13 +74,13 @@ export const profile = async (req,res) => {
         message: 'El usuario no encontrado',
     })
     
-    // return res.json({
-    //     id: userFound.id,
-    //     user: userFound.user,
-    //     password: userFound.password,
-    //     firstName: userFound.firstName,
-    //     lastName: userFound.lastName,
-    //     job: userFound.job,
-    //     departament: userFound.departament
-    // })
+    return res.json({
+        id: userFound.id,
+        user: userFound.user,
+        password: userFound.password,
+        firstName: userFound.firstName,
+        lastName: userFound.lastName,
+        job: userFound.job,
+        departament: userFound.departament
+    })
 }

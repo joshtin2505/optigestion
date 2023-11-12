@@ -1,14 +1,33 @@
 import Request from "../models/request.models.js"
 
 export const getRequirements = async (req,res) => {
-    const requirements = await Request.find()
-    res.json(requirements)
+    try {
+        const requirements = await Request.find({
+            employeeId: req.user.employeeId
+        })
+        if (requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos" })
+        res.json(requirements)
+    } catch (error) {
+        console.log(error)
+    }
 }
-export const getRequest = (req,res) => {
+export const getRequest = async (req,res) => {
+    try {
+        const request = await Request.findById(req.params.id)
+        if (!request) return res.status(404).json({ message: "No se encontró el requerimiento" })
+    } catch (error) {
+        console.log(error)
+    }
 
 }
 export const createRequest = async(req,res) => {
-    const { title, date, description, state, employeeId, employeeFullName, departamentId, operativeComments } = req.body
+    const { 
+        title, 
+        date, 
+        description, 
+        state, 
+        operativeComments 
+    } = req.body
 
     const newRequest = new Request({
         title,
@@ -20,12 +39,36 @@ export const createRequest = async(req,res) => {
         departamentId: req.user.departamentId,
         operativeComments
     })
-    const reqSaved = await newRequest.save()
-    res.json(reqSaved)
+    
+    try {
+        const reqSaved = await newRequest.save()
+        res.json(reqSaved)
+    } catch (error) {
+        console.log(error)
+    }
 }
-export const updateRequest = (req,res) => {
-    res.send('Pagina de borrador')
+export const updateRequest = async (req,res) => {
+
+    try {
+        const request = await Request.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        if (!request) return res.status(404).json({ message: "No se encontró el requerimiento" })
+    } catch (error) {
+        console.log(error)
+    }
 }
-export const deleteRequest = (req,res) => {
-    res.send('Pagina de borrador')
+export const deleteRequest = async(req,res) => {
+    try {
+        const request = await Request.findByIdAndDelete(req.params.id)
+        if (!request) return res.status(404).json({ message: "No se encontro el requerimiento" })
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const deleteAllRequest = async(req,res) => {
+    try {
+        const requirements = await Request.deleteMany()
+        if (!requirements) return res.status(404).json({ message: "No se encontraron requerimientos" })
+    } catch (error) {
+        console.log(error)
+    }
 }

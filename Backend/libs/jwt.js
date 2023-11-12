@@ -7,7 +7,7 @@ export default function crateAccessToken(payload){
             payload,
             SECRET_KEY,
             {
-                expiresIn: "1h"
+                expiresIn: "1d"
             },
             (err, token) => {
                 if (err) reject(err)
