@@ -1,0 +1,10 @@
+{
+    "title": "Random Title",
+    "date": "",
+    "description": "Random description",
+    "state": 1,
+    "employeeId": 12345,
+    "employeeFullName": "Fulano de tal",
+    "departamentId": 123456,
+    "operativeComments": "Comentarios operativos"
+}

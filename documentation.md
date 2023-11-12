@@ -1,6 +1,14 @@
 # Documentación de optiGestion
 
-### como guardar pdf en mongoDB
+## Back-end
+
+### controlers
+
+### models
+
+### routes
+
+### ¿Como guardar pdf en mongoDB?
 ```javascript
 import mongoose from "mongoose"
 

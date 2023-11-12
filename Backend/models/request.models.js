@@ -14,7 +14,7 @@ const reqSchema = new mongoose.Schema({
         required: true
     },
     employeeId:{
-        type: number,
+        type: Number,
         required: true
     },
     employeeFullName:{
@@ -28,6 +28,10 @@ const reqSchema = new mongoose.Schema({
     operativeComments:{
         type: String,
         required: true
+    },
+    date:{
+        type: Date,
+        default: Date.now
     }
 })
 export default mongoose.model("Request", reqSchema)

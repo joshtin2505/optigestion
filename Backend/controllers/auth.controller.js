@@ -21,8 +21,11 @@ export const register = async (req, res) => {
             password: paswordHash
         })
         const userSaved = await newUser.save()
-        const token = await crateAccessToken({idDB: userSaved._id})
-        res.cookie('token',token)
+
+        //por ahora no veo logico, darle un token a un usuario, recien registrado
+
+        /* const token = await crateAccessToken({idDB: userSaved._id, employeeId: userSaved.id, departamentId: userSaved.departamentId, fullName: userSaved.firstName + ' ' + userSaved.lastName})
+        res.cookie('token',token) */
 
         res.json({
             idDB: userSaved._id,
@@ -45,7 +48,7 @@ export const login = async (req, res) => {
         if(!isMatch) return res.status(400).json({message: 'La contraseña es incorrecta'})
 
 
-        const token = await crateAccessToken({idDB: userFound._id})
+        const token = await crateAccessToken({idDB: userFound._id, employeeId: userFound.id, departamentId: userFound.departamentId, fullName: userFound.firstName + ' ' + userFound.lastName})
 
         res.cookie('token',token)
         res.send('Loged')
@@ -66,13 +69,13 @@ export const profile = async (req,res) => {
         message: 'El usuario no encontrado',
     })
     
-    return res.json({
-        id: userFound.id,
-        user: userFound.user,
-        password: userFound.password,
-        firstName: userFound.firstName,
-        lastName: userFound.lastName,
-        job: userFound.job,
-        departament: userFound.departament
-    })
+    // return res.json({
+    //     id: userFound.id,
+    //     user: userFound.user,
+    //     password: userFound.password,
+    //     firstName: userFound.firstName,
+    //     lastName: userFound.lastName,
+    //     job: userFound.job,
+    //     departament: userFound.departament
+    // })
 }
