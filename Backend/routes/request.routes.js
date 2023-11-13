@@ -1,6 +1,6 @@
 import { Router } from "express"
 import {authRequired} from "../middlewares/validateToken.js"
-import { createRequest,deleteRequest,getRequest,getRequirements,updateRequest, deleteAllRequest,sendSavedRequest,getAllRequirements,sendNewRequest } from "../controllers/request.controler.js"
+import { createRequest,deleteRequest,getRequest,getRequirements,updateRequest, deleteAllRequest,sendSavedRequest,getAllRequirements,sendNewRequest,rectorResponse } from "../controllers/request.controler.js"
 import { authRectorRoll } from "../middlewares/validateRoll.js"
 
 const router = Router()
@@ -17,7 +17,7 @@ router.delete('/solicitud/:id', authRequired, deleteRequest)
 router.delete('/solicitud/', authRequired, deleteAllRequest)
 
 // Only visible to the rector
-
 router.get('/solicitud-all', authRequired,authRectorRoll, getAllRequirements)
+router.put('/solicitud-res/:id?', authRequired,authRectorRoll, rectorResponse)
 
 export default router

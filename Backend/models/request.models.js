@@ -32,6 +32,28 @@ const reqSchema = new mongoose.Schema({
     date:{
         type: Date,
         default: Date.now
+    },
+    // rector
+    rectorComment:{
+        type: String,
+        default: "No comment  yet"
+    },
+    // logistic
+    firstPrices:{
+        type: Buffer,
+        required: true
+    },
+    secondPrices:{
+        type: Buffer,
+        required: true
+    },
+    thirdPrices:{
+        type: Buffer,
+        required: true
+    },
+    logisticComments:{
+        type: String,
+        default: "No comments yet"
     }
 })
 export default mongoose.model("Request", reqSchema)

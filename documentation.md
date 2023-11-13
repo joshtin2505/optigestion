@@ -18,6 +18,8 @@
 - ``3 == enviado/pendiente de revicion``
 - ``4 == aprovado/pendiente de cotización``
 - ``5 == rechazado``
+- ``6 == cotizado/pendiente de selcceion de proveedor``
+- ``7 == proveedor selccionado``
 ### ¿Como guardar pdf en mongoDB?
 ```javascript
 import mongoose from "mongoose"
