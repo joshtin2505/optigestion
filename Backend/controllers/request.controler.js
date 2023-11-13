@@ -15,6 +15,7 @@ export const getRequest = async (req,res) => {
     try {
         const request = await Request.findById(req.params.id)
         if (!request) return res.status(404).json({ message: "No se encontró el requerimiento" })
+        res.json(request)
     } catch (error) {
         console.log(error)
     }
@@ -52,6 +53,7 @@ export const updateRequest = async (req,res) => {
     try {
         const request = await Request.findByIdAndUpdate(req.params.id, req.body, { new: true })
         if (!request) return res.status(404).json({ message: "No se encontró el requerimiento" })
+        res.json(request)
     } catch (error) {
         console.log(error)
     }
@@ -60,6 +62,7 @@ export const deleteRequest = async(req,res) => {
     try {
         const request = await Request.findByIdAndDelete(req.params.id)
         if (!request) return res.status(404).json({ message: "No se encontro el requerimiento" })
+        res.sendStatus(204)
     } catch (error) {
         console.log(error)
     }
@@ -68,6 +71,8 @@ export const deleteAllRequest = async(req,res) => {
     try {
         const requirements = await Request.deleteMany()
         if (!requirements) return res.status(404).json({ message: "No se encontraron requerimientos" })
+        res.sendStatus(204)
+
     } catch (error) {
         console.log(error)
     }
