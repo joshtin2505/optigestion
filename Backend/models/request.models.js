@@ -11,7 +11,7 @@ const reqSchema = new mongoose.Schema({
     },
     state:{
         type: Number,
-        default: 0,
+        default: 1,
     },
     employeeId:{
         type: Number,

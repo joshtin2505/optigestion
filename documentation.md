@@ -7,7 +7,17 @@
 ### models
 
 ### routes
-
+## Roll
+- ``1 == Rector``
+- ``2 == logistico``
+- ``3 == Operativo``
+## Requirements Status
+- ``0 == papelera``
+- ``1 == borrador``
+- ``2 == archivado``
+- ``3 == enviado/pendiente de revicion``
+- ``4 == aprovado/pendiente de cotización``
+- ``5 == rechazado``
 ### ¿Como guardar pdf en mongoDB?
 ```javascript
 import mongoose from "mongoose"

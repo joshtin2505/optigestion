@@ -1,16 +1,12 @@
 [
     {
         "title": "Random Title",
-        "date": "",
         "description": "Random description",
-        "state": 0,
         "operativeComments": "Comentarios operativos"
     },
     {
         "title": "Random Title #2",
-        "date": "",
         "description": "Random description #2",
-        "state": 0,
         "operativeComments": "Comentarios operativos "
     }
 ]

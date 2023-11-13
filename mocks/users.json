@@ -1,22 +1,42 @@
 [{
     "firstName": "alonso",
     "lastName": "piedraita",
-    "userType": 0,
+    "roll": 3,
     "departament": "Developer Team",
     "job": "Full Stack Devoloper",
     "departamentId": 1209,
     "id": 1212,
     "user": "Alonsho",
     "password":"lotsoP1212"
-  },
-  {
+  },{
     "firstName": "pancho",
     "lastName": "mendez",
-    "userType": 2,
+    "roll": 3,
     "departament": "Developer Team",
     "job": "Full Stack Devoloper",
     "departamentId": 1201,
     "id": 1312,
     "user": "pancho12",
     "password":"Pancho312"
-  }]
+  },{
+    "firstName": "german",
+    "lastName": "garmendia",
+    "roll": 1,
+    "departament": "Direccion",
+    "job": "rector",
+    "departamentId": 1010,
+    "id": 1026,
+    "user": "germangadi",
+    "password":"german12"
+  },{
+    "firstName": "vergoglio",
+    "lastName": "antino",
+    "roll": 2,
+    "departament": "logistica",
+    "job": "Jefe logistico",
+    "departamentId": 1325,
+    "id": 1310,
+    "user": "vergoanti",
+    "password":"vergoglio13"
+  }
+]

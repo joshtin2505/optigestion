@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import crateAccessToken from '../libs/jwt.js'
 
 export const register = async (req, res) => {
-    const {firstName, lastName, userType, departament, job, departamentId, user, id, password} = req.body
+    const {firstName, lastName, roll, departament, job, departamentId, user, id, password} = req.body
     
     try {
 
@@ -12,7 +12,7 @@ export const register = async (req, res) => {
         const newUser = new User({
             firstName, 
             lastName, 
-            userType, 
+            roll, 
             departament, 
             job, 
             departamentId, 
@@ -49,10 +49,12 @@ export const login = async (req, res) => {
 
 
         const token = await crateAccessToken(
-            {idDB: userFound._id, 
+            {
+                idDB: userFound._id, 
                 employeeId: userFound.id,
                 departamentId: userFound.departamentId,
-                fullName: userFound.firstName + ' ' + userFound.lastName
+                fullName: userFound.firstName + ' ' + userFound.lastName,
+                roll: userFound.roll
             })
 
         res.cookie('token',token)
@@ -81,6 +83,7 @@ export const profile = async (req,res) => {
         firstName: userFound.firstName,
         lastName: userFound.lastName,
         job: userFound.job,
-        departament: userFound.departament
+        departament: userFound.departament,
+        roll: userFound.roll
     })
 }

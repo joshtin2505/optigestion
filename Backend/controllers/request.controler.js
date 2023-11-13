@@ -1,5 +1,6 @@
 import Request from "../models/request.models.js"
 
+// Basics Methods of the requirements
 export const getRequirements = async (req,res) => {
     try {
         const requirements = await Request.find({
@@ -58,6 +59,48 @@ export const updateRequest = async (req,res) => {
         console.log(error)
     }
 }
+export const sendSavedRequest = async (req,res) => {
+    try {
+        const requestSent = await Request.findByIdAndUpdate(req.params.id, { state: 3 }, { new: true })
+        if (!requestSent) return res.status(404).json({ message: "No se pudo enviar el requerimiento" })
+        return res.json(requestSent)
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const sendNewRequest = async (req,res) => {
+    try {
+        // 
+        const { 
+            title, 
+            date, 
+            description, 
+            operativeComments 
+        } = req.body
+    
+        const newRequest = new Request({
+            title,
+            date,
+            description,
+            state: 3,
+            employeeId: req.user.employeeId ,
+            employeeFullName: req.user.fullName,
+            departamentId: req.user.departamentId,
+            operativeComments
+        })
+        
+        try {
+            const requestSent = await newRequest.save()
+            if (!requestSent) return res.status(404).json({ message: "No se pudo enviar el requerimiento" })
+            return res.json(requestSent)
+        } catch (error) {
+            console.log(error)
+        }
+        // 
+    } catch (error) {
+        console.log(error)
+    }
+}
 export const deleteRequest = async(req,res) => {
     try {
         const request = await Request.findByIdAndDelete(req.params.id)
@@ -73,6 +116,19 @@ export const deleteAllRequest = async(req,res) => {
         if (!requirements) return res.status(404).json({ message: "No se encontraron requerimientos" })
         res.sendStatus(204)
 
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// Rector Methods of the requirements
+export const getAllRequirements = async (req,res) => {
+    try {
+        const requirements = await Request.find({
+            state: 3
+        })
+        if (requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos" })
+        res.json(requirements)
     } catch (error) {
         console.log(error)
     }
