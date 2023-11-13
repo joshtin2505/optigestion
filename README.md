@@ -2,6 +2,7 @@
 
 ## Perndientes
 - **Para todos los usuarios**
+    <br>
     ✅ poner los metodos/funciones que hacen falta, para todos los usuarios 
     - poner que el usuario, pueda ver:
     <br>
