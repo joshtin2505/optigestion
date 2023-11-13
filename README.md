@@ -15,7 +15,7 @@
         ✅ enviados
         <br>
         ✅ respondidos -> (aprobados, rechazados)
-    - poner que el usuario pueda ver sus datos
+    ✅ poner que el usuario pueda ver sus datos
 - **Logistico**
     <br>
     ✅ poner que el logistico puda ver los requerimientos aprovados de los operativos
