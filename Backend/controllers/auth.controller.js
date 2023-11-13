@@ -87,3 +87,27 @@ export const profile = async (req,res) => {
         roll: userFound.roll
     })
 }
+export const updateUser = async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.user.idDB, req.body, {new: true})
+        if (!updatedUser) return res.status(400).json({message: 'No se pudo Actualizar el usuario'})
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const deleteUser = async (req, res) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.user.idDB)
+        if (!deletedUser) return res.status(400).json({message: 'No se pudo eliminar el usuario'})
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getUsers = async (req, res) => {
+    try {
+        const users = await User.find()
+        if (!users) return res.status(400).json({message: 'No se encontraron usuarios'})
+    } catch (error) {
+        console.log(error)
+    }
+}
