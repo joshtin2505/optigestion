@@ -20,7 +20,7 @@ export const register = async (req, res) => {
             id,
             password: paswordHash
         })
-        const userSaved = await newUser.save()
+        await newUser.save()
 
         //por ahora no veo logico, darle un token a un usuario, recien registrado
 
@@ -28,12 +28,11 @@ export const register = async (req, res) => {
         res.cookie('token',token) */
 
         res.json({
-            idDB: userSaved._id,
-            user: userSaved.user,
-            password: userSaved.password
+            status: 200,
+            message: 'Usuario registrado correctamente',
         })
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({message: error.message, errorMessage: 'Error al registrar el usuario'})
     }
 }
 export const login = async (req, res) => {
