@@ -4,10 +4,18 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 :root{
-  color: rgba(255, 255, 255, 0.87);  
-  background-color: #242424;
+  --lightPrimary: #ECECEC;
+  --lightSecond: #1287D6;
+  --lightThird: #6B6B6B;
+  --lightHighLight: #ED4B4B;
+  --lightStroke: #2C2C2C;
+  color: #2C2C2C;  
+  
 }
 
+body{
+  background-color: var(--lightPrimary);
+}
 
 input{
   outline: none;
