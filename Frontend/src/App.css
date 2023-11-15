@@ -1,3 +1,7 @@
+*{
+    padding: 0;
+    margin: 0;
+}
 .reg-container {
     display: grid;
     gap: 8px;
@@ -64,4 +68,20 @@
     grid-template-rows: repeat(2, auto); 
     gap: 4px;
   }
-  
+header{
+    padding: 10px 30px;
+}
+nav {
+    border: 2px solid #2c2c2c;
+    height: 40px;
+    border-radius: 8px;
+}
+.logo-container{
+    margin-left: 10px;
+}
+.logo {
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    height: 40px;
+    width: 200px;
+}
