@@ -1,6 +1,8 @@
 import User from '../models/user.model.js'
 import bcrypt from 'bcryptjs'
 import crateAccessToken from '../libs/jwt.js'
+import jwt from 'jsonwebtoken'
+import { SECRET_KEY } from '../config.js'
 
 export const register = async (req, res) => {
     const {firstName, lastName, roll, departament, job, departamentId, user, id, password} = req.body
@@ -114,4 +116,25 @@ export const getUsers = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+}
+export const verifyToken = async (req, res) => {
+    const {token} = req.cookies
+    if (!token) return res.status(401).json(['No autorizado'])
+    jwt.verify(token, SECRET_KEY, async (err, user) => {
+        
+        if (err) return res.status(err).json(['No autorizado'])
+
+        
+            const userFound = await User.findById(user.idDB)
+            if (!userFound) return res.status(401).json(['No autorizado'])
+            return res.json({
+                idDB: userFound._id,
+                employeeId: userFound.id,
+                firstName: userFound.firstName,
+                lastName: userFound.lastName,
+
+
+                })
+        
+    })
 }

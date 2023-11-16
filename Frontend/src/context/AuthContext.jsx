@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react"
-import { registerRequest, loginRequest } from '../api/auth'
-
+import { registerRequest, loginRequest,verifyTokenRequest } from '../api/auth'
+import Cookies from 'js-cookie'
 export const AuthContext = createContext()
 
 export const useAuth = () => {
@@ -15,6 +15,7 @@ export const AuthContextProvider = ({children}) => {
     const [response, setResponse] = useState(null)
     const [isAutenticated, setIsAuthenticated] = useState(false)
     const [errors, setErrors] = useState([])
+    const [loading, setLoading] = useState(true)
     const singUp = async(user) => {
         try {
             const res = await registerRequest(user)
@@ -34,6 +35,33 @@ export const AuthContextProvider = ({children}) => {
             setErrors(err.response.data)
         }
     }
+    useEffect(()=>{
+        async function  checkLogin (){
+            const cookies = Cookies.get()
+            if (!cookies.token){
+                setIsAuthenticated(false)
+                setLoading(false)
+                return setResponse(null)
+            }
+                try {
+                    const res = await verifyTokenRequest(cookies.token)
+                    if (!res.data) {
+                        setIsAuthenticated(false)
+                        setLoading(false)
+                        return
+                    }
+                    setIsAuthenticated(true)
+                    setResponse(res.data)
+                    setLoading(false)
+                    // console.log('Response: ',res.data)
+                } catch (error) {
+                    setIsAuthenticated(false)
+                    setResponse(null)
+                    setLoading(false)
+                }
+        }
+        checkLogin()
+    },[])  
 
     useEffect(() => {
         console.log(errors)
@@ -51,7 +79,8 @@ export const AuthContextProvider = ({children}) => {
             singIn,
             response,
             isAutenticated,
-            errors
+            errors,
+            loading
         }}>
             {children}
         </AuthContext.Provider>

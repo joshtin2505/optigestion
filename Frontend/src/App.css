@@ -2,6 +2,17 @@
     padding: 0;
     margin: 0;
 }
+#root{
+    height: 100vh;
+}
+.back{
+    background-image: url('assets/BG.png');
+    height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 .reg-container {
     display: grid;
     gap: 8px;
@@ -77,6 +88,8 @@ nav {
     border: 2px solid #2c2c2c;
     height: 40px;
     border-radius: 8px;
+    background: #ECECEC;
+    box-shadow: 2px 2px 8px #6b6b6ba3;
 }
 
 .logo-container{
@@ -100,7 +113,7 @@ nav {
 .nav-options li:hover{
     cursor: pointer;
     transition: all 0.1s;
-    text-shadow: 1px 1px 2px #2c2c2c;
+    text-shadow: 1px 1px 2px #2c2c2c4f;
 }
 .nav-options a{
     font-size: 17px;
