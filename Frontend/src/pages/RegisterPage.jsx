@@ -1,7 +1,5 @@
 import {useForm} from 'react-hook-form'
 import { useAuth } from '../context/AuthContext.jsx'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 function RegisterPage() {
   const {register, 
@@ -10,14 +8,8 @@ function RegisterPage() {
       errors
     }
   } = useForm()
-  const {singUp, response, isAutenticated} = useAuth() 
-  const navigate = useNavigate()
+  const {singUp, errors: registerErrors} = useAuth() 
 
-  useEffect(() => {
-    console.log('render', isAutenticated)
-    if (isAutenticated) navigate('/req-manager')
-    if (!isAutenticated) navigate('/register')
-  }, [isAutenticated])
 
   const onSubmit = handleSubmit( async (values) => {
     singUp(values)
@@ -49,7 +41,7 @@ function RegisterPage() {
 
           <input type="number" {...register('id', {required: true})} placeholder='ID de Empleado'/>
 
-          <input type="number" {...register('roll', {required: true})} placeholder='Roll'/>
+          <input type="number" max='3' min='1' {...register('roll', {required: true})} placeholder='Roll'/>
           {
             errors.job && (
               <p style={{"color": "#dc2626", "fontWeight": "600"}}>Puesto requerido</p>
@@ -99,10 +91,14 @@ function RegisterPage() {
         <div className='btn-container'>
           <button type="submit">Register</button>
         </div>
+
         {
-          response && <p className={response.status ?'succsess' : 'unSuccess'}>{response.status ? response.message : response.errorMessage }</p>
+          registerErrors.map((err, i)=> (
+            <div className='unSuccsess' key={i}>
+              {err}
+            </div>
+          ))
         }
-        
         
       </form>
     </div>

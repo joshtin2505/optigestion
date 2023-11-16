@@ -7,6 +7,11 @@ export const register = async (req, res) => {
     
     try {
 
+        const userFound = await User.findOne({id})
+        if (userFound) return res.status(400).json(["El Empleado se encuentra registrado"])
+
+        if(password.length < 8) return res.status(400).json(["Contraseña No menor a 8 caracteres"])
+
         const paswordHash = await bcrypt.hash(password, 10)
 
         const newUser = new User({
@@ -32,7 +37,7 @@ export const register = async (req, res) => {
             message: 'Usuario registrado correctamente',
         })
     } catch (error) {
-        res.status(500).json({message: error.message, errorMessage: 'Error al registrar el usuario'})
+        res.status(500).json([error.message])
     }
 }
 export const login = async (req, res) => {
@@ -41,10 +46,10 @@ export const login = async (req, res) => {
     try {
 
         const userFound = await User.findOne({user})
-        if(!userFound) return res. status(400).json({message: 'El usuario no existe'})
+        if(!userFound) return res. status(400).json(['El usuario no existe'])
 
         const isMatch = await bcrypt.compare(password, userFound.password)
-        if(!isMatch) return res.status(400).json({message: 'La contraseña es incorrecta'})
+        if(!isMatch) return res.status(400).json(['La contraseña es incorrecta'])
 
 
         const token = await crateAccessToken(
@@ -59,7 +64,7 @@ export const login = async (req, res) => {
         res.cookie('token',token)
         res.send('Loged')
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json([error.message])
     }
 }
 export const logout = (req, res) => {
@@ -67,7 +72,7 @@ export const logout = (req, res) => {
     {
         expires: new Date(Date.now(0))
     })
-    res.status(200).json({message: 'Sesión cerrada'})
+    res.status(200).json(['Sesión cerrada'])
 }
 export const profile = async (req,res) => {
     const userFound = await User.findById(req.user.idDB)
