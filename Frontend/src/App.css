@@ -5,6 +5,13 @@
 #root{
     height: 100vh;
 }
+h3{
+    font-size: 18px;
+    font-weight: 600;
+}
+a{
+    height: auto;
+}
 .back{
     background-image: url('assets/BG.png');
     height: 100%;
@@ -79,56 +86,7 @@
     grid-template-rows: repeat(2, auto); 
     gap: 4px;
   }
-header{
-    padding: 10px 30px;
-}
-nav {
-    display: flex;
-    align-items: center;
-    border: 2px solid #2c2c2c;
-    height: 40px;
-    border-radius: 8px;
-    background: #ECECEC;
-    box-shadow: 2px 2px 8px #6b6b6ba3;
-}
 
-.logo-container{
-    width: 30%;
-    padding: 0 10px;
-}
-.logo {
-    aspect-ratio: 16 / 9;
-    object-fit: contain;
-    height: 40px;
-    width: 200px;
-}
-.nav-options{
-    display: flex;
-    justify-content: end;
-    padding: 0 10px;
-    width: 70%;
-    list-style: none;
-    gap: 20px;
-}
-.nav-options li:hover{
-    cursor: pointer;
-    transition: all 0.1s;
-    text-shadow: 1px 1px 2px #2c2c2c4f;
-}
-.nav-options a{
-    font-size: 17px;
-    font-weight: 600;
-    color: #2c2c2c;
-    text-decoration: none;
-}
-.login-container{
-    width: 401px;
-    height: 429px;
-    border-radius: 2px;
-    background: #8787872e;
-    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    padding-bottom: 30px;
-}
 .title-container{
     width: 100%;
     height: 120px;
@@ -175,7 +133,14 @@ nav {
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 50px;
+}
+.pre-btn a{
+    height: auto;
+    font-weight: 600;
+}
+.pre-btn a:hover{
+    transition: all 0.15s;
+    color: #ED4B4B;
 }
 .remember {
     display: flex;
@@ -209,10 +174,11 @@ nav {
     font-weight: 400;
     line-height: normal;
     letter-spacing: 1px;
+    transition: all 0.2s;
 }
 .btn-submit:hover{
     cursor: pointer;
-    transition: all 0.1s;
+    background: linear-gradient(273deg, #1287D6 24.2%, #1287D680 107.05%);
     box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
     text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }

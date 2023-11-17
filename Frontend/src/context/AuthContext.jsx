@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react"
-import { registerRequest, loginRequest,verifyTokenRequest } from '../api/auth'
+import { registerRequest, loginRequest,verifyTokenRequest,logoutRequest } from '../api/auth.js'
 import Cookies from 'js-cookie'
 export const AuthContext = createContext()
 
@@ -16,6 +16,7 @@ export const AuthContextProvider = ({children}) => {
     const [isAutenticated, setIsAuthenticated] = useState(false)
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(true)
+    const [closedSession, setClosedSession] = useState(false)
     const singUp = async(user) => {
         try {
             const res = await registerRequest(user)
@@ -33,6 +34,15 @@ export const AuthContextProvider = ({children}) => {
             setIsAuthenticated(true)
         } catch (err) {
             setErrors(err.response.data)
+        }
+    }
+    const logOut = async () =>{
+        try {
+            const res = await logoutRequest()
+            if(!res) return console.log("No se pudo cerrar sesión")
+            setClosedSession(!closedSession)
+        } catch (error) {
+            console.log(error)
         }
     }
     useEffect(()=>{
@@ -53,7 +63,7 @@ export const AuthContextProvider = ({children}) => {
                     setIsAuthenticated(true)
                     setResponse(res.data)
                     setLoading(false)
-                    // console.log('Response: ',res.data)
+
                 } catch (error) {
                     setIsAuthenticated(false)
                     setResponse(null)
@@ -61,7 +71,7 @@ export const AuthContextProvider = ({children}) => {
                 }
         }
         checkLogin()
-    },[])  
+    },[closedSession])  
 
     useEffect(() => {
         console.log(errors)
@@ -77,6 +87,7 @@ export const AuthContextProvider = ({children}) => {
         <AuthContext.Provider value={{
             singUp,
             singIn,
+            logOut,
             response,
             isAutenticated,
             errors,

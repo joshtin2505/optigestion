@@ -12,10 +12,13 @@ import Borrador from './pages/Borrador.jsx'
 import CrearSolicitud from './pages/CrearSolicitud.jsx'
 import Profile from './pages/Profile.jsx'
 import ProtectedRoutes from './ProtectedRoutes.jsx'
+import { ChakraProvider } from '@chakra-ui/react'
 function App() {
 
   return (
     <AuthContextProvider>
+      <ChakraProvider>
+
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomePage/>} />
@@ -33,6 +36,7 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+      </ChakraProvider>
     </AuthContextProvider>
   )
 }

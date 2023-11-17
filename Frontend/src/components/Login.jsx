@@ -44,10 +44,7 @@ function Login() {
             )
           }
             <div className="pre-btn">
-                <div className="remember">
-                    <input {...register("remember", {required: false})} type="checkbox" />
-                    <label htmlFor="Recordar">Recordar</label>
-                </div>
+                
                 <Link to='change-Password'>Olvidé mi contraseña</Link>
             </div>
             <div className="btn-submit-container">

@@ -38,5 +38,15 @@
     "id": 1310,
     "user": "vergoanti",
     "password":"vergoglio13"
+  },{
+    "firstName": "Antonella",
+    "lastName": "D' Rosa",
+    "roll": 0,
+    "departament": "Developer Team",
+    "job": "Full Stack Devoloper",
+    "departamentId": 2345,
+    "id": 2345,
+    "user": "antodro",
+    "password":"antodro23"
   }
 ]

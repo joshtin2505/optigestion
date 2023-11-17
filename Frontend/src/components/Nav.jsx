@@ -1,7 +1,16 @@
-import { BsMoon, BsMoonFill } from "react-icons/bs"
-import { useState } from "react"
+import {IoIosLogOut} from 'react-icons/io'
 import { Link } from "react-router-dom"
-
+import '../assets/css/Nav.css'
+import {
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    Switch,
+    FormLabel,
+    FormControl,
+  } from '@chakra-ui/react'
+import { useAuth } from '../context/AuthContext'
 function NavBar({type = 0}) {
 
     if (type === 0) {
@@ -13,6 +22,7 @@ function NavBar({type = 0}) {
 
 }
 function Loget(){
+    const {logOut} = useAuth()
     return (
         <header>
             <nav>
@@ -23,13 +33,30 @@ function Loget(){
                         <li>
                         <Link to='/'>Inicio</Link>
                         </li>
-                        <li>
-                        <Link to='/profile'>Mis datos</Link>
-                        </li>
-                        <li>
-                        <Link to='/help'>Ayuda</Link>
-                        </li>
-                        <DarkModeIcon/>
+
+                        <Menu>
+                            <MenuButton className="menu-btn">
+                                Opciones
+                            </MenuButton>
+                            <MenuList className="menu-list">
+                                <MenuItem className="menuLi">
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='email-alerts' mb='0'>
+                                        Cambiar Modo
+                                    </FormLabel>
+                                    <Switch id='email-alerts' />
+                                    </FormControl>
+                                </MenuItem>
+                                <MenuItem className="menuLi">
+                                    <Link to='/profile'>Mis datos</Link>
+                                </MenuItem>
+                                <MenuItem onClick={logOut} className="menuLi">
+                                    <span>LogOut</span>
+                                    -
+                                    <IoIosLogOut size={20}/>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
                     </ul>
                 
             </nav>
@@ -50,32 +77,12 @@ function UnLoget(){
                         <li>
                         <Link to='/help'>Ayuda</Link>
                         </li>
-                        <DarkModeIcon/>
                     </ul>
                 
             </nav>
         </header>
     )
 }
-function DarkModeIcon(){
-    const [darkModeHover, setDarkModeHover] = useState(false)
-    const [mode, setMode] = useState(true)
-    return (
-        <li 
-            onMouseOver={() =>setDarkModeHover(true)
-            }
-            onMouseOut={
-                () =>setDarkModeHover(false)
-            }
-        >
-            {
-                darkModeHover ?
-                <BsMoonFill/>
-                :
-                <BsMoon/>
-            }
-        </li>
-    )
-}
+
 
 export default NavBar
