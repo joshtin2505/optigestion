@@ -64,7 +64,7 @@ export const login = async (req, res) => {
             })
 
         res.cookie('token',token)
-        res.send('Loged')
+
     } catch (error) {
         res.status(500).json([error.message])
     }
@@ -131,9 +131,7 @@ export const verifyToken = async (req, res) => {
                 idDB: userFound._id,
                 employeeId: userFound.id,
                 firstName: userFound.firstName,
-                lastName: userFound.lastName,
-
-
+                lastName: userFound.lastName
                 })
         
     })

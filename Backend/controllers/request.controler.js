@@ -32,7 +32,8 @@ export const createRequest = async(req,res) => {
         title, 
         date, 
         description, 
-        operativeComments 
+        operativeComments,
+         
     } = req.body
 
     const newRequest = new Request({
@@ -44,7 +45,7 @@ export const createRequest = async(req,res) => {
         departamentId: req.user.departamentId,
         operativeComments
     })
-    
+    console.log('Register')
     try {
         const reqSaved = await newRequest.save()
         res.json(reqSaved)

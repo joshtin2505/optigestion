@@ -40,16 +40,13 @@ const reqSchema = new mongoose.Schema({
     },
     // logistic
     firstPrices:{
-        type: Buffer,
-        required: true
+        type: Buffer
     },
     secondPrices:{
-        type: Buffer,
-        required: true
+        type: Buffer
     },
     thirdPrices:{
-        type: Buffer,
-        required: true
+        type: Buffer
     },
     logisticComments:{
         type: String,

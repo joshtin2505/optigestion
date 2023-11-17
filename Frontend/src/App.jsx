@@ -13,30 +13,31 @@ import CrearSolicitud from './pages/CrearSolicitud.jsx'
 import Profile from './pages/Profile.jsx'
 import ProtectedRoutes from './ProtectedRoutes.jsx'
 import { ChakraProvider } from '@chakra-ui/react'
+import ReqProvider from './context/ReqContext.jsx'
 function App() {
 
   return (
     <AuthContextProvider>
-      <ChakraProvider>
-
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<HomePage/>} />
-          <Route element={<ProtectedRoutes/>}>
-            <Route path='/register' element={<RegisterPage/>} />
-            <Route path='/req-manager' element={<GestionSolicitudes/>} />
-            <Route path='/req-trash' element={<Papelera/>} />
-            <Route path='/req-file' element={<Archivado/>} />
-            <Route path='/req-sent' element={<Enviados/>} />
-            <Route path='/req-res' element={<Respondidos/>} />
-            <Route path='/req-draft' element={<Borrador/>} />
-            <Route path='/req-add' element={<CrearSolicitud/>} />
-            <Route path='/profile' element={<Profile/>} />
-          </Route>
-
-        </Routes>
-      </BrowserRouter>
-      </ChakraProvider>
+      <ReqProvider>
+        <ChakraProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<HomePage/>} />
+            <Route element={<ProtectedRoutes/>}>
+              <Route path='/register' element={<RegisterPage/>} />
+              <Route path='/req-manager' element={<GestionSolicitudes/>} />
+              <Route path='/req-trash' element={<Papelera/>} />
+              <Route path='/req-file' element={<Archivado/>} />
+              <Route path='/req-sent' element={<Enviados/>} />
+              <Route path='/req-res' element={<Respondidos/>} />
+              <Route path='/req-draft' element={<Borrador/>} />
+              <Route path='/req-add' element={<CrearSolicitud/>} />
+              <Route path='/profile' element={<Profile/>} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+        </ChakraProvider>
+      </ReqProvider>
     </AuthContextProvider>
   )
 }
