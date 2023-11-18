@@ -48,7 +48,10 @@ export const createRequest = async(req,res) => {
     console.log('Register')
     try {
         const reqSaved = await newRequest.save()
-        res.json(reqSaved)
+        res.json({
+            message: 'Requerimiento creado',
+            reqSaved
+        })
     } catch (error) {
         console.log(error)
     }

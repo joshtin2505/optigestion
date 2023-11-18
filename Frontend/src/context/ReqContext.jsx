@@ -12,12 +12,12 @@ export const useReq = () =>{
 }
 
 function ReqProvider({children}) {
-    const [response, setResponse] = useState()
+    const [request, setRequest] = useState()
     const [errors, setErrors] = useState()
     const createReq = async (data) =>{
         try {
             const res = await addRequest(data)
-            setResponse(res.data) 
+            setRequest(res.data) 
         } catch (error) {
             setErrors(error.response.data)
         }
@@ -25,9 +25,9 @@ function ReqProvider({children}) {
     const getAllReq = async (data) =>{
         try {
             const res = await getRequirements(data)
-            setResponse(res.data) 
+            return res.data
         } catch (error) {
-            setErrors(error.response.data)
+            setErrors(error)
         }
     }
 
@@ -35,7 +35,7 @@ function ReqProvider({children}) {
     <ReqContext.Provider value={{
         createReq,
         getAllReq,
-        response,
+        request,
         errors
     }}>
         {children}

@@ -64,6 +64,7 @@ export const login = async (req, res) => {
             })
 
         res.cookie('token',token)
+        res.send('logged in')
 
     } catch (error) {
         res.status(500).json([error.message])
