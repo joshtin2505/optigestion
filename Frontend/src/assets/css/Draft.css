@@ -50,21 +50,7 @@
     justify-content: center;
     padding: 0 10px;
 }
-.head1{
-    width: 47.5%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.head1 .Br-icon{
-    cursor: pointer;
-}
-.head2{
-    width: 55%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-}
+
 hr{
     width: 100%;
     border: #6b6b6b40 1px solid;
@@ -94,4 +80,15 @@ hr{
 .BrCard:hover{
     box-shadow: 2px 1px 4px #2c2c2c60;
     cursor: pointer;
+}
+.Br-card-txt{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+.Br-options{
+    display: flex;
+    gap: 10px;
+
 }
