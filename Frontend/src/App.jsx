@@ -21,6 +21,8 @@ function App() {
       <ReqProvider>
         <ChakraProvider>
         <BrowserRouter>
+        <div className='back'>
+
           <Routes>
             <Route path='/' element={<HomePage/>} />
             <Route element={<ProtectedRoutes/>}>
@@ -35,6 +37,7 @@ function App() {
               <Route path='/profile' element={<Profile/>} />
             </Route>
           </Routes>
+        </div>
         </BrowserRouter>
         </ChakraProvider>
       </ReqProvider>

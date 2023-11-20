@@ -81,6 +81,7 @@ export const deleteRequest = async(req,res) => {
 // <------------------------------------------------------>
 // Advanced Methods of the requirements
 
+// Enciados
 // Enviar si ya esta guardado
 export const sendSavedRequest = async (req,res) => {
     try {
@@ -125,8 +126,20 @@ export const sendNewRequest = async (req,res) => {
         console.log(error)
     }
 }
+export const getSent= async (req,res) => {
+    try {
+        const files = await Request.find({
+            state: 3,
+            employeeId: req.user.employeeId
+        })
+        if (!files) return res.status(200).json({ message: "No hay requerimientos" })
+        res.json(files)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-// Arcivado
+// Arcivado ✅
 export const fileRequest = async (req,res) => {
     try {
         const getState = await Request.findById(req.params.id)
@@ -161,7 +174,7 @@ export const getFiles= async (req,res) => {
 }
 
 
-// Papelera
+// Papelera ✅
 export const trashRequest = async (req,res) => {
     try {
         const getState = await Request.findById(req.params.id)
@@ -200,7 +213,7 @@ export const getTrash = async (req,res) => {
     }
 }
 
-// Borrador
+// Borrador ✅
 export const getDraft = async (req,res) => {
     try {
         const files = await Request.find({
@@ -218,7 +231,8 @@ export const getDraft = async (req,res) => {
 export const getAllAprovedRequirements = async (req,res) => {
     try {
         const requirements = await Request.find({
-            state: 4
+            state: 4,
+            employeeId: req.user.employeeId
         })
         if (!requirements || requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos para cotizar" })
         res.json(requirements)
@@ -230,7 +244,8 @@ export const getAllAprovedRequirements = async (req,res) => {
 export const getAllRejectedRequirements = async (req,res) => {
     try {
         const requirements = await Request.find({
-            state: 5
+            state: 5,
+            employeeId: req.user.employeeId
         })
         if (!requirements || requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos rechazados" })
         res.json(requirements)

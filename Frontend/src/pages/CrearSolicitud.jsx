@@ -10,59 +10,78 @@ import {
   ModalBody,
   useDisclosure,
   ModalFooter,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
+import {useState} from 'react'
+
 function CrearSolicitud() {
   
-  
-  
-
-
 
   return (
     <div className='back'>
       <Nav type={1}/>
       <section className='CR-box-cont'>
-          <ReqForm typeForm/>
+          <CreateReqForm />
 
       </section>
     </div>
   )
 }
 
-export const ReqForm = ({typeForm, data}) => {
-  const {createReq, updateReq} = useReq()
+export const CreateReqForm = () => {
+  const {createReq, sendInNewReq} = useReq()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [sendSuccess, setSendSuccess] = useState(false)
   const {
     register,
     handleSubmit,
     formState:{
       errors
     },
-    reset
+    reset,
+    setValue,
+    watch
   } = useForm()
 
-  console.log(data)
- if (typeForm === true){
+ 
   const onSubmit = handleSubmit((values)=>{
     createReq(values)
     reset()
     onOpen()
   })
+  const onSend = () => {
+    const title = watch('title')
+    const description = watch('description')
+    sendInNewReq({
+      title,
+      description,
+    })
+    reset()
+    setSendSuccess(true)
+  }
 
+  if(sendSuccess === true){
+    setTimeout(() => {
+      setSendSuccess(false)
+    },5000)
+  }
   return(
     <>
     <div className='CR-container'>
       <h2>Solicitud</h2>
-      <form action="" onSubmit={onSubmit}>
+      <form className='form-Create formTwo' action="" onSubmit={onSubmit}>
         <div className='head'>
           <label htmlFor="">Titulo:</label>
           <input type="text" {...register('title',{
             required: true,
             min: 5
           })}
+          onChange={(e) => setValue('title', e.target.value)}
           autoFocus />
-          <label htmlFor="">Estado:</label>
         </div>
         {
           errors.title && (
@@ -74,7 +93,9 @@ export const ReqForm = ({typeForm, data}) => {
         <br />
         <textarea {...register('description', {
           required: true
-        })} ></textarea>
+        })}
+        onChange={(e) => setValue('description', e.target.value)}
+        ></textarea>
         {
           errors.description && (
             <div className="error">Se necita una descripción</div>
@@ -84,10 +105,19 @@ export const ReqForm = ({typeForm, data}) => {
           <div className="btnOptions">
           <button type='reset' className='btnClear'>Limpiar Campos</button>
           <button type='submit' className='btnSave'>Guardar</button>
-          <button type='button' className='btnSend'>Enviar</button>
+          <button type='button' onClick={onSend} className='btnSend'>Enviar</button>
           </div>
         </div>
       </form>
+      {
+        sendSuccess && (
+          <Alert status='success'>
+            <AlertIcon />
+            <AlertTitle>Solicitud Enviada!</AlertTitle>
+            <AlertDescription>Tu Solicitud ha sido enviada con exito.</AlertDescription>
+          </Alert>
+        )
+      }
       <Modal onClose={onClose} isOpen={isOpen} >
             <ModalOverlay />
             <ModalContent>
@@ -101,15 +131,15 @@ export const ReqForm = ({typeForm, data}) => {
                 }} to='/'>
                   Volver a Inicio
                 </Link>
-                <button style={{
+                <Link style={{
                   "background": "#6b6b6b",
                   "padding": "8px 5px",
                   color: "#fff",
                   "borderRadius": "4px",
                   "margin": "10px"
-                }} to='/'>
+                }} to='/req-draft'>
                   ver Solicitud
-                </button>
+                </Link>
               </ModalBody>
               <ModalFooter></ModalFooter>
             </ModalContent>
@@ -117,26 +147,55 @@ export const ReqForm = ({typeForm, data}) => {
       </div>
     </>
   )
- }
- if (typeForm === false){
-  const onSubmit = handleSubmit((values)=>{
-    // updateReq(values)
-    console.log(values)
-    reset()
-    onOpen()
-  })
+ 
 
+ 
+}
+export const UpdateReqForm = (data) => {
+  const {updateReq, sendSavedReq} = useReq()
+  const [inValues, setInValues] = useState({
+    title: data.data.title,
+    description: data.data.description
+  })
+  const {
+    register,
+    handleSubmit,
+    formState:{
+      errors
+    },
+    setValue,
+    watch
+  } = useForm()
+
+  const onSubmit = handleSubmit((values)=>{
+    updateReq({id :data.data._id,...values})
+  })
+  const onSend = () => {
+    sendSavedReq(data.data._id)
+  }
+  const handleChange = (e) => {
+    const title = watch('title')
+    const description = watch('description')
+    setInValues({
+      title,
+      description
+    })
+  }
   return(
     <>
-    <form action="" onSubmit={onSubmit}>
+    <form className='form-Update formTwo' onChange={handleChange}  onSubmit={onSubmit}>
       <div className='head'>
         <label htmlFor="">Titulo:</label>
-        <input type="text" value={data.title} {...register('title',{
+        <input 
+        type="text" 
+        onChange={(e) => setValue('title', e.target.value)} 
+        value={inValues.title} 
+        {...register('title',{
           required: true,
           min: 5
         })}
-        autoFocus />
-        <label htmlFor="">Estado:</label>
+        autoFocus 
+        />
       </div>
       {
         errors.title && (
@@ -146,7 +205,10 @@ export const ReqForm = ({typeForm, data}) => {
       <br />
       <label htmlFor="">Descripcion:</label>
       <br />
-      <textarea value={data.description} {...register('description', {
+      <textarea 
+      onChange={(e) => {setValue('description', e.target.value)}}
+      value={inValues.description} 
+      {...register('description', {
         required: true
       })} ></textarea>
       {
@@ -156,41 +218,38 @@ export const ReqForm = ({typeForm, data}) => {
       }
       <div>
         <div className="btnOptions">
-        <button type='reset' className='btnClear'>Limpiar Campos</button>
         <button type='submit' className='btnSave'>Guardar</button>
-        <button type='button' className='btnSend'>Enviar</button>
+        <button type='button' onClick={onSend} className='btnSend'>Enviar</button>
         </div>
       </div>
     </form>
-    <Modal onClose={onClose} isOpen={isOpen} >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Solcitud Guardada</ModalHeader>
-            <ModalBody>
-              <Link style={{
-                "background": "#6b6b6b",
-                "padding": "8px 5px",
-                color: "#fff",
-                "borderRadius": "4px",
-              }} to='/'>
-                Volver a Inicio
-              </Link>
-              <button style={{
-                "background": "#6b6b6b",
-                "padding": "8px 5px",
-                color: "#fff",
-                "borderRadius": "4px",
-                "margin": "10px"
-              }} to='/'>
-                ver Solicitud
-              </button>
-            </ModalBody>
-            <ModalFooter></ModalFooter>
-          </ModalContent>
-        </Modal>
+    
     </>
   )
- }
+}
+export const ViewReqForm = (data) => {
 
+  return(
+    <>
+    <form className='form-view formTwo'>
+      <div className='head'>
+        <label htmlFor="">Titulo:</label>
+        <input
+        disabled 
+        value={data.data.title} 
+        />
+        <label htmlFor="">Estado:</label>
+      </div>
+      <br />
+      <label htmlFor="">Descripcion:</label>
+      <br />
+      <textarea 
+      disabled 
+      value={data.data.description} 
+      ></textarea>
+    </form>
+    
+    </>
+  )
 }
 export default CrearSolicitud

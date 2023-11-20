@@ -1,5 +1,16 @@
-import { createContext, useState, useContext, useEffect } from "react"
-import { registerRequest, loginRequest,verifyTokenRequest,logoutRequest } from '../api/auth.js'
+import { 
+    createContext, 
+    useState, 
+    useContext, 
+    useEffect 
+} from "react"
+import { 
+    registerRequest, 
+    loginRequest,
+    verifyTokenRequest,
+    logoutRequest ,
+    profile
+} from '../api/auth.js'
 import Cookies from 'js-cookie'
 export const AuthContext = createContext()
 
@@ -45,6 +56,15 @@ export const AuthContextProvider = ({children}) => {
             console.log(error)
         }
     }
+    const getProfile = async () =>{
+        try {
+            const res = await profile()
+            if (!res) throw new Error('Error!!! - No response')
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
     useEffect(()=>{
         async function  checkLogin (){
             const cookies = Cookies.get()
@@ -88,6 +108,7 @@ export const AuthContextProvider = ({children}) => {
             singUp,
             singIn,
             logOut,
+            getProfile,
             response,
             isAutenticated,
             errors,

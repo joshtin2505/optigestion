@@ -1,4 +1,4 @@
-.Br-real-cont{
+.Tr-real-cont{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -29,7 +29,7 @@
     width: 100%;
 
 }
-.Br-box-cont{
+.Tr-box-cont{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +40,7 @@
     border-radius: 4px;
     margin-bottom: 1rem;
 }
-.Br-title{
+.Tr-title{
     font-size: 1.8rem;
     font-weight: 600;
         
@@ -57,7 +57,7 @@ hr{
     border: #6b6b6b40 1px solid;
     box-shadow: 2px 1px 4px #2c2c2c60;
 }
-.Br-cards-cont{
+.Tr-cards-cont{
     height: auto;
     width: 100%;
     display: flex;
@@ -68,45 +68,37 @@ hr{
     gap: 5px;
     padding: 10px;
     overflow: auto;
+    
 }
-.BrCard{
+.TrCard{
     display: flex;
     align-items: center;
     width: 100%;
     gap: 10px;
+    padding: 0 10px;
     height: 35px;
     transition: all 0.2s ease-in-out;
     border-radius: 4px;
-
+    background: #6b6b6b33; 
 }
-.BrCard:hover{
+.TrCard:hover{
     box-shadow: 2px 1px 4px #2c2c2c60;
 }
-.Br-card-txt{
+.Tr-card-txt{
     display: flex;
     align-items: center;
     gap: 5px;
     width: 100%;
 }
-.Br-options{
+.Tr-options{
     display: flex;
     gap: 10px;
 
 }
-.Br-icon{
+.Tr-icon{
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
-.Br-icon:hover{
+.Tr-icon:hover{
     transform: scale(1.1);
-}
-.Br-card-real{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    background: #6b6b6b33; 
-    border-radius: 4px;
-    padding: 0 10px;
-
 }

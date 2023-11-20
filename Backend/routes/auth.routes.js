@@ -3,10 +3,12 @@ import { login, register, logout,profile, verifyToken } from '../controllers/aut
 import { authRequired } from '../middlewares/validateToken.js'
 const router = Router()
 
-router.post("/register", register)
+// Pendiente a enpapsular en un super usuario
+router.post("/register", authRequired,register) //
+// 
 router.post("/login", login)
 router.get("/verify", verifyToken)
-router.post("/logout", logout)
+router.post("/logout", authRequired,logout)
 router.get("/profile", authRequired, profile)
 
 export default router

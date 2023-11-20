@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import Nav from '../components/Nav.jsx'
 import { useReq } from '../context/ReqContext.jsx'
-import '../assets/css/Draft.css'
+import '../assets/css/Trash.css'
 import {BsSearch, BsTrash, BsArrowClockwise} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
  
 function Papelera() {
-  const {getAllReq, updateReq, response: DBres, deleteReq } = useReq()
+  const {deleteReq, trashReq, getAllTrashReq } = useReq()
   const {register, setValue, watch} = useForm()
   const [response ,setResponse] = useState([])
   const [updateComponent, setUpdateComponent] = useState(0)
@@ -15,7 +15,7 @@ function Papelera() {
 
   useEffect(() => {
     const fetchReq = async () => {
-      const res = await getAllReq()
+      const res = await getAllTrashReq()
       setResponse(res)
     }
 
@@ -27,58 +27,57 @@ function Papelera() {
 
   const filteredResponse = response.filter((req) => {
     return (
-      (req.title.toLowerCase().includes(search.toLowerCase()) ||
-      req.description.toLowerCase().includes(search.toLowerCase())) && 
-      req.state === 0
+      req.title.toLowerCase().includes(search.toLowerCase()) ||
+      req.description.toLowerCase().includes(search.toLowerCase())
     )
   })
-  const toTrash = (id) => {
+  const toDelete = (id) => {
     deleteReq(id)
     setUpdateComponent(prevValue => prevValue + 1)
   }
   const toRestore = (id) => {
-    updateReq({state: 1, id})
+    trashReq(id)
     setUpdateComponent(prevValue => prevValue + 1)
   }
 
   return (
 <div className='back'>
       <Nav type={1}/>
-      <div className="Br-real-cont">
+      <div className="Tr-real-cont">
         <form onSubmit={handleSubmit} action="" className='search-form'>
           <BsSearch className='search-icon' fill='#6b6b6b' size={25}/>
           <input type="text" {...register('search')} autoFocus onChange={(e) => setValue('search', e.target.value)} className='search-in'/>
         </form>
-        <section className='Br-box-cont'>
+        <section className='Tr-box-cont'>
           <div className="head">
 
-              <h1 className='Br-title'>Papelera</h1>
+              <h1 className='Tr-title'>Papelera</h1>
 
           </div>
           <hr />
-          <div className='Br-cards-cont'>
+          <div className='Tr-cards-cont'>
             {
               filteredResponse && 
               filteredResponse.map(req => {
                 const fecha = new Date(req.date)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
                 return (
-                  <div className='BrCard' key={req._id} >
+                  <div className='TrCard' key={req._id} >
 
-                    <div className="Br-card-txt">
+                    <div className="Tr-card-txt">
                       <p>{concatDate}</p>
                       <p>|</p>
                       <p>{req.title}</p>
                       <span>-</span>
                       <p>{req.description}</p>
                     </div>
-                    <div className="Br-options">
+                    <div className="Tr-options">
                       <BsArrowClockwise onClick={() =>{
                          toRestore(req._id)
-                      }} className='Br-icon' fill='#6b6b6b' size={18}/>
+                      }} className='Tr-icon' fill='#6b6b6b' size={18}/>
                       <BsTrash onClick={() =>{
-                         toTrash(req._id)
-                      }} className='Br-icon' fill='#6b6b6b' size={18}/>
+                         toDelete(req._id)
+                      }} className='Tr-icon' fill='#6b6b6b' size={18}/>
                     </div>
                   </div>
                 )
@@ -86,8 +85,8 @@ function Papelera() {
             }
             {
               filteredResponse.length === 0  &&
-              <div className='BrCard'>
-                <div className="Br-card-txt" style={{
+              <div className='TrCard'>
+                <div className="Tr-card-txt" style={{
                   "display": "flex",
                   "justifyContent": "center",
                   "fontWeight": "bold",

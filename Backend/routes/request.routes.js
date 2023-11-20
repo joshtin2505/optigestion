@@ -18,7 +18,8 @@ import {
     getTrash,
     trashRequest,
     getDraft,
-    getAllRejectedRequirements
+    getAllRejectedRequirements,
+    getSent
 } from "../controllers/request.controler.js"
 
 const router = Router()
@@ -34,15 +35,14 @@ router.delete('/solicitud/:id', authRequired, deleteRequest)
 
 // Enviar
 // Si ya esta guardada una solicitud como borrado, se usara esta ruta
-router.put('/solicitud/send/:id', authRequired, sendSavedRequest)
+router.put('/solicitud-send/:id', authRequired, sendSavedRequest)
 // Si no esta guardada una solicitud como borrado, se usara esta otra ruta
-router.post('/solicitud/send', authRequired, sendNewRequest)
+router.post('/solicitud-send', authRequired, sendNewRequest)
 // Ver los enviados
-router.get('/solicitud/sent', authRequired, sendNewRequest)
-router.get('/solicitud/sent/:id', authRequired, sendNewRequest)
+router.get('/solicitud-sent', authRequired, getSent)
 
 // Archivo
-router.put('/solicitud/file-set/:id', authRequired, fileRequest)
+router.put('/solicitud-file/:id', authRequired, fileRequest)
 router.get('/solicitud-files', authRequired, getFiles)
 
 // Papelera

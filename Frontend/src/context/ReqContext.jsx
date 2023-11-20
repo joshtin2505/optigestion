@@ -1,5 +1,19 @@
 import { createContext, useContext } from "react"
-import {addRequest, deleteRequest, getRequest,getRequirements,updateRequest} from '../api/req.js'
+import {
+    addRequest, 
+    deleteRequest, 
+    getRequest,
+    getRequirements,
+    updateRequest,
+    getDraftRequirements,
+    toTrashRequest,
+    getTrashRequirements,
+    getFileRequirements,
+    toFileRequest,
+    sendNewRequest,
+    sendSavedRequest,
+    getSentRequirements
+} from '../api/req.js'
 import { useState } from "react"
 export const ReqContext = createContext() 
 
@@ -18,14 +32,52 @@ function ReqProvider({children}) {
     const createReq = async (data) =>{
         try {
             const res = await addRequest(data)
+            if (!res) throw new Error('No response')
             setResponse(res.data) 
         } catch (error) {
             setErrors(error.response.data)
         }
     }
-    const getAllReq = async (data) =>{
+    const getAllReq = async () =>{
         try {
-            const res = await getRequirements(data)
+            const res = await getRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+    const getAllDraftReq = async () =>{
+        try {
+            const res = await getDraftRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+    const getAllTrashReq = async () =>{
+        try {
+            const res = await getTrashRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+    const getAllFileReq = async () =>{
+        try {
+            const res = await getFileRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+    const getAllsentReq = async () =>{
+        try {
+            const res = await getSentRequirements()
+            if (!res) throw new Error('No response')
             return res.data
         } catch (error) {
             setErrors(error)
@@ -34,6 +86,7 @@ function ReqProvider({children}) {
     const getReq = async (id) =>{
         try {
             const res = await getRequest(id)
+            if (!res) throw new Error('No response')
             return res.data
         } catch (error) {
             setErrors(error)
@@ -42,6 +95,27 @@ function ReqProvider({children}) {
     const updateReq = async (data) =>{
         try {
             const res = await updateRequest(data)
+            if (!res) throw new Error('No response')
+            console.log(data)
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
+    const trashReq = async (id) =>{
+        try {
+            const res = await toTrashRequest(id)
+            if (!res) throw new Error('No response')
+            console.log(id)
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
+    const fileReq = async (id) =>{
+        try {
+            const res = await toFileRequest(id)
+            if (!res) throw new Error('No response')
             setResponse(res.data) 
         } catch (error) {
             setErrors(error.response.data)
@@ -50,19 +124,48 @@ function ReqProvider({children}) {
     const deleteReq = async (id) =>{
         try {
             const res = await deleteRequest(id)
-            console.log(id)
+            if (!res) throw new Error('No response')
             setResponse(res.data) 
         } catch (error) {
             setErrors(error.response.data)
         }
     }
+    const sendInNewReq = async (data) =>{
+        try {
+            const res = await sendNewRequest(data)
+            if (!res) throw new Error('No response')
+            console.log(data)
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
+    const sendSavedReq = async (data) =>{
+        try {
+            const res = await sendSavedRequest(data)
+            if (!res) throw new Error('No response')
+            console.log(data)
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
+    
   return (
     <ReqContext.Provider value={{
-        createReq,
         getAllReq,
+        getAllDraftReq,
+        getAllFileReq,
+        getAllTrashReq,
+        getAllsentReq,
+        createReq,
         getReq,
         updateReq,
         deleteReq,
+        trashReq,
+        fileReq,
+        sendInNewReq,
+        sendSavedReq,
         response,
         errors
     }}>
