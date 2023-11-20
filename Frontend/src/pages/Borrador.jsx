@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import Nav from '../components/Nav.jsx'
 import { useReq } from '../context/ReqContext.jsx'
 import '../assets/css/Draft.css'
-import {BsSearch, BsTrash, BsFolder} from 'react-icons/bs'
+import {BsSearch, BsTrash, BsFolder,BsPen} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
+import {ReqForm} from './CrearSolicitud.jsx'
  
 function Borrador() {
   const {getAllReq, updateReq, response: DBres } = useReq()
   const {register, setValue, watch} = useForm()
+
   const [response ,setResponse] = useState([])
   const [updateComponent, setUpdateComponent] = useState(0)
 
@@ -21,6 +23,7 @@ function Borrador() {
 
     fetchReq()
   },[updateComponent])
+
   function handleSubmit(e){
     e.preventDefault()
   }
@@ -47,7 +50,7 @@ function Borrador() {
       <div className="Br-real-cont">
         <form onSubmit={handleSubmit} action="" className='search-form'>
           <BsSearch className='search-icon' fill='#6b6b6b' size={25}/>
-          <input type="text" {...register('search')} onChange={(e) => setValue('search', e.target.value)} className='search-in'/>
+          <input type="text" {...register('search')} autoFocus   onChange={(e) => setValue('search', e.target.value)} className='search-in'/>
         </form>
         <section className='Br-box-cont'>
           <div className="head">
@@ -62,26 +65,7 @@ function Borrador() {
               filteredResponse.map(req => {
                 const fecha = new Date(req.date)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return (
-                  <div className='BrCard' key={req._id} >
-
-                    <div className="Br-card-txt">
-                      <p>{concatDate}</p>
-                      <p>|</p>
-                      <p>{req.title}</p>
-                      <span>-</span>
-                      <p>{req.description}</p>
-                    </div>
-                    <div className="Br-options">
-                      <BsTrash onClick={() =>{
-                         toTrash(req._id)
-                      }} className='Br-icon' fill='#6b6b6b' size={18}/>
-                      <BsFolder onClick={() =>{
-                         toFile(req._id)
-                      }} className='Br-icon' fill='#6b6b6b' size={18}/>
-                    </div>
-                  </div>
-                )
+                return <List req={req} concatDate={concatDate}/>
               })
             }
             {
@@ -103,5 +87,41 @@ function Borrador() {
   )
 }
 
+const List = ({req, concatDate}) => {
+  const [openReq, setOpenReq] = useState(false)
+
+  return (
+    <section className='Br-card-real' key={req._id}>
+      <div  className='BrCard' >
+
+        <div className="Br-card-txt">
+          <p>{concatDate}</p>
+          <p>|</p>
+          <p>{req.title}</p>
+          <span>-</span>
+          <p>{req.description}</p>
+        </div>
+        <div className="Br-options">
+          <BsPen onClick={() =>{
+            setOpenReq(!openReq)
+            }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          <BsTrash onClick={() =>{
+            toTrash(req._id)
+          }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          <BsFolder onClick={() =>{
+            toFile(req._id)
+          }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          </div>
+      </div>
+      <div className='bR-ed-cont'>
+        {
+          openReq && (
+            <ReqForm typeForm={false} data={req}/>
+            )
+          }
+          </div>
+    </section>
+  )
+}
 
 export default Borrador

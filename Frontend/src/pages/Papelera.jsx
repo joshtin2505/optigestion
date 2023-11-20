@@ -47,7 +47,7 @@ function Papelera() {
       <div className="Br-real-cont">
         <form onSubmit={handleSubmit} action="" className='search-form'>
           <BsSearch className='search-icon' fill='#6b6b6b' size={25}/>
-          <input type="text" {...register('search')} onChange={(e) => setValue('search', e.target.value)} className='search-in'/>
+          <input type="text" {...register('search')} autoFocus onChange={(e) => setValue('search', e.target.value)} className='search-in'/>
         </form>
         <section className='Br-box-cont'>
           <div className="head">

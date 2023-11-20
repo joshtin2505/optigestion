@@ -31,6 +31,14 @@ function ReqProvider({children}) {
             setErrors(error)
         }
     }
+    const getReq = async (id) =>{
+        try {
+            const res = await getRequest(id)
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
     const updateReq = async (data) =>{
         try {
             const res = await updateRequest(data)
@@ -52,6 +60,7 @@ function ReqProvider({children}) {
     <ReqContext.Provider value={{
         createReq,
         getAllReq,
+        getReq,
         updateReq,
         deleteReq,
         response,
