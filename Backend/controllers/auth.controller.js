@@ -64,7 +64,7 @@ export const login = async (req, res) => {
             })
 
         res.cookie('token',token)
-        res.send('logged in')
+        res.json(userFound)
 
     } catch (error) {
         res.status(500).json([error.message])
@@ -128,12 +128,7 @@ export const verifyToken = async (req, res) => {
         
             const userFound = await User.findById(user.idDB)
             if (!userFound) return res.status(401).json(['No autorizado'])
-            return res.json({
-                idDB: userFound._id,
-                employeeId: userFound.id,
-                firstName: userFound.firstName,
-                lastName: userFound.lastName
-                })
+            return res.json(userFound)
         
     })
 }

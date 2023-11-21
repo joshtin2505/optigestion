@@ -12,16 +12,16 @@ import {
   } from '@chakra-ui/react'
 import { useAuth } from '../context/AuthContext'
 function NavBar({type = 0}) {
-
+    const {response} = useAuth()
     if (type === 0) {
         return <UnLoget/>
     }
     else if (type === 1) {
-        return <Loget/>
+        return <Loget user={response.roll}/>
     }
 
 }
-function Loget(){
+function Loget({user}){
     const {logOut} = useAuth()
     return (
         <header>
@@ -50,6 +50,13 @@ function Loget(){
                                 <MenuItem className="menuLi">
                                     <Link to='/profile'>Mis datos</Link>
                                 </MenuItem>
+                                {
+                                    user === 0 && (
+                                        <MenuItem className="menuLi">
+                                            <Link to='/register'>Registrar usuario</Link>
+                                        </MenuItem>
+                                    )
+                                }
                                 <MenuItem onClick={logOut} className="menuLi">
                                     <span>LogOut</span>
                                     -

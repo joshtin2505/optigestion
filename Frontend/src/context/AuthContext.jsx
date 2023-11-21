@@ -25,6 +25,7 @@ export const useAuth = () => {
 export const AuthContextProvider = ({children}) => {
     const [response, setResponse] = useState(null)
     const [isAutenticated, setIsAuthenticated] = useState(false)
+    const [isAllowed, setIsAllowed] = useState(false)
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(true)
     const [closedSession, setClosedSession] = useState(false)
@@ -41,8 +42,8 @@ export const AuthContextProvider = ({children}) => {
     const singIn = async (user) =>{
         try {
             const res = await loginRequest(user)
-            console.log(res.data)
             setIsAuthenticated(true)
+            setResponse(res.data)
         } catch (err) {
             setErrors(err.response.data)
         }
@@ -80,6 +81,10 @@ export const AuthContextProvider = ({children}) => {
                         setLoading(false)
                         return
                     }
+                    if(res.data.roll === 0 ) setIsAllowed(0)
+                    else if(res.data.roll === 1) setIsAllowed(1)
+                    else if(res.data.roll === 2) setIsAllowed(2)
+                    else if(res.data.roll === 3) setIsAllowed(3)
                     setIsAuthenticated(true)
                     setResponse(res.data)
                     setLoading(false)
@@ -111,6 +116,7 @@ export const AuthContextProvider = ({children}) => {
             getProfile,
             response,
             isAutenticated,
+            isAllowed,
             errors,
             loading
         }}>

@@ -1,5 +1,6 @@
 import {useForm} from 'react-hook-form'
 import { useAuth } from '../context/AuthContext.jsx'
+import NavBar from '../components/Nav.jsx'
 
 function RegisterPage() {
   const {register, 
@@ -15,6 +16,8 @@ function RegisterPage() {
     singUp(values)
   } )
   return (
+    <>
+      <NavBar type={1}/>
     <div className='reg-container'>
       <h1>Register</h1>
       <form action=""
@@ -41,7 +44,7 @@ function RegisterPage() {
 
           <input type="number" {...register('id', {required: true})} placeholder='ID de Empleado'/>
 
-          <input type="number" max='3' min='1' {...register('roll', {required: true})} placeholder='Roll'/>
+          <input type="number" max='3' min='0' {...register('roll', {required: true})} placeholder='Roll'/>
           {
             errors.job && (
               <p style={{"color": "#dc2626", "fontWeight": "600"}}>Puesto requerido</p>
@@ -102,6 +105,7 @@ function RegisterPage() {
         
       </form>
     </div>
+    </>
   )
 }
 

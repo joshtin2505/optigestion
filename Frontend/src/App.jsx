@@ -1,7 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import './App.css'
 import RegisterPage from './pages/RegisterPage.jsx'
-import { AuthContextProvider } from './context/AuthContext.jsx'
 import HomePage from './pages/HomePage.jsx'
 import GestionSolicitudes from './pages/GestionSolicitudes'
 import Papelera from './pages/Papelera.jsx'
@@ -14,10 +13,15 @@ import Profile from './pages/Profile.jsx'
 import ProtectedRoutes from './ProtectedRoutes.jsx'
 import { ChakraProvider } from '@chakra-ui/react'
 import ReqProvider from './context/ReqContext.jsx'
+import {useAuth} from './context/AuthContext.jsx'
+import RectorRes from './pages/RectorRes.jsx'
+import Cotizar from './pages/Cotizar.jsx'
+import Comprar from './pages/Comprar.jsx'
 function App() {
-
+  const {isAllowed} = useAuth()
+  const admin = isAllowed === 0 ? true : false
+  // console.log(admin)
   return (
-    <AuthContextProvider>
       <ReqProvider>
         <ChakraProvider>
         <BrowserRouter>
@@ -25,8 +29,25 @@ function App() {
 
           <Routes>
             <Route path='/' element={<HomePage/>} />
-            <Route element={<ProtectedRoutes/>}>
-              <Route path='/register' element={<RegisterPage/>} />
+            {/* Admin */}
+            <Route path='/register' element={
+                <ProtectedRoutes isAllowed={isAllowed === 0} >
+                  <RegisterPage/>
+                </ProtectedRoutes>
+              } />
+            {/* Rector */}
+            <Route path='/rector-response' element={
+                <ProtectedRoutes isAllowed={isAllowed === 1 || isAllowed === 0} >
+                  <RectorRes/>
+                </ProtectedRoutes>
+              } />
+            {/* Logistico */}
+            <Route element={<ProtectedRoutes isAllowed={isAllowed === 2 || isAllowed === 0}/>}>
+              <Route path='/to-quote' element={<Cotizar/>} />
+              <Route path='/to-buy' element={<Comprar/>} />
+            </Route>
+            {/* All Option */}
+            <Route element={<ProtectedRoutes isAllowed={isAllowed === 0 || isAllowed === 1 || isAllowed === 2 || isAllowed === 3}/>}>
               <Route path='/req-manager' element={<GestionSolicitudes/>} />
               <Route path='/req-trash' element={<Papelera/>} />
               <Route path='/req-file' element={<Archivado/>} />
@@ -41,7 +62,6 @@ function App() {
         </BrowserRouter>
         </ChakraProvider>
       </ReqProvider>
-    </AuthContextProvider>
   )
 }
 
