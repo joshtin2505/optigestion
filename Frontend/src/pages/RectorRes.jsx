@@ -8,7 +8,7 @@ import {ResReqForm} from '../components/Forms.jsx'
  
 
 function RectorRes() {
-  const {getAllsentReq } = useReq()
+  const {getSentRector, response: res} = useReq()
   const {register, setValue, watch} = useForm()
   const [response ,setResponse] = useState([])
 
@@ -45,11 +45,11 @@ function RectorRes() {
 
   useEffect(() => {
     const fetchReq = async () => {
-      const res = await getAllsentReq()
+      const res = await getSentRector()
       setResponse(res)
     }
     fetchReq()
-  },[])
+  },[res])
 
   function handleSubmit(e){
     e.preventDefault()

@@ -12,7 +12,11 @@ import {
     toFileRequest,
     sendNewRequest,
     sendSavedRequest,
-    getSentRequirements
+    getSentRequirements,
+    getAllSentRequirements,
+    rectorResponse,
+    getApprovedRequirements,
+    getRejectedRequirements
 } from '../api/req.js'
 import { useState } from "react"
 export const ReqContext = createContext() 
@@ -92,6 +96,36 @@ function ReqProvider({children}) {
             setErrors(error)
         }
     }
+    const getSentRector = async () =>{
+        try {
+            const res = await getAllSentRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+    const getApprovedReq = async () =>{
+        try {
+            const res = await getApprovedRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+    const getRejectedReq = async () =>{
+        try {
+            const res = await getRejectedRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+
+
+
     const updateReq = async (data) =>{
         try {
             const res = await updateRequest(data)
@@ -150,6 +184,15 @@ function ReqProvider({children}) {
             setErrors(error.response.data)
         }
     }
+    const sendRectorRes = async (data) =>{
+        try {
+            const res = await rectorResponse(data)
+            if (!res) throw new Error('No response')
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
     
   return (
     <ReqContext.Provider value={{
@@ -158,14 +201,18 @@ function ReqProvider({children}) {
         getAllFileReq,
         getAllTrashReq,
         getAllsentReq,
-        createReq,
         getReq,
+        getSentRector,
+        getApprovedReq,
+        getRejectedReq,
+        createReq,
         updateReq,
         deleteReq,
         trashReq,
         fileReq,
         sendInNewReq,
         sendSavedReq,
+        sendRectorRes,
         response,
         errors
     }}>

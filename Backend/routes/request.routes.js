@@ -8,7 +8,7 @@ import {
     getRequirements,
     updateRequest, 
     sendSavedRequest,
-    getAllRequirements,
+    getAllSentRequirements,
     sendNewRequest,
     rectorResponse,
     getAllAprovedRequirements,
@@ -59,8 +59,8 @@ router.get('/solicitud-rejected', authRequired, getAllRejectedRequirements)
 // ------------------------------->
 
 // Only visible to the rector
-router.get('/solicitud-allSend', authRequired,authRectorRoll, getAllRequirements)
-router.put('/solicitud-res-YorN/:id?', authRequired,authRectorRoll, rectorResponse)
+router.get('/solicitud-allSent', authRequired,authRectorRoll, getAllSentRequirements)
+router.put('/solicitud-res-YorN/:id', authRequired,authRectorRoll, rectorResponse)
 
 // Only visible to the Logistic
 router.get('/solicitud-allApproved', authRequired,authLogisticRoll, getAllAprovedRequirements)

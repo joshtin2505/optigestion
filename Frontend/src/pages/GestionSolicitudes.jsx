@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 function GestionSolicitudes() {
   const {response} = useAuth()
   return (
-    <div className='back'>
+    <>
         <Nav type={1}/>
         <section className='cardContainer'>
           <OptionCards to="/req-add" imgUrl='https://images.pexels.com/photos/267569/pexels-photo-267569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Crear Solicitud"/>
@@ -15,9 +15,12 @@ function GestionSolicitudes() {
           <OptionCards to="/req-sent" imgUrl='https://images.pexels.com/photos/6348101/pexels-photo-6348101.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Solicitudes Enviadas"/>
           <OptionCards to="/req-res" imgUrl='https://images.pexels.com/photos/3760607/pexels-photo-3760607.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Solicitud Respondida"/>
           <OptionCards to="/req-file" imgUrl='https://images.pexels.com/photos/1181772/pexels-photo-1181772.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Archivado"/>
-          <RollDashboard roll={response.roll}/>
+          {
+            response.roll !== null ? <RollDashboard roll={response.roll}/> : null
+          }
         </section>
-    </div>
+    </>
+
   )
 }
 const RollDashboard = ({roll}) => {

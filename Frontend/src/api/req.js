@@ -23,3 +23,12 @@ export const getTrashRequirements = async () => axios.get('/solicitud-trash/' )
 export const toFileRequest = async (id) => axios.put('/solicitud-file/' + id)
 export const getFileRequirements = async () => axios.get('/solicitud-files/' )
 
+
+// Rector 
+export const getAllSentRequirements = async () => axios.get('/solicitud-allSent/' )
+
+export const rectorResponse = async (data) => axios.put('/solicitud-res-YorN/' + data.id, data)
+
+//Respondidos
+export const getApprovedRequirements = async () => axios.get('/solicitud-approved/')
+export const getRejectedRequirements = async () => axios.get('/solicitud-rejected/')

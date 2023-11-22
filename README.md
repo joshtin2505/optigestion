@@ -1,29 +1,16 @@
 # OptiGestion
 
 ## Perndientes
-- **Para todos los usuarios**
-    <br>
-    ✅ poner los metodos/funciones que hacen falta, para todos los usuarios 
-    - poner que el usuario, pueda ver:
-    <br>
-        ✅ archivados 
-        <br>
-        ✅ papelera
-        <br>
-        ✅ borrador
-        <br>
-        ✅ enviados
-        <br>
-        ✅ respondidos -> (aprobados, rechazados)
-    ✅ poner que el usuario pueda ver sus datos
 - **Logistico**
-    <br>
-    ✅ poner que el logistico puda ver los requerimientos aprovados de los operativos
-    <br>
-    ✅ poner que el logistico pueda suvir sus cotizaciones
-    <br>
-    ✅ poner comentarios a los operativos
-    <br>
-    ✅ actualizar estado a cotizado/pendiente de selcceion de proveedor
-    - Guardar y leer PDF
-    - Test
+    - completar dashboard
+    - que pueda subir sus cotizaciones
+    - que pueda ver lo que ya esta para comprar
+    - que pueda subir pdf
+- **Operativo**
+    - que pueda ver y descargar pdf
+- **Rector**  *__Completado__*
+
+- **Administrador**
+    - que pueda ver todos los usuarios registrados
+    - que pueda editar los usuarios
+    - que pueda eleminar usuarios

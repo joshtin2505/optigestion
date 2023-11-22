@@ -256,7 +256,7 @@ export const getAllRejectedRequirements = async (req,res) => {
 
 // <------------------------------------------------------>
 // Rector Methods of the requirements
-export const getAllRequirements = async (req,res) => {
+export const getAllSentRequirements = async (req,res) => {
     try {
         const requirements = await Request.find({
             state: 3
@@ -275,9 +275,9 @@ export const rectorResponse = async (req,res) => {
         })
         if (!requirements) return res.status(404).json({ message: "No se encontró el requerimiento" })
         
-        const response = Number(req.query.res )
+        const response = Number(req.body.res)
 
-        if(response == 1){
+        if(response === 1){
             const requestApprove = await Request.findByIdAndUpdate(req.params.id, { state: 4, rectorComment: req.body.rectorComment }, { new: true })
             if (!requestApprove) return res.status(404).json({ message: "No se pudo aprobar el requerimiento" })
             return res.json({ message: "Requerimiento aprobado", state: requestApprove.state, rectorComment: requestApprove.rectorComment})

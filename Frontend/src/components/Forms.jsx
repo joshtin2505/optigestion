@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import {useState} from 'react'
+import { BsDownload } from 'react-icons/bs'
+import '../assets/css/Approved.css'
 
 export const CreateReqForm = () => {
     const {createReq, sendInNewReq} = useReq()
@@ -212,78 +214,268 @@ export const CreateReqForm = () => {
     )
   }
   export const ResReqForm = (data) => {
-    const {updateReq, sendSavedReq} = useReq()
-    const [inValues, setInValues] = useState({
-      title: data.data.title,
-      description: data.data.description
-    })
+    const {sendRectorRes, } = useReq()
+    const [inValues, setInValues] = useState()
     const {
-      register,
-      handleSubmit,
-      formState:{
-        errors
-      },
       setValue,
       watch
     } = useForm()
   
-    const onSubmit = handleSubmit((values)=>{
-      updateReq({id :data.data._id,...values})
-    })
-    const onSend = () => {
-      sendSavedReq(data.data._id)
+    const onApprove = ()=> {
+      sendRectorRes({id :data.data._id,rectorComment:inValues, res: 1})
+    }
+    const onReject = () => {
+      sendRectorRes({id :data.data._id,rectorComment:inValues, res: 0})
     }
     const handleChange = (e) => {
-      const title = watch('title')
-      const description = watch('description')
-      setInValues({
-        title,
-        description
-      })
+      const rectorComment = watch('rectorComment')
+      setInValues(rectorComment)
     }
     return(
       <>
-      <form className='form-Update formTwo' onChange={handleChange}  onSubmit={onSubmit}>
+      <form className='form-Update formTwo' onChange={handleChange}>
         <div className='head'>
           <label htmlFor="">Titulo:</label>
           <input 
           type="text" 
-          onChange={(e) => setValue('title', e.target.value)} 
-          value={inValues.title} 
-          {...register('title',{
-            required: true,
-            min: 5
-          })}
+          value={data.data.title} 
           disabled 
           />
         </div>
-        {
-          errors.title && (
-            <div className="error">Se necita un titulo </div>
-          )
-        }
+
         <br />
-        <label htmlFor="">Descripcion:</label>
-        <br />
-        <textarea 
-        className='textarea-Res '
-        onChange={(e) => {setValue('description', e.target.value)}}
-        value={inValues.description} 
-        {...register('description', {
-          required: true
-        })} 
-        disabled
-        ></textarea>
-        {
-          errors.description && (
-            <div className="error">Se necita una descripción</div>
-          )
-        }
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }} className="body">
+
+          <label style={{
+            width: 'auto',
+            textalign: 'start',
+          }} htmlFor="">Descripcion:</label>
+          <textarea style={{
+            height: 'auto',
+          }}
+          className='textarea-Res '
+          value={data.data.description} 
+          disabled
+          />
+        </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }} className="body">
+
+          <label style={{
+            width: 'auto',
+            textalign: 'start',
+          }} htmlFor="">Comentarios:</label>
+          <textarea style={{
+            height: 'auto',
+          }}
+          className='textarea-Res '
+          onChange={(e) => {setValue('rectorComment', e.target.value)}}
+          autoFocus
+          />
+        </div>
+
         <div>
           <div className="btnOptions">
-          <button type='submit' className='btnSave'>Guardar</button>
-          <button type='button' onClick={onSend} className='btnSend'>Enviar</button>
+            <button type='button' onClick={onReject} className='btnSend'>Rechazar</button>
+            <button type='button' onClick={onApprove} className='btnSave'>Aprobar</button>
           </div>
+        </div>
+      </form>
+      
+      </>
+    )
+  }
+  export const ViewApprovedResForm = (data) => {
+    const {sendRectorRes, } = useReq()
+    const [inValues, setInValues] = useState()
+    const {
+      setValue,
+      watch
+    } = useForm()
+  
+    const onApprove = ()=> {
+      sendRectorRes({id :data.data._id,rectorComment:inValues, res: 1})
+    }
+    const onReject = () => {
+      sendRectorRes({id :data.data._id,rectorComment:inValues, res: 0})
+    }
+    const handleChange = (e) => {
+      const rectorComment = watch('rectorComment')
+      setInValues(rectorComment)
+    }
+    return(
+      <>
+      <form className='form-Update formTwo' onChange={handleChange}>
+        <div className='head'>
+          <label htmlFor="">Titulo:</label>
+          <input 
+          type="text" 
+          value={data.data.title} 
+          disabled 
+          />
+        </div>
+
+        <br />
+        <section className="A-content">
+          <div className="A-Description-cont">
+
+            <label style={{
+              width: 'auto',
+              textalign: 'start',
+            }} htmlFor="">Descripcion:</label>
+            <textarea style={{
+              height: 'auto',
+            }}
+            className='textarea-Res '
+            value={data.data.description} 
+            disabled
+            />
+            </div>
+            <div className="A-RectorComments-cont">
+
+            <label style={{
+              width: 'auto',
+              textalign: 'start',
+            }} htmlFor="">Comentarios:</label>
+            <textarea style={{
+              height: 'auto',
+            }}
+            value={data.data.rectorComment}
+            className='textarea-Res'
+            disabled
+            />
+          </div>
+        </section>
+        {/*  */}
+        <div>
+          <h1>Cotizacones</h1>
+          <hr />
+          <section className='A-middle-section'>
+            <div className="A-toQuote-Box">
+              <h5 className='A-title-op'>Opcion 1</h5>
+              <p className='A-pdf-name'>Pdf Name.pdf</p>
+              <div className='A-btn-pdf-cont'>
+                <button className='A-btn-view' type='button'>Ver</button>
+                <button className='A-btn-download' type='button'>
+                  <BsDownload size={20} fill='#fff'/>
+                </button>
+              </div>
+            </div>
+            <div className="A-toQuote-Box">
+              <h5 className='A-title-op'>Opcion 2</h5>
+              <p className='A-pdf-name'>Pdf Name.pdf</p>
+              <div className='A-btn-pdf-cont'>
+                <button className='A-btn-view' type='button'>Ver</button>
+                <button className='A-btn-download' type='button'>
+                  <BsDownload fill='#fff'/>
+                </button>
+              </div>
+            </div>
+            <div className="A-toQuote-Box">
+              <h5 className='A-title-op'>Opcion 3</h5>
+              <p className='A-pdf-name'>Pdf Name.pdf</p>
+              <div className='A-btn-pdf-cont'>
+                <button className='A-btn-view' type='button'>Ver</button>
+                <button className='A-btn-download' type='button'>
+                  <BsDownload fill='#fff'/>
+                </button>
+              </div>
+            </div>
+          </section>
+          {/*  */}
+          <section className='A-down-section'>
+            <h5 className='A-operative-comments-txt'>Comentarios: </h5>
+            <textarea className='A-operative-comments-in' />
+            <div className='A-chose-cont'>
+              <h6 className='A-chose-title'>Elige</h6>
+                <div className='A-chose-option'>
+                  <input className='A-radio-chose' type="radio" name='opciones' value='1'/>
+                  <span className='A-chose-opt-txt'>Opcion 1</span>
+                </div>
+                <div className='A-chose-option'>
+                  <input className='A-radio-chose' type="radio" name='opciones' value='2'/>
+                  <span className='A-chose-opt-txt'>Opcion 2 </span>
+                </div>
+                <div className='A-chose-option'>
+                  <input className='A-radio-chose' type="radio" name='opciones' value='3'/>
+                  <span className='A-chose-opt-txt'>Opcion 3</span>
+                </div>
+            </div>
+          </section>
+        </div>
+        {/*  */}
+        <div className='A-btnCont'>
+          <div className="A-btnOptions">
+            <button type='button' onClick={onReject} className='A-btnClear'>Limpiar Campos</button>
+            <button type='button' onClick={onApprove} className='A-btnSend'>Enviar</button>
+          </div>
+        </div>
+      </form>
+      
+      </>
+    )
+  }
+  export const ViewRejectedResForm = (data) => {
+
+    return(
+      <>
+      <form className='form-Update formTwo'>
+        <div className='head'>
+          <label htmlFor="">Titulo:</label>
+          <input 
+          type="text" 
+          value={data.data.title} 
+          disabled 
+          />
+        </div>
+
+        <br />
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }} className="body">
+
+          <label style={{
+            width: 'auto',
+            textalign: 'start',
+          }} htmlFor="">Descripcion:</label>
+          <textarea style={{
+            height: 'auto',
+          }}
+          className='textarea-Res '
+          value={data.data.description} 
+          disabled
+          />
+        </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }} className="body">
+
+          <label style={{
+            width: 'auto',
+            textalign: 'start',
+          }} htmlFor="">Comentarios:</label>
+          <textarea style={{
+            height: 'auto',
+          }}
+          className='textarea-Res '
+          disabled
+          value={data.data.rectorComment} 
+          />
         </div>
       </form>
       
