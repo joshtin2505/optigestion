@@ -4,7 +4,7 @@ import { useReq } from '../context/ReqContext.jsx'
 import '../assets/css/Draft.css'
 import {BsSearch,BsEye} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import {ViewReqForm} from './CrearSolicitud.jsx'
+import {ViewReqForm} from '../components/Forms.jsx'
  
 
 function Enviados() {

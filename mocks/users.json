@@ -39,14 +39,14 @@
     "user": "vergoanti",
     "password":"vergoglio13"
   },{
-    "firstName": "Antonella",
-    "lastName": "D' Rosa",
+    "firstName": "admin",
+    "lastName": "admin",
     "roll": 0,
-    "departament": "Developer Team",
-    "job": "Full Stack Devoloper",
-    "departamentId": 2345,
-    "id": 2345,
-    "user": "antodro",
-    "password":"antodro23"
+    "departament": "admin",
+    "job": "admin",
+    "departamentId": "0000",
+    "id": "0000",
+    "user": "admin",
+    "password":"admin1234"
   }
 ]

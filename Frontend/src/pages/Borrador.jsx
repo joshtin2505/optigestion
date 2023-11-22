@@ -4,7 +4,7 @@ import { useReq } from '../context/ReqContext.jsx'
 import '../assets/css/Draft.css'
 import {BsSearch, BsTrash, BsFolder,BsPen} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import {UpdateReqForm} from './CrearSolicitud.jsx'
+import {UpdateReqForm} from '../components/Forms.jsx'
  
 
 function Borrador() {

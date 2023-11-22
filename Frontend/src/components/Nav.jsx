@@ -21,7 +21,7 @@ function NavBar({type = 0}) {
     }
 
 }
-function Loget({user}){
+function Loget({user = 1}){
     const {logOut} = useAuth()
     return (
         <header>
