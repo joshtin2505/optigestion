@@ -1,4 +1,5 @@
 import { Router } from "express"
+import { upload } from "../config.js"
 import {authRequired} from "../middlewares/validateToken.js"
 import { authRectorRoll,authLogisticRoll } from "../middlewares/validateRoll.js"
 import { 
@@ -19,8 +20,10 @@ import {
     trashRequest,
     getDraft,
     getAllRejectedRequirements,
-    getSent
+    getSent,
+    getAllToQuoteRequirements
 } from "../controllers/request.controler.js"
+
 
 const router = Router()
 // Basics
@@ -63,8 +66,13 @@ router.get('/solicitud-allSent', authRequired,authRectorRoll, getAllSentRequirem
 router.put('/solicitud-res-YorN/:id', authRequired,authRectorRoll, rectorResponse)
 
 // Only visible to the Logistic
-router.get('/solicitud-allApproved', authRequired,authLogisticRoll, getAllAprovedRequirements)
-router.put('/solicitud-res-prices/:id?', authRequired,authLogisticRoll, logisticResponse)
+router.get('/solicitud-toQuote', authRequired,authLogisticRoll, getAllToQuoteRequirements)
+router.put('/solicitud-res-prices/', authRequired,authLogisticRoll, upload.fields([
+    { name: 'id', maxCount: 1 },
+    { name: 'pdf1', maxCount: 1 },
+    { name: 'pdf2', maxCount: 1 },
+    { name: 'pdf3', maxCount: 1 }
+]), logisticResponse)
 
 
 export default router

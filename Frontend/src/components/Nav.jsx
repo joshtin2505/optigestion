@@ -11,13 +11,14 @@ import {
     FormControl,
   } from '@chakra-ui/react'
 import { useAuth } from '../context/AuthContext'
+
 function NavBar({type = 0}) {
     const {response} = useAuth()
     if (type === 0) {
         return <UnLoget/>
     }
     else if (type === 1) {
-        return <Loget user={response.roll}/>
+        return response.roll !== null ? <Loget user={response.roll}/> : null
     }
 
 }

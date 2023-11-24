@@ -2,21 +2,23 @@ import { createContext, useContext } from "react"
 import {
     addRequest, 
     deleteRequest, 
-    getRequest,
-    getRequirements,
     updateRequest,
-    getDraftRequirements,
     toTrashRequest,
-    getTrashRequirements,
-    getFileRequirements,
     toFileRequest,
     sendNewRequest,
     sendSavedRequest,
+    rectorResponse,
+    logisticResponse,
+    getRequest,
+    getRequirements,
+    getDraftRequirements,
+    getTrashRequirements,
+    getFileRequirements,
     getSentRequirements,
     getAllSentRequirements,
-    rectorResponse,
     getApprovedRequirements,
-    getRejectedRequirements
+    getRejectedRequirements,
+    getAllToQuoteRequirements
 } from '../api/req.js'
 import { useState } from "react"
 export const ReqContext = createContext() 
@@ -87,6 +89,7 @@ function ReqProvider({children}) {
             setErrors(error)
         }
     }
+    // Nunca usada getReq() ⬇️
     const getReq = async (id) =>{
         try {
             const res = await getRequest(id)
@@ -123,9 +126,16 @@ function ReqProvider({children}) {
             setErrors(error)
         }
     }
-
-
-
+    const getAllToQuoteReq = async () =>{
+        try {
+            const res = await getAllToQuoteRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
+// <----------------------------->
     const updateReq = async (data) =>{
         try {
             const res = await updateRequest(data)
@@ -178,7 +188,6 @@ function ReqProvider({children}) {
         try {
             const res = await sendSavedRequest(data)
             if (!res) throw new Error('No response')
-            console.log(data)
             setResponse(res.data) 
         } catch (error) {
             setErrors(error.response.data)
@@ -187,6 +196,15 @@ function ReqProvider({children}) {
     const sendRectorRes = async (data) =>{
         try {
             const res = await rectorResponse(data)
+            if (!res) throw new Error('No response')
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
+    const LogisticRes = async (data) =>{
+        try {
+            const res = await logisticResponse(data)
             if (!res) throw new Error('No response')
             setResponse(res.data) 
         } catch (error) {
@@ -205,6 +223,7 @@ function ReqProvider({children}) {
         getSentRector,
         getApprovedReq,
         getRejectedReq,
+        getAllToQuoteReq,
         createReq,
         updateReq,
         deleteReq,
@@ -213,6 +232,7 @@ function ReqProvider({children}) {
         sendInNewReq,
         sendSavedReq,
         sendRectorRes,
+        LogisticRes,
         response,
         errors
     }}>

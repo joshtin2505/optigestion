@@ -3,9 +3,11 @@
 ## Perndientes
 - **Logistico**
     - completar dashboard
-    - que pueda subir sus cotizaciones
+    <br>
+    ✅ que pueda subir sus cotizaciones
+    <br>
+    ✅ que pueda subir pdf
     - que pueda ver lo que ya esta para comprar
-    - que pueda subir pdf
 - **Operativo**
     - que pueda ver y descargar pdf
 - **Rector**  *__Completado__*

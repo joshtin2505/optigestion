@@ -42,15 +42,27 @@ const reqSchema = new mongoose.Schema({
     firstPrices:{
         type: Buffer
     },
+    firstPricesName:{
+        type: String
+    },
     secondPrices:{
         type: Buffer
+    },
+    secondPricesName:{
+        type: String
     },
     thirdPrices:{
         type: Buffer
     },
-    logisticComments:{
+    thirdPricesName:{
+        type: String
+    },
+    toBuyComments:{
         type: String,
         default: "No comments yet"
+    },
+    choice:{
+        type: Number
     }
 })
 export default mongoose.model("Request", reqSchema)

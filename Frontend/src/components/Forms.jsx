@@ -15,8 +15,9 @@ import {
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import {useState} from 'react'
-import { BsDownload } from 'react-icons/bs'
+import { BsCloudUpload, BsDownload } from 'react-icons/bs'
 import '../assets/css/Approved.css'
+import '../assets/css/ToQuote.css'
 
 export const CreateReqForm = () => {
     const {createReq, sendInNewReq} = useReq()
@@ -287,6 +288,127 @@ export const CreateReqForm = () => {
           <div className="btnOptions">
             <button type='button' onClick={onReject} className='btnSend'>Rechazar</button>
             <button type='button' onClick={onApprove} className='btnSave'>Aprobar</button>
+          </div>
+        </div>
+      </form>
+      
+      </>
+    )
+  }
+  export const ToQuoteResForm = (data) => {
+
+    const [pdfs, setPdfs] = useState([null, null, null])
+    const [fileNames, setFileNames] = useState(['No hay archivos cargados', 'No hay archivos cargados', 'No hay archivos cargados'])
+    const {LogisticRes} = useReq()
+    
+    const handleFileChange = (index, files) => {
+      if (files[0]) {
+        setFileNames((prevNames) => {
+          const newNames = [...prevNames]
+          newNames[index] = files[0].name
+          return newNames
+        })
+        setPdfs((prevPdfs) => {
+          const newPdfs = [...prevPdfs]
+          newPdfs[index] = files[0]
+          return newPdfs
+        })
+      }
+    }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const [pdf1, pdf2, pdf3] = pdfs
+    if (pdf1 || pdf2 || pdf3) {
+      const formData = new FormData()
+
+
+      formData.append('id', data.data._id)
+      pdf1 && formData.append('pdf1', pdf1)
+      pdf2 && formData.append('pdf2', pdf2)
+      pdf3 && formData.append('pdf3', pdf3)
+
+      LogisticRes(formData)
+    }
+  }
+
+    return(
+      <>
+      <form encType="multipart/form-data" className='form-Update formTwo' onSubmit={handleSubmit}>
+        <div className='head'>
+          <label htmlFor="">Titulo:</label>
+          <input 
+          type="text" 
+          value={data.data.title} 
+          disabled 
+          />
+        </div>
+
+        <br />
+        <section className="TQ-content">
+          <div className="TQ-Description-cont">
+
+            <label style={{
+              width: 'auto',
+              textalign: 'start',
+            }} htmlFor="">Descripcion:</label>
+            <textarea style={{
+              height: 'auto',
+            }}
+            className='textarea-Res '
+            value={data.data.description} 
+            disabled
+            />
+            </div>
+            <div className="TQ-RectorComments-cont">
+
+            <label style={{
+              width: 'auto',
+              textalign: 'start',
+            }} htmlFor="">Comentarios:</label>
+            <textarea style={{
+              height: 'auto',
+            }}
+            value={data.data.rectorComment}
+            className='textarea-Res'
+            disabled
+            />
+          </div>
+        </section>
+        {/*  */}
+        <div>
+          <h1>Cotizacones</h1>
+          <hr />
+          <section className='TQ-middle-section'>
+          {[0, 1, 2].map((index) => (
+            <div className='TQ-toQuote-Box' key={index}>
+              <div
+                className='TQ-btn-pdf-cont'
+                onClick={() => document.querySelector(`.option${index + 1}In`).click()}
+              >
+                <h5 className='TQ-title-op'>{`Opcion ${index + 1}`}</h5>
+                <input
+                  type='file'
+                  accept='.pdf'
+                  className={`option${index + 1}In`}
+                  hidden
+                  multiple={false}
+                  onChange={({ target: { files } }) => handleFileChange(index, files)}
+                  name={`pdf${index + 1}`}
+                />
+                <BsCloudUpload fill='#ececec' size={50} />
+                <p className='TQ-pdf-name'>{fileNames[index]}</p>
+              </div>
+            </div>
+          ))}
+        </section>
+          {/*  */}
+          
+        </div>
+        {/*  */}
+        <div className='TQ-btnCont'>
+          <div className="TQ-btnOptions">
+            <button type='submit' className='TQ-btnSend'>Enviar</button>
           </div>
         </div>
       </form>

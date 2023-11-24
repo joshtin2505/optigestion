@@ -10,7 +10,7 @@ function HomePage() {
       <div className="home-container">
         <section className="welcomeSection">
           <h1 className="welcomeTxt">Bienvenido a...</h1>
-            <p className="softwareName"><p className="txtRed">Opti</p><p className="txtBlue">Gestion </p></p>
+            <p className="softwareName"><span className="txtRed">Opti</span><span className="txtBlue">Gestion </span></p>
           <p className="slogan">
              ¡Acelera tu compra, optimiza tus recursos.! 
           </p>

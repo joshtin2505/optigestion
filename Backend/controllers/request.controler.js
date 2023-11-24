@@ -1,6 +1,4 @@
 import Request from "../models/request.models.js"
-import fs from "fs"
-
 // Basics Methods of the requirements
 
 // Obtener todos los requerimientos
@@ -15,7 +13,7 @@ export const getRequirements = async (req,res) => {
         console.log(error)
     }
 }
-// Obtener un solo requerimineto
+// Obtener un solo requerimineto ✅
 export const getRequest = async (req,res) => {
     try {
         const request = await Request.findById(req.params.id)
@@ -26,7 +24,7 @@ export const getRequest = async (req,res) => {
     }
 
 }
-// Crear Requerimiento, lo que lo guarda como un borrador
+// Crear Requerimiento, lo que lo guarda como un borrador ✅
 export const createRequest = async(req,res) => {
     const { 
         title, 
@@ -56,7 +54,7 @@ export const createRequest = async(req,res) => {
         console.log(error)
     }
 }
-// Actualizar un req ya creado - No se puede actualizar una ya en proceso(enviado, aprovado, cotizado)
+// Actualizar un req ya creado - No se puede actualizar una ya en proceso(enviado, aprovado, cotizado) ✅
 export const updateRequest = async (req,res) => {
 
     try {
@@ -67,7 +65,7 @@ export const updateRequest = async (req,res) => {
         console.log(error)
     }
 }
-// Eleimiar un req | solo si no esta ya en proceso 
+// Eleimiar un req | solo si no esta ya en proceso ✅
 export const deleteRequest = async(req,res) => {
     try {
         const request = await Request.findByIdAndDelete(req.params.id)
@@ -81,7 +79,7 @@ export const deleteRequest = async(req,res) => {
 // <------------------------------------------------------>
 // Advanced Methods of the requirements
 
-// Enciados
+// Enciados ✅
 // Enviar si ya esta guardado
 export const sendSavedRequest = async (req,res) => {
     try {
@@ -227,7 +225,7 @@ export const getDraft = async (req,res) => {
     }
 }
 
-// Respondidos
+// Respondidos ✅
 export const getAllAprovedRequirements = async (req,res) => {
     try {
         const requirements = await Request.find({
@@ -255,7 +253,7 @@ export const getAllRejectedRequirements = async (req,res) => {
 }
 
 // <------------------------------------------------------>
-// Rector Methods of the requirements
+// Rector Methods of the requirements ✅
 export const getAllSentRequirements = async (req,res) => {
     try {
         const requirements = await Request.find({
@@ -294,31 +292,44 @@ export const rectorResponse = async (req,res) => {
 
 // <------------------------------------------------------>
 // Logistic Methodsof the requiremendts
-
+export const getAllToQuoteRequirements = async (req, res) => {
+    try {
+        const requirements = await Request.find({
+            state: 4
+        })
+        if (requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos" })
+        res.json(requirements)
+    } catch (error) {
+        console.log(error)
+    }
+}
 export const logisticResponse = async (req,res) => {
+
     try {
         const requirements = await Request.find({
             state: 4,
-            _id: req.params.id
+            _id: req.body.id
         })
         if (!requirements) return res.status(404).json({ message: "No se encontró el requerimiento" })
         
-        const response = Number(req.query.res )
+        const firstPrices = req.files.pdf1[0].buffer
+        const firstPricesName = req.files.pdf1[0].originalname
+        const secondPrices = req.files.pdf2[0].buffer
+        const secondPricesName = req.files.pdf2[0].originalname
+        const thirdPrices = req.files.pdf3[0].buffer
+        const thirdPricesName = req.files.pdf3[0].originalname
         
-        const firstPrices = fs.readFile(req.body.firstPrices)
-        const secondPrices = fs.readFile(req.body.secondPrices)
-        const thirdPrices  = fs.readFile(req.body.thirdPrices)
-        if(response == 1){
-            const requestApprove = await Request.findByIdAndUpdate(req.params.id, { 
-                state: 6, 
-                logisticComments: req.body.logisticComments, 
-                firstPrices, 
-                secondPrices, 
-                thirdPrices 
-            }, { new: true })
-            if (!requestApprove) return res.status(404).json({ message: "No se pudo enviar la cotización" })
-            return res.json({ message: "Requerimiento aprobado", state: requestApprove.state, logisticComments: requestApprove.logisticComments})
-        }
+        const requestQuote = await Request.findByIdAndUpdate(req.body.id, { 
+            state: 6, 
+            firstPrices, 
+            firstPricesName, 
+            secondPrices, 
+            secondPricesName, 
+            thirdPrices, 
+            thirdPricesName 
+        }, { new: true })
+        if (!requestQuote) return res.status(404).json({ message: "No se pudo enviar la cotización" })
+        return res.json(requestQuote)
     } catch (error) {
         console.log(error)
     }

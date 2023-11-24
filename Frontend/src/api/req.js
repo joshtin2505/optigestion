@@ -32,3 +32,7 @@ export const rectorResponse = async (data) => axios.put('/solicitud-res-YorN/' +
 //Respondidos
 export const getApprovedRequirements = async () => axios.get('/solicitud-approved/')
 export const getRejectedRequirements = async () => axios.get('/solicitud-rejected/')
+
+// Logistico
+export const getAllToQuoteRequirements = async () => axios.get('/solicitud-toQuote/')
+export const logisticResponse = async (data) => await axios.put('/solicitud-res-prices/', data, {headers: {'Content-Type': 'multipart/form-data'}})

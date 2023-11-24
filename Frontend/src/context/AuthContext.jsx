@@ -99,7 +99,6 @@ export const AuthContextProvider = ({children}) => {
     },[closedSession])  
 
     useEffect(() => {
-        console.log(errors)
         if (errors.length > 0 ){
             const timer = setTimeout(()=> {
                 setErrors([])

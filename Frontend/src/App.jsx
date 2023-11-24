@@ -19,8 +19,7 @@ import Cotizar from './pages/Cotizar.jsx'
 import Comprar from './pages/Comprar.jsx'
 function App() {
   const {isAllowed} = useAuth()
-  const admin = isAllowed === 0 ? true : false
-  // console.log(admin)
+
   return (
       <ReqProvider>
         <ChakraProvider>

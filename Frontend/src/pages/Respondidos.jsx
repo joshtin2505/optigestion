@@ -9,16 +9,16 @@ import {ViewApprovedResForm, ViewRejectedResForm} from '../components/Forms.jsx'
 
 function Respondidos() {
   const {getApprovedReq,getRejectedReq, response: res} = useReq()
-  const {register, setValue, watch} = useForm()
   const [approvedResponse ,setApprovedResponse] = useState([])
   const [rejectedResponse ,setRejectedResponse] = useState([])
 
   useEffect(() => {
     const fetchReq = async () => {
       const resA = await getApprovedReq()
-      setApprovedResponse(resA)
+        if (Array.isArray(resA)) setApprovedResponse(resA)
       const resR = await getRejectedReq()
-      setRejectedResponse(resR)
+        if (Array.isArray(resR)) setRejectedResponse(resR)
+      
     }
     fetchReq()
   },[res])
