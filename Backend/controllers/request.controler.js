@@ -229,7 +229,7 @@ export const getDraft = async (req,res) => {
 export const getAllAprovedRequirements = async (req,res) => {
     try {
         const requirements = await Request.find({
-            state: 4,
+            state: {$in: [4,6]},
             employeeId: req.user.employeeId
         })
         if (!requirements || requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos para cotizar" })
@@ -247,6 +247,17 @@ export const getAllRejectedRequirements = async (req,res) => {
         })
         if (!requirements || requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos rechazados" })
         res.json(requirements)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// Elegir
+export const chosenQuote = async (req,res) => {
+    try {
+        const requestSent = await Request.findByIdAndUpdate(req.params.id, { state: 7, choice:req.body.choise, toBuyComments:req.body.toBuyComments }, { new: true })
+        if (!requestSent) return res.status(404).json({ message: "No se pudo enviar la eleccion" })
+        return res.json(requestSent)
     } catch (error) {
         console.log(error)
     }
@@ -330,6 +341,17 @@ export const logisticResponse = async (req,res) => {
         }, { new: true })
         if (!requestQuote) return res.status(404).json({ message: "No se pudo enviar la cotización" })
         return res.json(requestQuote)
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getAllToBuyRequirements = async (req, res) => {
+    try {
+        const requirements = await Request.find({
+            state: 7
+        })
+        if (requirements.length === 0) return res.status(200).json({ message: "No hay requerimientos" })
+        res.json(requirements)
     } catch (error) {
         console.log(error)
     }

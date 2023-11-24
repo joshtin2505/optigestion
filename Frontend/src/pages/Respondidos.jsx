@@ -18,7 +18,6 @@ function Respondidos() {
         if (Array.isArray(resA)) setApprovedResponse(resA)
       const resR = await getRejectedReq()
         if (Array.isArray(resR)) setRejectedResponse(resR)
-      
     }
     fetchReq()
   },[res])

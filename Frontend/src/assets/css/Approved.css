@@ -126,3 +126,10 @@
     width: 155px;
     background: #ED4B4B;
 }
+.A-pdf-name{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Número de líneas deseadas */
+    -webkit-box-orient: vertical;
+    text-align: center;
+}

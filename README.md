@@ -10,6 +10,9 @@
     - que pueda ver lo que ya esta para comprar
 - **Operativo**
     - que pueda ver y descargar pdf
+    - que pueda comentar
+    - elegir lo que entre las opciones
+    - que pueda enviar y limpiar los campos
 - **Rector**  *__Completado__*
 
 - **Administrador**

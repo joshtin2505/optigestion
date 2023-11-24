@@ -21,7 +21,9 @@ import {
     getDraft,
     getAllRejectedRequirements,
     getSent,
-    getAllToQuoteRequirements
+    getAllToQuoteRequirements,
+    chosenQuote,
+    getAllToBuyRequirements
 } from "../controllers/request.controler.js"
 
 
@@ -59,6 +61,9 @@ router.get('/solicitud-draft', authRequired, getDraft)
 router.get('/solicitud-approved', authRequired, getAllAprovedRequirements)
 router.get('/solicitud-rejected', authRequired, getAllRejectedRequirements)
 
+// Elegir
+router.put('/solicitud-electQuote/:id', authRequired, chosenQuote)
+
 // ------------------------------->
 
 // Only visible to the rector
@@ -67,6 +72,7 @@ router.put('/solicitud-res-YorN/:id', authRequired,authRectorRoll, rectorRespons
 
 // Only visible to the Logistic
 router.get('/solicitud-toQuote', authRequired,authLogisticRoll, getAllToQuoteRequirements)
+router.get('/solicitud-toBuy', authRequired,authLogisticRoll, getAllToBuyRequirements)
 router.put('/solicitud-res-prices/', authRequired,authLogisticRoll, upload.fields([
     { name: 'id', maxCount: 1 },
     { name: 'pdf1', maxCount: 1 },

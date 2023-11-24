@@ -4,7 +4,7 @@ import { useReq } from '../context/ReqContext.jsx'
 import '../assets/css/Draft.css'
 import {BsSearch,BsEye} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import {ToQuoteResForm, ViewApprovedResForm, ViewRejectedResForm} from '../components/Forms.jsx'
+import {ToQuoteResForm} from '../components/Forms.jsx'
  
 
 function Cotizar() {

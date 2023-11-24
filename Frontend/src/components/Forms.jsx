@@ -12,12 +12,14 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  ModalCloseButton
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import {useState} from 'react'
 import { BsCloudUpload, BsDownload } from 'react-icons/bs'
 import '../assets/css/Approved.css'
 import '../assets/css/ToQuote.css'
+import '../assets/css/ViewPdf.css'
 
 export const CreateReqForm = () => {
     const {createReq, sendInNewReq} = useReq()
@@ -416,27 +418,94 @@ export const CreateReqForm = () => {
       </>
     )
   }
-  export const ViewApprovedResForm = (data) => {
-    const {sendRectorRes, } = useReq()
-    const [inValues, setInValues] = useState()
-    const {
-      setValue,
-      watch
-    } = useForm()
-  
-    const onApprove = ()=> {
-      sendRectorRes({id :data.data._id,rectorComment:inValues, res: 1})
-    }
-    const onReject = () => {
-      sendRectorRes({id :data.data._id,rectorComment:inValues, res: 0})
-    }
-    const handleChange = (e) => {
-      const rectorComment = watch('rectorComment')
-      setInValues(rectorComment)
+  export const ViewToBuyResForm = (data) => {
+    
+    function Quote({req}){
+      const request = req.data
+      const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
+      const { isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2 } = useDisclosure()
+      const { isOpen: isOpen3, onOpen: onOpen3, onClose: onClose3 } = useDisclosure()
+      function PdfView({url, title, isOpen, onClose, onOpen}) {
+        return (
+          <>
+            <Modal size={'full'} isCentered motionPreset='slideInBottom' isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>{title}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody >
+                <iframe className='pdf' src={url} frameborder="0"></iframe>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+          </>
+        )
+      }
+      return (
+        <>
+          <form>
+            <h1>Cotizacones</h1>
+            <hr />
+            <section className='A-middle-section'>
+              {
+                [1,2,3].map((index)=> {
+                  const value = index === 1 ? request.firstPrices
+                  : index === 2 ? request.secondPrices 
+                  : request.thirdPrices
+                  const nameValue = index === 1 ? request.firstPricesName
+                  : index === 2 ? request.secondPricesName 
+                  : request.thirdPricesName
+                  const toBuffer = Uint8Array.from(value.data).buffer
+                  const blob = new Blob([
+                    toBuffer
+                  ],{type: 'application/pdf'})
+                  const url = window.URL.createObjectURL(blob)
+                  const PdfViewerProps = {
+                    url,
+                    title: nameValue,
+                    isOpen: index === 1 ? isOpen1 : index === 2 ? isOpen2 : isOpen3,
+                    onOpen: index === 1 ? onOpen1 : index === 2 ? onOpen2 : onOpen3,
+                    onClose: index === 1 ? onClose1 : index === 2 ? onClose2 : onClose3,
+                  }
+                  return(
+                    <div className="A-toQuote-Box" key={index}>
+                      <h5 className='A-title-op'>Opcion {index}</h5>
+                      <p className='A-pdf-name'>
+                        {
+                          nameValue
+                        }
+                      </p>
+                      <PdfView {...PdfViewerProps} />
+                      <div className='A-btn-pdf-cont'>
+                        <button onClick={index === 1 ? onOpen1 : index === 2 ? onOpen2 : onOpen3} className='A-btn-view' type='button'>Ver</button>
+                        <a href={url} download={`cotizacion_${nameValue}`} target='_blank' className='A-btn-download'>
+                          <BsDownload size={20} fill='#fff'/>
+                        </a>
+                      </div>
+                    </div>
+                  ) 
+                })
+              }
+            </section>
+            {/*  */}
+            <section className='A-down-section'>
+              <h5 className='A-operative-comments-txt'>Comentarios: </h5>
+              <textarea className='A-operative-comments-in' value={request.toBuyComments} disabled/>
+              <div className='A-chose-cont'>
+                <h6 className='A-chose-title'>Comprar</h6>
+                <h6 className='A-chose-title'>Opcion {request.choise}</h6>
+                  
+              </div>
+            </section>
+            {/*  */}
+            <div className='A-btnCont'/>
+          </form>
+        </>
+      )
     }
     return(
       <>
-      <form className='form-Update formTwo' onChange={handleChange}>
+      <section className='form-Update formTwo' >
         <div className='head'>
           <label htmlFor="">Titulo:</label>
           <input 
@@ -445,7 +514,6 @@ export const CreateReqForm = () => {
           disabled 
           />
         </div>
-
         <br />
         <section className="A-content">
           <div className="A-Description-cont">
@@ -478,70 +546,172 @@ export const CreateReqForm = () => {
           </div>
         </section>
         {/*  */}
-        <div>
-          <h1>Cotizacones</h1>
-          <hr />
-          <section className='A-middle-section'>
-            <div className="A-toQuote-Box">
-              <h5 className='A-title-op'>Opcion 1</h5>
-              <p className='A-pdf-name'>Pdf Name.pdf</p>
-              <div className='A-btn-pdf-cont'>
-                <button className='A-btn-view' type='button'>Ver</button>
-                <button className='A-btn-download' type='button'>
-                  <BsDownload size={20} fill='#fff'/>
-                </button>
+          <Quote req={data}/>        
+      </section>
+      
+      </>
+    )
+  }
+  export const ViewApprovedResForm = (data) => {
+    const {setChosenQuote} = useReq()
+    
+    function Quote({req}){
+      const request = req.data
+      const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
+      const { isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2 } = useDisclosure()
+      const { isOpen: isOpen3, onOpen: onOpen3, onClose: onClose3 } = useDisclosure()
+
+      function PdfView({url, title, isOpen, onClose, onOpen}) {
+        return (
+          <>
+            <Modal size={'full'} isCentered motionPreset='slideInBottom' isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>{title}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody >
+                <iframe className='pdf' src={url} frameborder="0"></iframe>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+          </>
+        )
+      }
+      const {register, handleSubmit, formState: {
+        errors
+      }} = useForm()
+      const onSubmit = handleSubmit((values)=>{
+        setChosenQuote({id:request._id, ...values})
+      })
+      return (
+        <>
+          <form onSubmit={onSubmit}>
+            <h1>Cotizacones</h1>
+            <hr />
+            <section className='A-middle-section'>
+              {
+                [1,2,3].map((index)=> {
+                  const value = index === 1 ? request.firstPrices
+                  : index === 2 ? request.secondPrices 
+                  : request.thirdPrices
+                  const nameValue = index === 1 ? request.firstPricesName
+                  : index === 2 ? request.secondPricesName 
+                  : request.thirdPricesName
+                  const toBuffer = Uint8Array.from(value.data).buffer
+                  const blob = new Blob([
+                    toBuffer
+                  ],{type: 'application/pdf'})
+                  const url = window.URL.createObjectURL(blob)
+                  const PdfViewerProps = {
+                    url,
+                    title: nameValue,
+                    isOpen: index === 1 ? isOpen1 : index === 2 ? isOpen2 : isOpen3,
+                    onOpen: index === 1 ? onOpen1 : index === 2 ? onOpen2 : onOpen3,
+                    onClose: index === 1 ? onClose1 : index === 2 ? onClose2 : onClose3,
+                  }
+                  return(
+                    <div className="A-toQuote-Box" key={index}>
+                      <h5 className='A-title-op'>Opcion {index}</h5>
+                      <p className='A-pdf-name'>
+                        {
+                          nameValue
+                        }
+                      </p>
+                      <PdfView {...PdfViewerProps}/>
+                      <div className='A-btn-pdf-cont'>
+                        <button onClick={index === 1 ? onOpen1 : index === 2 ? onOpen2 : onOpen3} className='A-btn-view' type='button'>Ver</button>
+                        <a href={url} download={`cotizacion_${nameValue}`} target='_blank' className='A-btn-download'>
+                          <BsDownload size={20} fill='#fff'/>
+                        </a>
+                      </div>
+                    </div>
+                  ) 
+                })
+              }
+            </section>
+            {/*  */}
+            <section className='A-down-section'>
+              <h5 className='A-operative-comments-txt'>Comentarios: </h5>
+              <textarea className='A-operative-comments-in' {...register('toBuyComments')}/>
+              <div className='A-chose-cont'>
+                <h6 className='A-chose-title'>Elige</h6>
+                  <div className='A-chose-option'>
+                    <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='1'/>
+                    <span className='A-chose-opt-txt'>Opcion 1</span>
+                  </div>
+                  <div className='A-chose-option'>
+                    <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='2'/>
+                    <span className='A-chose-opt-txt'>Opcion 2 </span>
+                  </div>
+                  <div className='A-chose-option'>
+                    <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='3'/>
+                    <span className='A-chose-opt-txt'>Opcion 3</span>
+                  </div>
+                  {
+                    errors.choise && <span className='Q-err'>Elige una cotizacion</span>
+                  }
+              </div>
+            </section>
+            {/*  */}
+            <div className='A-btnCont'>
+              <div className="A-btnOptions">
+                <button type='reset' className='A-btnClear'>Limpiar Campos</button>
+                <button type='submit' className='A-btnSend'>Enviar</button>
               </div>
             </div>
-            <div className="A-toQuote-Box">
-              <h5 className='A-title-op'>Opcion 2</h5>
-              <p className='A-pdf-name'>Pdf Name.pdf</p>
-              <div className='A-btn-pdf-cont'>
-                <button className='A-btn-view' type='button'>Ver</button>
-                <button className='A-btn-download' type='button'>
-                  <BsDownload fill='#fff'/>
-                </button>
-              </div>
-            </div>
-            <div className="A-toQuote-Box">
-              <h5 className='A-title-op'>Opcion 3</h5>
-              <p className='A-pdf-name'>Pdf Name.pdf</p>
-              <div className='A-btn-pdf-cont'>
-                <button className='A-btn-view' type='button'>Ver</button>
-                <button className='A-btn-download' type='button'>
-                  <BsDownload fill='#fff'/>
-                </button>
-              </div>
-            </div>
-          </section>
-          {/*  */}
-          <section className='A-down-section'>
-            <h5 className='A-operative-comments-txt'>Comentarios: </h5>
-            <textarea className='A-operative-comments-in' />
-            <div className='A-chose-cont'>
-              <h6 className='A-chose-title'>Elige</h6>
-                <div className='A-chose-option'>
-                  <input className='A-radio-chose' type="radio" name='opciones' value='1'/>
-                  <span className='A-chose-opt-txt'>Opcion 1</span>
-                </div>
-                <div className='A-chose-option'>
-                  <input className='A-radio-chose' type="radio" name='opciones' value='2'/>
-                  <span className='A-chose-opt-txt'>Opcion 2 </span>
-                </div>
-                <div className='A-chose-option'>
-                  <input className='A-radio-chose' type="radio" name='opciones' value='3'/>
-                  <span className='A-chose-opt-txt'>Opcion 3</span>
-                </div>
-            </div>
-          </section>
+          </form>
+        </>
+      )
+    }
+    return(
+      <>
+      <section className='form-Update formTwo' >
+        <div className='head'>
+          <label htmlFor="">Titulo:</label>
+          <input 
+          type="text" 
+          value={data.data.title} 
+          disabled 
+          />
         </div>
-        {/*  */}
-        <div className='A-btnCont'>
-          <div className="A-btnOptions">
-            <button type='button' onClick={onReject} className='A-btnClear'>Limpiar Campos</button>
-            <button type='button' onClick={onApprove} className='A-btnSend'>Enviar</button>
+        <br />
+        <section className="A-content">
+          <div className="A-Description-cont">
+
+            <label style={{
+              width: 'auto',
+              textalign: 'start',
+            }} htmlFor="">Descripcion:</label>
+            <textarea style={{
+              height: 'auto',
+            }}
+            className='textarea-Res '
+            value={data.data.description} 
+            disabled
+            />
+            </div>
+            <div className="A-RectorComments-cont">
+
+            <label style={{
+              width: 'auto',
+              textalign: 'start',
+            }} htmlFor="">Comentarios:</label>
+            <textarea style={{
+              height: 'auto',
+            }}
+            value={data.data.rectorComment}
+            className='textarea-Res'
+            disabled
+            />
           </div>
-        </div>
-      </form>
+        </section>
+        {/*  */}
+        {
+          data.data.state === 6 ? <Quote req={data}/> : <strong>
+            No hay cotizaciones
+          </strong>    
+        }
+      </section>
       
       </>
     )

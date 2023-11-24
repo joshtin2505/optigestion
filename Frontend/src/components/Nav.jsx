@@ -82,9 +82,7 @@ function UnLoget(){
                         <li>
                         <Link to='/'>Inicio</Link>
                         </li>
-                        <li>
-                        <Link to='/help'>Ayuda</Link>
-                        </li>
+
                     </ul>
                 
             </nav>

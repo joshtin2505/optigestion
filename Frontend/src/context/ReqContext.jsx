@@ -18,7 +18,9 @@ import {
     getAllSentRequirements,
     getApprovedRequirements,
     getRejectedRequirements,
-    getAllToQuoteRequirements
+    getAllToQuoteRequirements,
+    choseQuote,
+    getAllToBuyRequirements
 } from '../api/req.js'
 import { useState } from "react"
 export const ReqContext = createContext() 
@@ -135,6 +137,15 @@ function ReqProvider({children}) {
             setErrors(error)
         }
     }
+    const getAllToBuyReq = async () =>{
+        try {
+            const res = await getAllToBuyRequirements()
+            if (!res) throw new Error('No response')
+            return res.data
+        } catch (error) {
+            setErrors(error)
+        }
+    }
 // <----------------------------->
     const updateReq = async (data) =>{
         try {
@@ -211,7 +222,15 @@ function ReqProvider({children}) {
             setErrors(error.response.data)
         }
     }
-    
+    const setChosenQuote = async (data) =>{
+        try {
+            const res = await choseQuote(data)
+            if (!res) throw new Error('No response')
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        } 
+    }
   return (
     <ReqContext.Provider value={{
         getAllReq,
@@ -224,6 +243,7 @@ function ReqProvider({children}) {
         getApprovedReq,
         getRejectedReq,
         getAllToQuoteReq,
+        getAllToBuyReq,
         createReq,
         updateReq,
         deleteReq,
@@ -233,6 +253,7 @@ function ReqProvider({children}) {
         sendSavedReq,
         sendRectorRes,
         LogisticRes,
+        setChosenQuote,
         response,
         errors
     }}>

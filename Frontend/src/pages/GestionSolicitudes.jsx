@@ -15,7 +15,9 @@ function GestionSolicitudes() {
           <OptionCards to="/req-sent" imgUrl='https://images.pexels.com/photos/6348101/pexels-photo-6348101.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Solicitudes Enviadas"/>
           <OptionCards to="/req-res" imgUrl='https://images.pexels.com/photos/3760607/pexels-photo-3760607.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Solicitud Respondida"/>
           <OptionCards to="/req-file" imgUrl='https://images.pexels.com/photos/1181772/pexels-photo-1181772.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Archivado"/>
-            <RollDashboard roll={response.roll}/>
+            {
+              response.roll !== null ? <RollDashboard roll={response.roll}/> : null
+            }
           
         </section>
     </>
@@ -23,7 +25,6 @@ function GestionSolicitudes() {
   )
 }
 const RollDashboard = ({roll}) => {
-  if (roll !== null){
     if (roll === 0) return(
       <>
         <OptionCards to="/rector-response" imgUrl='https://images.pexels.com/photos/4631066/pexels-photo-4631066.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Responder Solicitudes"/>
@@ -39,8 +40,6 @@ const RollDashboard = ({roll}) => {
       </>
     )
     else return 
-  }
-  return null
 }
 
 export default GestionSolicitudes

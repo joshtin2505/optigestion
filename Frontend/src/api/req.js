@@ -23,6 +23,9 @@ export const getTrashRequirements = async () => axios.get('/solicitud-trash/' )
 export const toFileRequest = async (id) => axios.put('/solicitud-file/' + id)
 export const getFileRequirements = async () => axios.get('/solicitud-files/' )
 
+// elegir
+export const choseQuote = async (data) => axios.put('/solicitud-electQuote/' + data.id, data)
+
 
 // Rector 
 export const getAllSentRequirements = async () => axios.get('/solicitud-allSent/' )
@@ -35,4 +38,5 @@ export const getRejectedRequirements = async () => axios.get('/solicitud-rejecte
 
 // Logistico
 export const getAllToQuoteRequirements = async () => axios.get('/solicitud-toQuote/')
+export const getAllToBuyRequirements = async () => axios.get('/solicitud-toBuy/')
 export const logisticResponse = async (data) => await axios.put('/solicitud-res-prices/', data, {headers: {'Content-Type': 'multipart/form-data'}})
