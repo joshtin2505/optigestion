@@ -1,6 +1,5 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import './App.css'
-import RegisterPage from './pages/RegisterPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import GestionSolicitudes from './pages/GestionSolicitudes'
 import Papelera from './pages/Papelera.jsx'
@@ -28,12 +27,6 @@ function App() {
 
           <Routes>
             <Route path='/' element={<HomePage/>} />
-            {/* Admin */}
-            <Route path='/register' element={
-                <ProtectedRoutes isAllowed={isAllowed === 0} >
-                  <RegisterPage/>
-                </ProtectedRoutes>
-              } />
             {/* Rector */}
             <Route path='/rector-response' element={
                 <ProtectedRoutes isAllowed={isAllowed === 1 || isAllowed === 0} >

@@ -1,11 +1,23 @@
 import {Router} from 'express'
-import { login, register, logout,profile, verifyToken } from '../controllers/auth.controller.js'
+import { 
+    login, 
+    register, 
+    logout,
+    profile, 
+    verifyToken,
+    deleteUser,
+    getUsers,
+    updateUser 
+} from '../controllers/auth.controller.js'
 import { authRequired } from '../middlewares/validateToken.js'
+import { authAdminRoll } from '../middlewares/validateRoll.js'
 const router = Router()
 
-// Pendiente a enpapsular en un super usuario
-router.post("/register", authRequired,register) //
-// 
+router.post("/register", authRequired, authAdminRoll, register)
+router.get("/users", authRequired, getUsers)
+router.put("/update", authRequired, authAdminRoll, updateUser)
+router.delete("/delete", authRequired, authAdminRoll, deleteUser)
+
 router.post("/login", login)
 router.get("/verify", verifyToken)
 router.post("/logout",logout)

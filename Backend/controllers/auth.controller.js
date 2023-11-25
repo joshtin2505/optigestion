@@ -113,7 +113,8 @@ export const deleteUser = async (req, res) => {
 export const getUsers = async (req, res) => {
     try {
         const users = await User.find()
-        if (!users) return res.status(400).json({message: 'No se encontraron usuarios'})
+        if (!users || users.length === 0) return res.json({message: 'No se encontraron usuarios'})
+        return res.json(users)
     } catch (error) {
         console.log(error)
     }

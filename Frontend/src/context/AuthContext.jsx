@@ -5,10 +5,13 @@ import {
     useEffect 
 } from "react"
 import { 
-    registerRequest, 
-    loginRequest,
-    verifyTokenRequest,
-    logoutRequest ,
+    register,
+    users, 
+    update,
+    deleteUser,
+    login,
+    verifyToken,
+    logout ,
     profile
 } from '../api/auth.js'
 import Cookies from 'js-cookie'
@@ -31,17 +34,39 @@ export const AuthContextProvider = ({children}) => {
     const [closedSession, setClosedSession] = useState(false)
     const singUp = async(user) => {
         try {
-            const res = await registerRequest(user)
-            console.log(res.data)
+            const res = await register(user)
             setResponse(res.data) 
-            setIsAuthenticated(true)
         } catch (error) {
             setErrors(error.response.data)
         }
     }
+    const getUsers = async() =>{
+        try {
+            const res = await users()
+            return res
+        } catch (err) {
+           setErrors(err) 
+        }
+    }
+    const updateUser = async(user) => {
+        try {
+            const res = await update(user)
+            setResponse(res.data) 
+        } catch (error) {
+            setErrors(error.response.data)
+        }
+    }
+    const userDelete = async(id) => {
+        try {
+            const res = await deleteUser(id)
+            setResponse(res.data)
+        } catch (err) {
+            setErrors(err.response.data)
+        }
+    }
     const singIn = async (user) =>{
         try {
-            const res = await loginRequest(user)
+            const res = await login(user)
             setIsAuthenticated(true)
             setResponse(res.data)
         } catch (err) {
@@ -50,7 +75,7 @@ export const AuthContextProvider = ({children}) => {
     }
     const logOut = async () =>{
         try {
-            const res = await logoutRequest()
+            const res = await logout()
             if(!res) return console.log("No se pudo cerrar sesión")
             setClosedSession(!closedSession)
         } catch (error) {
@@ -75,7 +100,7 @@ export const AuthContextProvider = ({children}) => {
                 return setResponse(null)
             }
                 try {
-                    const res = await verifyTokenRequest(cookies.token)
+                    const res = await verifyToken(cookies.token)
                     if (!res.data) {
                         setIsAuthenticated(false)
                         setLoading(false)
@@ -110,6 +135,9 @@ export const AuthContextProvider = ({children}) => {
     return(
         <AuthContext.Provider value={{
             singUp,
+            getUsers,
+            updateUser,
+            userDelete,
             singIn,
             logOut,
             getProfile,

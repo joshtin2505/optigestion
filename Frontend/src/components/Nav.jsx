@@ -13,16 +13,15 @@ import {
 import { useAuth } from '../context/AuthContext'
 
 function NavBar({type = 0}) {
-    const {response} = useAuth()
     if (type === 0) {
         return <UnLoget/>
     }
     else if (type === 1) {
-        return response.roll !== null ? <Loget user={response.roll}/> : null
+        return <Loget />
     }
 
 }
-function Loget({user = 1}){
+function Loget(){
     const {logOut} = useAuth()
     return (
         <header>
@@ -40,7 +39,8 @@ function Loget({user = 1}){
                                 Opciones
                             </MenuButton>
                             <MenuList className="menu-list">
-                                <MenuItem className="menuLi">
+                                {/* Aun no implementado modo oscuro */}
+                                <MenuItem className="menuLi" hidden>
                                 <FormControl display='flex' alignItems='center'>
                                     <FormLabel htmlFor='email-alerts' mb='0'>
                                         Cambiar Modo
@@ -51,13 +51,6 @@ function Loget({user = 1}){
                                 <MenuItem className="menuLi">
                                     <Link to='/profile'>Mis datos</Link>
                                 </MenuItem>
-                                {
-                                    user === 0 && (
-                                        <MenuItem className="menuLi">
-                                            <Link to='/register'>Registrar usuario</Link>
-                                        </MenuItem>
-                                    )
-                                }
                                 <MenuItem onClick={logOut} className="menuLi">
                                     <span>LogOut</span>
                                     -

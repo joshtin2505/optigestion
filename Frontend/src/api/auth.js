@@ -2,12 +2,15 @@ import axios from './axios.js'
 
 
 
-export const registerRequest = (user) => axios.post('/register', user)
+export const register = (user) => axios.post('/register', user)
+export const users = () => axios.get('/users')
+export const update = (user) => axios.post('/update', user)
+export const deleteUser = (user) => axios.post('/delete', user)
 
-export const loginRequest = (user)=> axios.post('/login', user)
+export const login = (user)=> axios.post('/login', user)
 
-export const verifyTokenRequest = () => axios.get('/verify')
+export const verifyToken = () => axios.get('/verify')
 
-export const logoutRequest = () => axios.post('/logout')
+export const logout = () => axios.post('/logout')
 
 export const profile = () => axios.get('/profile')
