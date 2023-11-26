@@ -1,0 +1,57 @@
+.users-container{
+    padding: 0 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+.userCont{
+    backdrop-filter: blur(10px);
+    background: #6b6b6b33;
+    padding: 10px;
+}
+.users-card-container{
+    list-style: none;
+    display: grid;
+    gap: 5px;
+}
+.user-card{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.user-infoCont{
+    background: #6b6b6b33;
+    padding: 5px 10px;
+    border-radius: 4px;
+    gap: 5px;
+    display: flex;
+    width: 100%;
+}
+.user-id{
+    font-weight: 500;
+}
+.user-div{
+    font-weight: 500;
+}
+.admin-op-container{
+    display: flex;
+    gap: 5px;
+}
+.admin-op{
+    background: #6b6b6b33;
+    padding: 8px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.AO-delBtn{
+    color: #ececec;  
+    padding: 2px 10px;
+    border-radius: 4px;
+
+}
+.AO-btn-cansel{
+    background: #1287D6;
+}
+.AO-btn-del{
+    background: #ED4B4B;  
+    margin-left: 10px;
+}

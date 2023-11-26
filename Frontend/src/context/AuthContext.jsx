@@ -32,6 +32,7 @@ export const AuthContextProvider = ({children}) => {
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(true)
     const [closedSession, setClosedSession] = useState(false)
+    const [render, setRender] = useState(false)
     const singUp = async(user) => {
         try {
             const res = await register(user)
@@ -39,6 +40,8 @@ export const AuthContextProvider = ({children}) => {
         } catch (error) {
             setErrors(error.response.data)
         }
+        setRender(!render)
+
     }
     const getUsers = async() =>{
         try {
@@ -52,6 +55,7 @@ export const AuthContextProvider = ({children}) => {
         try {
             const res = await update(user)
             setResponse(res.data) 
+            setRender(!render)
         } catch (error) {
             setErrors(error.response.data)
         }
@@ -59,10 +63,12 @@ export const AuthContextProvider = ({children}) => {
     const userDelete = async(id) => {
         try {
             const res = await deleteUser(id)
-            setResponse(res.data)
+            setRender(!render)
+            return res
         } catch (err) {
             setErrors(err.response.data)
         }
+
     }
     const singIn = async (user) =>{
         try {
@@ -145,7 +151,8 @@ export const AuthContextProvider = ({children}) => {
             isAutenticated,
             isAllowed,
             errors,
-            loading
+            loading,
+            render
         }}>
             {children}
         </AuthContext.Provider>

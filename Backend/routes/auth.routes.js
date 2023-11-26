@@ -15,8 +15,8 @@ const router = Router()
 
 router.post("/register", authRequired, authAdminRoll, register)
 router.get("/users", authRequired, getUsers)
-router.put("/update", authRequired, authAdminRoll, updateUser)
-router.delete("/delete", authRequired, authAdminRoll, deleteUser)
+router.put("/update/:id", authRequired, authAdminRoll, updateUser)
+router.delete("/delete/:id", authRequired, authAdminRoll, deleteUser)
 
 router.post("/login", login)
 router.get("/verify", verifyToken)

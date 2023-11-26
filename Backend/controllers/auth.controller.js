@@ -96,16 +96,18 @@ export const profile = async (req,res) => {
 }
 export const updateUser = async (req, res) => {
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.user.idDB, req.body, {new: true})
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true})
         if (!updatedUser) return res.status(400).json({message: 'No se pudo Actualizar el usuario'})
     } catch (error) {
         console.log(error)
     }
 }
 export const deleteUser = async (req, res) => {
+
     try {
-        const deletedUser = await User.findByIdAndDelete(req.user.idDB)
-        if (!deletedUser) return res.status(400).json({message: 'No se pudo eliminar el usuario'})
+        const deletedUser = await User.findByIdAndDelete(req.params.id)
+        if (!deletedUser) return res.status(200).json({message: 'No se pudo eliminar el usuario'})
+        return res.status(200).json({message: 'Usuario eliminado'})
     } catch (error) {
         console.log(error)
     }
