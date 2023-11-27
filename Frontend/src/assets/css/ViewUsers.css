@@ -81,3 +81,53 @@
     background: #ED4B4B;  
     margin-left: 10px;
 }
+.updateCont{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.updateUserCont{
+    height: 280px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.upd-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px;
+    border-radius: 2px;
+    backdrop-filter: overlay(10px) ;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+    width: 500px;
+}
+.upd-form input {
+    background: #6b6b6b69;
+    border: none;
+    border-radius: 2px;
+    font-size: medium;
+    width: calc(100% - 8px);
+    padding: 4px;
+    color: rgba(255, 255, 255, 0.816);
+}
+.upd-form input::placeholder{
+    color: #ffffff;
+}
+.upd-form input:focus{
+    color: #ffffff;
+    transition: all 0.15s ease-in-out;
+    background: linear-gradient(273deg, #1287D6 24.2%, #1287D680 107.05%);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.upd-form .btn-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.hide{
+    display: none;
+}

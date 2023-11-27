@@ -2,6 +2,15 @@
     padding: 0;
     margin: 0;
 }
+html::-webkit-scrollbar{
+    width: 8px;
+    background: linear-gradient(273deg, #6b6b6b84 24.2%, #6b6b6b5f 107.05%);
+}
+html::-webkit-scrollbar-thumb{
+    width: 8px;
+    background: linear-gradient(273deg, #ED4B4B 24.2%, rgba(237, 75, 75, 0.50) 107.05%);
+    border-radius: 900px;
+}
 #root{
     height: 100vh;
 }

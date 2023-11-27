@@ -21,6 +21,8 @@
 - **Rector**  *__Completado__*
 
 - **Administrador**
-    - que pueda ver todos los usuarios registrados
-    - que pueda editar los usuarios
-    - que pueda eleminar usuarios
+    <br>
+    ✅ que pueda ver todos los usuarios registrados
+    ✅ que pueda editar los usuarios
+    <br>
+    ✅ que pueda eleminar usuarios

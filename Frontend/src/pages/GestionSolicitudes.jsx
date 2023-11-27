@@ -10,7 +10,7 @@ function GestionSolicitudes() {
     <>
         <NavBar type={1}/>
             {
-              response.roll !== null ? <RollDashboardToRoll roll={response.roll}/> : null
+              response.roll !== null ? <RollDashboardToRoll roll={response.roll}/> : -1
             }
           
     </>

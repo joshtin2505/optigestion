@@ -51,11 +51,10 @@ export const AuthContextProvider = ({children}) => {
            setErrors(err) 
         }
     }
-    const updateUser = async(user) => {
+    const updateUser = async(id,user) => {
         try {
-            const res = await update(user)
-            setResponse(res.data) 
-            
+            const res = await update(id,user)
+            return res            
         } catch (error) {
             setErrors(error.response.data)
         }

@@ -22,7 +22,7 @@ function NavBar({type = 0}) {
 
 }
 function Loget(){
-    const {logOut} = useAuth()
+    const {logOut, setNewRender} = useAuth()
     return (
         <header>
             <nav>
@@ -30,7 +30,7 @@ function Loget(){
                     <img className='logo' src="/src/assets/Logo.png" alt="" />
                 </div>
                     <ul className="nav-options">
-                        <li>
+                        <li onClick={()=> setNewRender(true)}>
                         <Link to='/'>Inicio</Link>
                         </li>
 
@@ -48,7 +48,7 @@ function Loget(){
                                     <Switch id='email-alerts' />
                                     </FormControl>
                                 </MenuItem>
-                                <MenuItem className="menuLi">
+                                <MenuItem className="menuLi" onClick={()=> setNewRender(true)}>
                                     <Link to='/profile'>Mis datos</Link>
                                 </MenuItem>
                                 <MenuItem onClick={logOut} className="menuLi">

@@ -95,9 +95,17 @@ export const profile = async (req,res) => {
     })
 }
 export const updateUser = async (req, res) => {
+    
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        const userToUpdate = req.body
+    
+        if (req.body.password){
+            const paswordHash = await bcrypt.hash(req.body.password, 10)
+            userToUpdate.password = paswordHash
+        }
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, userToUpdate, {new: true})
         if (!updatedUser) return res.status(400).json({message: 'No se pudo Actualizar el usuario'})
+        res.status(200).json({message: 'Updated'})
     } catch (error) {
         console.log(error)
     }

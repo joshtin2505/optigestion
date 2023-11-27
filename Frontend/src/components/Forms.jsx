@@ -137,6 +137,145 @@ export const CreateUserForm = () => {
   </form>
   )
 }
+export const UpdateUserForm = ({idDB, user}) => {
+  const [modalName, setModalName] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [userData, setUserData] = useState([
+    user.firstName,
+    user.lastName,
+    user.job,
+    user.id,
+    user.roll,
+    user.departament,
+    user.departamentId,
+    user.user,
+    ''
+  ])
+  const {register, 
+    handleSubmit,
+    setValue,
+    watch
+  } = useForm()
+  const {updateUser,setNewRender} = useAuth() 
+  
+  const onChange = () => {
+    setUserData([
+      watch('firstName'),
+      watch('lastName'),
+      watch('job'),
+      watch('id'),
+      watch('roll'),
+      watch('departament'),
+      watch('departamentId'),
+      watch('user'),
+      watch('password'),      
+    ])
+  }
+  const onSubmit = handleSubmit( async (values) => {
+    const departament = !values.departament ? user.departament : values.departament
+    const departamentId = !values.departamentId ? Number(user.departamentId) : Number(values.departamentId)
+    const firstName = !values.firstName ? user.firstName : values.firstName
+    const lastName = !values.lastName ? user.lastName : values.lastName
+    const job = !values.job ? user.job : values.job
+    const roll = !values.roll ? Number(user.roll) : Number(values.roll)
+    const userName = !values.user ? user.user : values.user
+    const id = !values.id ? Number(user.id) : Number(values.id)
+    if (values.password){
+      const res = await updateUser(idDB,{
+        departament,
+        departamentId,
+        firstName,
+        lastName,
+        job,
+        roll,
+        user: userName,
+        id,
+        password: values.password
+      })
+      if (res.data.message) setModalName(res.data.message)
+      setNewRender(true)
+      res.status == 200 ? onOpen() : null
+    }
+    else{
+      const res = await updateUser(idDB,{
+        departament,
+        departamentId,
+        firstName,
+        lastName,
+        job,
+        roll,
+        user: userName,
+        id
+      })
+      if (res.data.message) setModalName(res.data.message)
+      setNewRender(true)
+      res.status == 200 ? onOpen() : null
+    }
+
+  } )
+  return (
+    <form action=""
+    className='upd-form'
+    onSubmit={onSubmit}
+    noValidate
+    onChange={onChange}
+  >
+    <div className="dual">
+      <input className='RU-input' type="text" {...register('firstName')} placeholder='Nombre' onChange={(e) => setValue('firstName', e.target.value)} value={userData[0]}/>
+      
+      <input className='RU-input' type="text" {...register('lastName')} placeholder='Apellido' onChange={(e) => setValue('lastName', e.target.value)} value={userData[1]}/>
+       
+    </div>
+    <hr />
+    <div className="third">
+      <input className='RU-input' type="text" {...register('job')} placeholder='Puesto' onChange={(e) => setValue('job', e.target.value)} value={userData[2]}/>
+
+      <input className='RU-input' type="number" {...register('id')} placeholder='ID de Empleado' onChange={(e) => setValue('id', e.target.value)} value={userData[3]}/>
+
+      <input className='RU-input' type="number" max='3' min='0' {...register('roll')} placeholder='Roll' onChange={(e) => setValue('roll', e.target.value)} value={userData[4]}/>
+      
+      
+       
+    </div>
+    <hr />
+    <div className="dual">
+      <input className='RU-input' type="text" {...register('departament')} placeholder='Departamento' onChange={(e) => setValue('departament', e.target.value)} value={userData[5]}/>
+      
+        <input className='RU-input' type="number" {...register('departamentId')} placeholder='ID de Departamento' onChange={(e) => setValue('departamentId', e.target.value)} value={userData[6]}/>
+      
+    </div>
+    <hr />
+    <div className="dual">
+      <input className='RU-input' type="text" {...register('user')} placeholder='Usuario' onChange={(e) => setValue('user', e.target.value)} value={userData[7]}/>
+      
+      <input className='RU-input' type="password" {...register('password')} placeholder='Contraseña' onChange={(e) => setValue('password', e.target.value)} value={userData[8]}/>
+      
+    </div>
+    <div className='btn-container'>
+      <button type="submit">Actualizar</button>
+    </div>
+    <Modal onClose={onClose} isOpen={isOpen} >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{modalName}</ModalHeader>
+        <ModalBody>
+          <button style={{
+            background: 'cyan',
+            padding: '0 10px',
+            borderRadius: '4px'
+          }} onClick={()=>{
+            
+            onClose()
+          }} className='okbtn'>Ok</button>
+        </ModalBody>
+        <ModalFooter></ModalFooter>
+      </ModalContent>
+    </Modal>
+    
+    
+  </form>
+  )
+}
 export const CreateReqForm = () => {
     const {createReq, sendInNewReq} = useReq()
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -144,12 +283,7 @@ export const CreateReqForm = () => {
     const {
       register,
       handleSubmit,
-      formState:{
-        errors
-      },
-      reset,
-      setValue,
-      watch
+      atch
     } = useForm()
   
    

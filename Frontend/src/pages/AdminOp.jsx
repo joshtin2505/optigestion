@@ -1,4 +1,4 @@
-import { CreateUserForm } from '../components/Forms.jsx'
+import { CreateUserForm, UpdateUserForm } from '../components/Forms.jsx'
 import '../assets/css/CreateUser.css'
 import '../assets/css/ViewUsers.css'
 import { BsArrowClockwise, BsArrowDownSquare, BsArrowUpSquare, BsPencilSquare, BsTrash } from 'react-icons/bs'
@@ -58,14 +58,15 @@ function Users (){
         console.log(error)
       }
     }
-    if (newRender === true){
+    if (newRender === true || refresh === true) {
       setTimeout(()=>{
         setNewRender(false)
+        setRefresh(false)
         fetchUsers()
       },300)
     }
     
-  },[newRender])
+  },[newRender,refresh])
   
   
   return(
@@ -74,14 +75,14 @@ function Users (){
         <div className="userCont">
           <section className='users-head'>
             <h1>Users</h1>
-            <button onClick={()=> setRefresh(!refresh)} className='user-refresh-btn'>
+            <button onClick={()=> setRefresh(true)} className='user-refresh-btn'>
               <span>Refresh</span>
               <BsArrowClockwise size={20} fill='#6b6b6b'/>
             </button>
           </section>
           <ul className='users-card-container'>
             {
-              users.map((user,index,users) => {
+              users.map((user,index) => {
                 const fullName = `${user.firstName} ${user.lastName}`
                 const roll = user.roll === 0 ? 'Admin' : user.roll === 1 ? 'Rector' : user.roll === 2 ? 'Logistico' : user.roll === 3 ? 'Operativo' : 'No Role'
                 
@@ -96,51 +97,65 @@ function Users (){
   )
 }
 const List = ({user, roll, fullName, index}) =>{
-  const {updateUser, userDelete, setNewRender} = useAuth()
-
+  const {userDelete, setNewRender} = useAuth()
+  const [openUpdateForm, setOpenUpdateForm] = useState('hide')
   const { isOpen, onOpen, onClose } = useDisclosure()
   return(
-    <li 
-    className={`user-card uc-${index}`}
-    >
-      <section className='user-infoCont'>
-        <span className='user-info user-id'>{user.id}</span>
-        <span className='user-div'>|</span>
-        <span className='user-info user-name'>{fullName}</span>
-        <span className='user-div'>|</span>
-        <span className='user-info user-job'>{user.job}</span>
-        <span className='user-div'>|</span>
-        <span className='user-info user-nick'>{user.user}</span>
-        <span className='user-div'>|</span>
-        <span className='user-info user-departament'>{user.departament}</span>
-        <span className='user-div'>-</span>
-        <span className='user-info user-departament'>{user.departamentId}</span>
-        <span className='user-div'>|</span>
-        <span className='user-info user-departament'>{roll}</span>
-      </section>
-      <section className='admin-op-container'>
-        <div className="admin-op" ><BsPencilSquare/></div>
-        <div className="admin-op" onClick={() => onOpen()}><BsTrash/></div>
+    <>
+      <li 
+      className={`user-card uc-${index}`}
+      >
+        <section className='user-infoCont'>
+          <span className='user-info user-id'>{user.id}</span>
+          <span className='user-div'>|</span>
+          <span className='user-info user-name'>{fullName}</span>
+          <span className='user-div'>|</span>
+          <span className='user-info user-job'>{user.job}</span>
+          <span className='user-div'>|</span>
+          <span className='user-info user-nick'>{user.user}</span>
+          <span className='user-div'>|</span>
+          <span className='user-info user-departament'>{user.departament}</span>
+          <span className='user-div'>-</span>
+          <span className='user-info user-departament'>{user.departamentId}</span>
+          <span className='user-div'>|</span>
+          <span className='user-info user-departament'>{roll}</span>
+        </section>
+        <section className='admin-op-container'>
+          <div className="admin-op" onClick={
+            ()=> {
+              setOpenUpdateForm(openUpdateForm === '' ? 'hide' : '')
+            }
+          }><BsPencilSquare/></div>
+          <div className="admin-op" onClick={() => onOpen()}><BsTrash/></div>
 
+        </section>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Eliminar el Usuario</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <p>¿Estas seguro de eliminar el usuario?</p>
+              <p>{fullName}</p>
+              <button className='AO-delBtn AO-btn-cansel' onClick={onClose}>Cancelar</button>
+              <button className='AO-delBtn AO-btn-del' onClick={()=>{
+                userDelete(user._id)
+                setNewRender(oldRender => !oldRender)
+                onClose()
+              }}>Eliminar</button>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </li>
+      <section className={"updateCont " + openUpdateForm}>
+        <div className="updateUserCont">
+          <h3>Update User</h3>
+          <UpdateUserForm idDB={user._id} user={user}/>
+        </div>
       </section>
-      <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Eliminar el Usuario</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <p>¿Estas seguro de eliminar el usuario?</p>
-          <p>{fullName}</p>
-          <button className='AO-delBtn AO-btn-cansel' onClick={onClose}>Cancelar</button>
-          <button className='AO-delBtn AO-btn-del' onClick={()=>{
-            userDelete(user._id)
-            setNewRender(oldRender => !oldRender)
-            onClose()
-          }}>Eliminar</button>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-    </li>
+
+    </>
   )
 }
+
 export default AdminOp
