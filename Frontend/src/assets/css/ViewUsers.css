@@ -18,6 +18,32 @@
     align-items: center;
     gap: 5px;
 }
+.users-head{
+    position: relative;
+    margin-bottom: 10px;
+}
+.user-refresh-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    border: 2px solid #6b6b6b;
+    border-radius: 4px;
+    padding: 0 10px;
+}
+.user-refresh-btn:hover, .admin-op:hover{
+    transition: all 0.2s ease;
+    box-shadow: 2px 2px 4px #6b6b6b;
+}
+.user-refresh-btn span{
+    font-size: 20px;
+    text-align: center;
+    color: #6b6b6b;
+    
+}
 .user-infoCont{
     background: #6b6b6b33;
     padding: 5px 10px;

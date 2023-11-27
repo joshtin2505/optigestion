@@ -32,15 +32,15 @@ export const AuthContextProvider = ({children}) => {
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(true)
     const [closedSession, setClosedSession] = useState(false)
-    const [render, setRender] = useState(false)
+    const [newRender, setNewRender] = useState(true)
     const singUp = async(user) => {
         try {
             const res = await register(user)
-            setResponse(res.data) 
+            return res
         } catch (error) {
             setErrors(error.response.data)
         }
-        setRender(!render)
+        
 
     }
     const getUsers = async() =>{
@@ -55,7 +55,7 @@ export const AuthContextProvider = ({children}) => {
         try {
             const res = await update(user)
             setResponse(res.data) 
-            setRender(!render)
+            
         } catch (error) {
             setErrors(error.response.data)
         }
@@ -63,7 +63,7 @@ export const AuthContextProvider = ({children}) => {
     const userDelete = async(id) => {
         try {
             const res = await deleteUser(id)
-            setRender(!render)
+            
             return res
         } catch (err) {
             setErrors(err.response.data)
@@ -133,7 +133,6 @@ export const AuthContextProvider = ({children}) => {
         if (errors.length > 0 ){
             const timer = setTimeout(()=> {
                 setErrors([])
-                console.log("clear")
             }, 5000)
             return () => clearTimeout(timer)
         }
@@ -147,12 +146,13 @@ export const AuthContextProvider = ({children}) => {
             singIn,
             logOut,
             getProfile,
+            setNewRender,
+            newRender,
             response,
             isAutenticated,
             isAllowed,
             errors,
             loading,
-            render
         }}>
             {children}
         </AuthContext.Provider>

@@ -23,17 +23,22 @@ import '../assets/css/ToQuote.css'
 import '../assets/css/ViewPdf.css'
 
 export const CreateUserForm = () => {
+  const [modalName, setModalName] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const {register, 
     handleSubmit,
     formState:{
       errors
     }
   } = useForm()
-  const {singUp} = useAuth() 
+  const {singUp,setNewRender} = useAuth() 
 
 
   const onSubmit = handleSubmit( async (values) => {
-    singUp(values)
+    const res = await singUp(values)
+    if (res.data.message) setModalName(res.data.message)
+    setNewRender(true)
+    res.status == 200 ? onOpen() : null
   } )
   return (
     <form action=""
@@ -110,7 +115,23 @@ export const CreateUserForm = () => {
     <div className='btn-container'>
       <button type="submit">Register</button>
     </div>
-
+    <Modal onClose={onClose} isOpen={isOpen} >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{modalName}</ModalHeader>
+        <ModalBody>
+          <button style={{
+            background: 'cyan',
+            padding: '0 10px',
+            borderRadius: '4px'
+          }} onClick={()=>{
+            
+            onClose()
+          }} className='okbtn'>Ok</button>
+        </ModalBody>
+        <ModalFooter></ModalFooter>
+      </ModalContent>
+    </Modal>
     
     
   </form>
