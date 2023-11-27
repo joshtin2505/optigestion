@@ -4,7 +4,8 @@ import { useReq } from '../context/ReqContext.jsx'
 import '../assets/css/File.css'
 import {BsSearch, BsTrash, BsFolder} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
- 
+import '../assets/css/Extra.css'
+
 function Archivado() {
   const {trashReq, fileReq, getAllFileReq } = useReq()
   const {register, setValue, watch} = useForm()
@@ -67,9 +68,9 @@ function Archivado() {
                     <div className="Ar-card-txt">
                       <p>{concatDate}</p>
                       <p>|</p>
-                      <p>{req.title}</p>
+                      <p className='card-title'>{req.title}</p>
                       <span>-</span>
-                      <p>{req.description}</p>
+                      <p className='card-description'>{req.description}</p>
                     </div>
                     <div className="Ar-options">
                       <BsFolder onClick={() =>{

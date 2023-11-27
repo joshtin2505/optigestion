@@ -36,37 +36,7 @@ function Respondidos() {
 function ViewResRequest({res, title, type}) {
   const {register, setValue, watch} = useForm()
 
-  const List = ({req, concatDate}) => {
-    const [openReq, setOpenReq] = useState(false)
-
-    return (
-      <section className='Br-card-real' >
-        <div  className='BrCard' >
-          <div className="Br-card-txt">
-            <p>{concatDate}</p>
-            <p>|</p>
-            <p>{req.title}</p>
-            <span>-</span>
-            <p>{req.description}</p>
-          </div>
-          <div className="Br-options">
-            <BsEye onClick={() =>{
-              setOpenReq(!openReq)
-              }} className='Br-icon' fill='#6b6b6b' size={18}/>
-            
-            </div>
-        </div>
-        <div className='BR-ed-cont'>
-          {
-            openReq && (
-              type ? <ViewApprovedResForm data={req}/> : <ViewRejectedResForm data={req}/>
-              )
-            }
-            </div>
-      </section>
-    )
-  }
-
+  
   function handleSubmit(e){
     e.preventDefault()
   }
@@ -96,7 +66,7 @@ function ViewResRequest({res, title, type}) {
               filteredResponse.map(req => {
                 const fecha = new Date(req.date)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return <List key={req._id} req={req} concatDate={concatDate}/>
+                return <List key={req._id} type={type} req={req} concatDate={concatDate}/>
               })
             }
             {/* Si no hay Solicitudes */}
@@ -117,6 +87,36 @@ function ViewResRequest({res, title, type}) {
       </div>
     </>
 
+  )
+}
+const List = ({req, concatDate, type}) => {
+  const [openReq, setOpenReq] = useState(false)
+
+  return (
+    <section className='Br-card-real' >
+      <div  className='BrCard' >
+        <div className="Br-card-txt">
+          <p>{concatDate}</p>
+          <p>|</p>
+          <p className='card-title'>{req.title}</p>
+          <span>-</span>
+          <p className='card-description'>{req.description}</p>
+        </div>
+        <div className="Br-options">
+          <BsEye onClick={() =>{
+            setOpenReq(!openReq)
+            }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          
+          </div>
+      </div>
+      <div className='BR-ed-cont'>
+        {
+          openReq && (
+            type ? <ViewApprovedResForm data={req}/> : <ViewRejectedResForm data={req}/>
+            )
+          }
+          </div>
+    </section>
   )
 }
 

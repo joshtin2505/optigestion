@@ -41,9 +41,9 @@ function ViewToBuyRequest({res, title}) {
           <div className="Br-card-txt">
             <p>{concatDate}</p>
             <p>|</p>
-            <p>{req.title}</p>
+            <p className='card-title'>{req.title}</p>
             <span>-</span>
-            <p>{req.description}</p>
+            <p className='card-description'>{req.description}</p>
           </div>
           <div className="Br-options">
             <BsEye onClick={() =>{

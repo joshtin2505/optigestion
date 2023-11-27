@@ -4,7 +4,8 @@ import { useReq } from '../context/ReqContext.jsx'
 import '../assets/css/Trash.css'
 import {BsSearch, BsTrash, BsArrowClockwise} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
- 
+import '../assets/css/Extra.css'
+
 function Papelera() {
   const {deleteReq, trashReq, getAllTrashReq } = useReq()
   const {register, setValue, watch} = useForm()
@@ -68,8 +69,8 @@ function Papelera() {
                       <p>{concatDate}</p>
                       <p>|</p>
                       <p>{req.title}</p>
-                      <span>-</span>
-                      <p>{req.description}</p>
+                      <span className='card-title'>-</span>
+                      <p className='card-description'>{req.description}</p>
                     </div>
                     <div className="Tr-options">
                       <BsArrowClockwise onClick={() =>{

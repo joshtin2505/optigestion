@@ -283,7 +283,12 @@ export const CreateReqForm = () => {
     const {
       register,
       handleSubmit,
-      atch
+      formState: {
+        errors,
+      },
+      reset,
+      setValue,
+      watch
     } = useForm()
   
    
@@ -886,15 +891,21 @@ export const CreateReqForm = () => {
               <div className='A-chose-cont'>
                 <h6 className='A-chose-title'>Elige</h6>
                   <div className='A-chose-option'>
-                    <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='1'/>
+                    <div className="boxRadio">
+                      <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='1'/>
+                    </div>
                     <span className='A-chose-opt-txt'>Opcion 1</span>
                   </div>
                   <div className='A-chose-option'>
-                    <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='2'/>
+                    <div className="boxRadio">
+                      <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='2'/>
+                    </div>
                     <span className='A-chose-opt-txt'>Opcion 2 </span>
                   </div>
                   <div className='A-chose-option'>
-                    <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='3'/>
+                    <div className="boxRadio">
+                      <input className='A-radio-chose' type="radio" {...register('choise', {required: true})} value='3'/>
+                    </div>
                     <span className='A-chose-opt-txt'>Opcion 3</span>
                   </div>
                   {

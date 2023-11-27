@@ -5,6 +5,7 @@ import '../assets/css/Draft.css'
 import {BsSearch, BsTrash, BsFolder,BsPen} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
 import {UpdateReqForm} from '../components/Forms.jsx'
+import '../assets/css/Extra.css'
  
 
 function Borrador() {
@@ -13,51 +14,6 @@ function Borrador() {
   const {register, setValue, watch} = useForm()
   const [response ,setResponse] = useState([])
 
-  const List = ({req, concatDate}) => {
-    const [openReq, setOpenReq] = useState(false)
-  
-    const toTrash = (id) => {
-      trashReq(id)
-      setUpdateComponent(prevValue => prevValue + 1)
-    }
-    const toFile = (id) => {
-      fileReq(id)
-      setUpdateComponent(prevValue => prevValue + 1)
-    }
-  
-    return (
-      <section className='Br-card-real' >
-        <div  className='BrCard' >
-  
-          <div className="Br-card-txt">
-            <p>{concatDate}</p>
-            <p>|</p>
-            <p>{req.title}</p>
-            <span>-</span>
-            <p>{req.description}</p>
-          </div>
-          <div className="Br-options">
-            <BsPen onClick={() =>{
-              setOpenReq(!openReq)
-              }} className='Br-icon' fill='#6b6b6b' size={18}/>
-            <BsTrash onClick={() =>{
-              toTrash(req._id)
-            }} className='Br-icon' fill='#6b6b6b' size={18}/>
-            <BsFolder onClick={() =>{
-              toFile(req._id)
-            }} className='Br-icon' fill='#6b6b6b' size={18}/>
-            </div>
-        </div>
-        <div className='bR-ed-cont'>
-          {
-            openReq && (
-              <UpdateReqForm data={req}/>
-              )
-            }
-            </div>
-      </section>
-    )
-  }
 
   useEffect(() => {
     const fetchReq = async () => {
@@ -124,6 +80,51 @@ function Borrador() {
   )
 }
 
+const List = ({req, concatDate}) => {
+  const [openReq, setOpenReq] = useState(false)
+
+  const toTrash = (id) => {
+    trashReq(id)
+    setUpdateComponent(prevValue => prevValue + 1)
+  }
+  const toFile = (id) => {
+    fileReq(id)
+    setUpdateComponent(prevValue => prevValue + 1)
+  }
+
+  return (
+    <section className='Br-card-real' >
+      <div  className='BrCard' >
+
+        <div className="Br-card-txt">
+          <p>{concatDate}</p>
+          <p>|</p>
+          <p className='card-title'>{req.title}</p>
+          <span>-</span>
+          <p className='card-description'>{req.description}</p>
+        </div>
+        <div className="Br-options">
+          <BsPen onClick={() =>{
+            setOpenReq(!openReq)
+            }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          <BsTrash onClick={() =>{
+            toTrash(req._id)
+          }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          <BsFolder onClick={() =>{
+            toFile(req._id)
+          }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          </div>
+      </div>
+      <div className='bR-ed-cont'>
+        {
+          openReq && (
+            <UpdateReqForm data={req}/>
+            )
+          }
+          </div>
+    </section>
+  )
+}
 
 
 export default Borrador

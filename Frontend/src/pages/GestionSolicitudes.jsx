@@ -8,40 +8,41 @@ function GestionSolicitudes() {
   const {response} = useAuth()
   return (
     <>
-        <NavBar type={1}/>
-            {
-              response.roll !== null ? <RollDashboardToRoll roll={response.roll}/> : -1
-            }
-          
+      <NavBar type={1}/>
+      <RollDashboardToRoll roll={response.roll}/>
     </>
 
   )
 }
 const RollDashboardToRoll = ({roll}) => {
-    if (roll === 0) return(
+    if(roll === null) return
+    else if (roll === 0) return(
       <>
         <AdminOp/>
       </>
       ) 
     else if (roll === 1) return (
       <>
-        <OptionCardsToORdenalUsers>
+        <OptionCardsToOrdenalUsers>
           <OptionCards to="/rector-response" imgUrl='https://images.pexels.com/photos/4631066/pexels-photo-4631066.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Responder Solicitudes"/>
-        </OptionCardsToORdenalUsers>
+        </OptionCardsToOrdenalUsers>
       </>
 
     )
     else if (roll === 2) return (
       <>
-      <OptionCardsToORdenalUsers>
+      <OptionCardsToOrdenalUsers>
         <OptionCards to="/to-quote" imgUrl='https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Para Cotizar"/>
         <OptionCards to="/to-buy" imgUrl='https://images.pexels.com/photos/2988232/pexels-photo-2988232.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Para Comprar"/>
-      </OptionCardsToORdenalUsers>
+      </OptionCardsToOrdenalUsers>
       </>
     )
+    else if (roll === 3){
+      return <OptionCardsToOrdenalUsers/>
+    }
     else return 
 }
-const OptionCardsToORdenalUsers = ({children}) => {
+const OptionCardsToOrdenalUsers = ({children}) => {
   return(
     <section className='cardContainer'>
       <OptionCards to="/req-add" imgUrl='https://images.pexels.com/photos/267569/pexels-photo-267569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' title="Crear Solicitud"/>

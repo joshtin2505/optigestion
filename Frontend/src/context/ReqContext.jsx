@@ -189,7 +189,6 @@ function ReqProvider({children}) {
         try {
             const res = await sendNewRequest(data)
             if (!res) throw new Error('No response')
-            console.log(data)
             setResponse(res.data) 
         } catch (error) {
             setErrors(error.response.data)

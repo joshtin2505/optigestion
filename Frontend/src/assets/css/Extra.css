@@ -1,0 +1,50 @@
+.card-title{
+    max-width: 400px; /* Establece la anchura máxima del contenedor */
+    white-space: nowrap; /* Evita el salto de línea del texto */
+    overflow: hidden; /* Oculta el texto que se desborde */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos (...) al final del texto truncado */
+}
+.card-description{
+    max-width: 900px; /* Establece la anchura máxima del contenedor */
+    white-space: nowrap; /* Evita el salto de línea del texto */
+    overflow: hidden; /* Oculta el texto que se desborde */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos (...) al final del texto truncado */
+}
+.boxRadio{
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+.boxRadio input{
+    appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border:2px solid rgba(0,0,0,0.2);
+    background-color: transparent;
+    transition: all all 0.2s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.boxRadio input:checked::before{
+    position: absolute;
+    left: 5px;
+    top: -1px;
+    content: '✓';
+    font-weight: bold;
+    font-size: 20px;
+}
+@media screen and (max-width: 968px){
+    .card-title{
+        max-width: 300px;
+    }
+    .card-description{
+        max-width: 300px;   
+    }
+}
