@@ -1,5 +1,5 @@
-import Login from "../components/Login"
-import NavBar from "../components/Nav"
+import Login from "../../components/Login"
+import NavBar from "../../components/Nav"
 function HomePage() {
   return (
     <>

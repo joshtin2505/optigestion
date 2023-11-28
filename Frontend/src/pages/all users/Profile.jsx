@@ -1,6 +1,6 @@
-import Nav from '../components/Nav.jsx'
-import '../assets/css/Profile.css'
-import { useAuth } from '../context/AuthContext.jsx'
+import Nav from '../../components/Nav.jsx'
+import '../../assets/css/Profile.css'
+import { useAuth } from '../../context/AuthContext.jsx'
 import { useEffect } from 'react'
 function Profile() {
 

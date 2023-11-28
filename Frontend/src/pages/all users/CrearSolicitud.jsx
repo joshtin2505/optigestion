@@ -1,6 +1,6 @@
-import Nav from '../components/Nav.jsx'
-import '../assets/css/CreateReq.css'
-import { CreateReqForm } from '../components/Forms.jsx'
+import Nav from '../../components/Nav.jsx'
+import '../../assets/css/CreateReq.css'
+import { CreateReqForm } from '../../components/Forms.jsx'
 
 function CrearSolicitud() {
   

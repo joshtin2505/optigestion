@@ -1,42 +1,40 @@
 import { useEffect, useState } from 'react'
-import Nav from '../components/Nav.jsx'
-import { useReq } from '../context/ReqContext.jsx'
-import '../assets/css/Draft.css'
+import Nav from '../../components/Nav.jsx'
+import { useReq } from '../../context/ReqContext.jsx'
+import '../../assets/css/Draft.css'
 import {BsSearch,BsEye} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import {ViewApprovedResForm, ViewRejectedResForm} from '../components/Forms.jsx'
+import {ToQuoteResForm} from '../../components/Forms.jsx'
  
 
-function Respondidos() {
-  const {getApprovedReq,getRejectedReq, response: res} = useReq()
-  const [approvedResponse ,setApprovedResponse] = useState([])
-  const [rejectedResponse ,setRejectedResponse] = useState([])
+function Cotizar() {
+  const [updateComponent, setUpdateComponent] = useState(0)
+  const {getAllToQuoteReq, response: res} = useReq()
+  const [toQuote ,setToQuote] = useState([])
 
   useEffect(() => {
     const fetchReq = async () => {
-      const resA = await getApprovedReq()
-        if (Array.isArray(resA)) setApprovedResponse(resA)
-      const resR = await getRejectedReq()
-        if (Array.isArray(resR)) setRejectedResponse(resR)
+      const resToQuote = await getAllToQuoteReq()
+      if (Array.isArray(resToQuote)) setToQuote(resToQuote)
     }
     fetchReq()
-  },[res])
+  },[res, updateComponent])
   
   return (
     <>
       <Nav type={1}/>
       <div className="">
-        <ViewResRequest type res={approvedResponse} title={'Aprovados'}/>
-        <ViewResRequest type={false} res={rejectedResponse} title={'Rechazados'}/>
+        <ViewResRequest setUpdateComponent={setUpdateComponent} type res={toQuote} title={'Cotizar'}/>
       </div>
     </>
   )
 }
 
-function ViewResRequest({res, title, type}) {
+function ViewResRequest({res, title, setUpdateComponent}) {
   const {register, setValue, watch} = useForm()
 
   
+
   function handleSubmit(e){
     e.preventDefault()
   }
@@ -66,7 +64,7 @@ function ViewResRequest({res, title, type}) {
               filteredResponse.map(req => {
                 const fecha = new Date(req.date)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return <List key={req._id} type={type} req={req} concatDate={concatDate}/>
+                return <List setUpdateComponent={setUpdateComponent} key={req._id} req={req} concatDate={concatDate}/>
               })
             }
             {/* Si no hay Solicitudes */}
@@ -89,7 +87,7 @@ function ViewResRequest({res, title, type}) {
 
   )
 }
-const List = ({req, concatDate, type}) => {
+const List = ({req, concatDate, setUpdateComponent}) => {
   const [openReq, setOpenReq] = useState(false)
 
   return (
@@ -112,12 +110,11 @@ const List = ({req, concatDate, type}) => {
       <div className='BR-ed-cont'>
         {
           openReq && (
-            type ? <ViewApprovedResForm data={req}/> : <ViewRejectedResForm data={req}/>
+            <ToQuoteResForm setUpdateComponent={setUpdateComponent} data={req}/>
             )
           }
           </div>
     </section>
   )
 }
-
-export default Respondidos
+export default Cotizar

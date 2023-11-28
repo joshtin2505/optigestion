@@ -1,9 +1,9 @@
-import { CreateUserForm, UpdateUserForm } from '../components/Forms.jsx'
-import '../assets/css/CreateUser.css'
-import '../assets/css/ViewUsers.css'
+import { CreateUserForm, UpdateUserForm } from '../../components/Forms.jsx'
+import '../../assets/css/CreateUser.css'
+import '../../assets/css/ViewUsers.css'
 import { BsArrowClockwise, BsArrowDownSquare, BsArrowUpSquare, BsPencilSquare, BsTrash } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '../../context/AuthContext.jsx'
 import {
   Modal,
   ModalOverlay,
@@ -13,6 +13,7 @@ import {
   ModalCloseButton,
   useDisclosure
 } from '@chakra-ui/react'
+// Renderiza todo el dashboard de el Administrador
 function AdminOp() {
   return (
     <>
@@ -21,12 +22,14 @@ function AdminOp() {
     </>
   )
 }
+// Registro de usuarios
 function CreateUser() {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <div className='reg-true-cont'>
       <section className='reg-container'>
         <h1>Register</h1>
+        {/* abrir el form registro de usuarios */}
         {
           isOpen ? <BsArrowUpSquare className='open-reg' size={25} fill='#2b2b2b' cursor='pointer' onClick={() => setIsOpen(false)}/> : <BsArrowDownSquare className='open-reg' size={25} fill='#2b2b2b' cursor='pointer' onClick={() => setIsOpen(true)}/>
         }
@@ -44,6 +47,7 @@ function CreateUser() {
     </div>
   )
 }
+// Muestra usuarios
 function Users (){
   
   const {getUsers, newRender,setNewRender} = useAuth()

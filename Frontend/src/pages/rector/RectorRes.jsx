@@ -1,26 +1,55 @@
 import { useEffect, useState } from 'react'
-import Nav from '../components/Nav.jsx'
-import { useReq } from '../context/ReqContext.jsx'
-import '../assets/css/Draft.css'
+import Nav from '../../components/Nav.jsx'
+import { useReq } from '../../context/ReqContext.jsx'
+import '../../assets/css/Draft.css'
 import {BsSearch,BsEye} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import {ViewReqForm} from '../components/Forms.jsx'
-import '../assets/css/Extra.css'
+import {ResReqForm} from '../../components/Forms.jsx'
+import '../../assets/css/Extra.css'
 
-function Enviados() {
-  const {getAllsentReq } = useReq()
+function RectorRes() {
+  const {getSentRector, response: res} = useReq()
   const {register, setValue, watch} = useForm()
   const [response ,setResponse] = useState([])
 
+  const List = ({req, concatDate}) => {
+    const [openReq, setOpenReq] = useState(false)
 
+    return (
+      <section className='Br-card-real' >
+        <div  className='BrCard' >
+          <div className="Br-card-txt">
+            <p>{concatDate}</p>
+            <p>|</p>
+            <p className='card-title'>{req.title}</p>
+            <span>-</span>
+            <p className='card-description'>{req.description}</p>
+          </div>
+          <div className="Br-options">
+            <BsEye onClick={() =>{
+              setOpenReq(!openReq)
+              }} className='Br-icon' fill='#6b6b6b' size={18}/>
+            
+            </div>
+        </div>
+        <div className='BR-ed-cont'>
+          {
+            openReq && (
+              <ResReqForm data={req}/>
+              )
+            }
+            </div>
+      </section>
+    )
+  }
 
   useEffect(() => {
     const fetchReq = async () => {
-      const res = await getAllsentReq()
+      const res = await getSentRector()
       setResponse(res)
     }
     fetchReq()
-  },[])
+  },[res])
 
   function handleSubmit(e){
     e.preventDefault()
@@ -43,7 +72,7 @@ function Enviados() {
         </form>
         <section className='Br-box-cont'>
           <div className="head">
-              <h1 className='Br-title'>Enviados</h1>
+              <h1 className='Br-title'>Responder solicitudes</h1>
           </div>
           <hr />
           <div className='Br-cards-cont'>
@@ -74,35 +103,6 @@ function Enviados() {
   )
 }
 
-const List = ({req, concatDate}) => {
-  const [openReq, setOpenReq] = useState(false)
 
-  return (
-    <section className='Br-card-real' >
-      <div  className='BrCard' >
-        <div className="Br-card-txt">
-          <p>{concatDate}</p>
-          <p>|</p>
-          <p className='card-title'>{req.title}</p>
-          <span>-</span>
-          <p className='card-description'>{req.description}</p>
-        </div>
-        <div className="Br-options">
-          <BsEye onClick={() =>{
-            setOpenReq(!openReq)
-            }} className='Br-icon' fill='#6b6b6b' size={18}/>
-          
-          </div>
-      </div>
-      <div className='BR-ed-cont'>
-        {
-          openReq && (
-            <ViewReqForm data={req}/>
-            )
-          }
-          </div>
-    </section>
-  )
-}
 
-export default Enviados
+export default RectorRes

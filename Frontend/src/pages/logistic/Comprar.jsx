@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import Nav from '../components/Nav.jsx'
-import { useReq } from '../context/ReqContext.jsx'
-import '../assets/css/Draft.css'
+import Nav from '../../components/Nav.jsx'
+import { useReq } from '../../context/ReqContext.jsx'
+import '../../assets/css/Draft.css'
 import {BsSearch,BsEye} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import {ViewToBuyResForm} from '../components/Forms.jsx'
+import {ViewToBuyResForm} from '../../components/Forms.jsx'
  
 
 function Comprar() {

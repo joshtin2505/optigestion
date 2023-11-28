@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import Nav from '../components/Nav.jsx'
-import { useReq } from '../context/ReqContext.jsx'
-import '../assets/css/Trash.css'
+import Nav from '../../components/Nav.jsx'
+import { useReq } from '../../context/ReqContext.jsx'
+import '../../assets/css/Trash.css'
 import {BsSearch, BsTrash, BsArrowClockwise} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import '../assets/css/Extra.css'
+import '../../assets/css/Extra.css'
 
 function Papelera() {
   const {deleteReq, trashReq, getAllTrashReq } = useReq()

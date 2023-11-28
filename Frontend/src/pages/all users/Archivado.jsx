@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import Nav from '../components/Nav.jsx'
-import { useReq } from '../context/ReqContext.jsx'
-import '../assets/css/File.css'
+import Nav from '../../components/Nav.jsx'
+import { useReq } from '../../context/ReqContext.jsx'
+import '../../assets/css/File.css'
 import {BsSearch, BsTrash, BsFolder} from 'react-icons/bs'
 import {useForm} from 'react-hook-form'
-import '../assets/css/Extra.css'
+import '../../assets/css/Extra.css'
 
 function Archivado() {
   const {trashReq, fileReq, getAllFileReq } = useReq()
