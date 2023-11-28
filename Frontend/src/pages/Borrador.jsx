@@ -10,7 +10,7 @@ import '../assets/css/Extra.css'
 
 function Borrador() {
   const [updateComponent, setUpdateComponent] = useState(0)
-  const {getAllDraftReq, response: DBres, trashReq, fileReq } = useReq()
+  const {getAllDraftReq, response: DBres} = useReq()
   const {register, setValue, watch} = useForm()
   const [response ,setResponse] = useState([])
 
@@ -58,7 +58,7 @@ function Borrador() {
               filteredResponse.map(req => {
                 const fecha = new Date(req.date)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return <List key={req._id} req={req} concatDate={concatDate}/>
+                return <List key={req._id} setUpdateComponent={setUpdateComponent} req={req} concatDate={concatDate}/>
               })
             }
             {
@@ -80,8 +80,10 @@ function Borrador() {
   )
 }
 
-const List = ({req, concatDate}) => {
+const List = ({req, concatDate, setUpdateComponent}) => {
   const [openReq, setOpenReq] = useState(false)
+  const {trashReq, fileReq } = useReq()
+
 
   const toTrash = (id) => {
     trashReq(id)

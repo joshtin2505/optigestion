@@ -43,7 +43,7 @@ function Login() {
               <p style={{"color": "#dc2626", "fontWeight": "600"}}>Contraseña requerido</p>
             )
           }
-            <div className="pre-btn">
+            <div className="pre-btn" hidden>
                 
                 <Link to='change-Password'>Olvidé mi contraseña</Link>
             </div>

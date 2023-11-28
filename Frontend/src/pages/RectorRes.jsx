@@ -72,7 +72,7 @@ function RectorRes() {
         </form>
         <section className='Br-box-cont'>
           <div className="head">
-              <h1 className='Br-title'>RectorRes</h1>
+              <h1 className='Br-title'>Responder solicitudes</h1>
           </div>
           <hr />
           <div className='Br-cards-cont'>

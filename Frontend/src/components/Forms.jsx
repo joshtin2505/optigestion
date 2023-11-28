@@ -552,7 +552,7 @@ export const CreateReqForm = () => {
       </>
     )
   }
-  export const ToQuoteResForm = (data) => {
+  export const ToQuoteResForm = ({data, setUpdateComponent}) => {
 
     const [pdfs, setPdfs] = useState([null, null, null])
     const [fileNames, setFileNames] = useState(['No hay archivos cargados', 'No hay archivos cargados', 'No hay archivos cargados'])
@@ -579,8 +579,10 @@ export const CreateReqForm = () => {
     if (pdf1 || pdf2 || pdf3) {
       const formData = new FormData()
 
+      setUpdateComponent(prevValue => prevValue + 1)
 
-      formData.append('id', data.data._id)
+
+      formData.append('id', data._id)
       pdf1 && formData.append('pdf1', pdf1)
       pdf2 && formData.append('pdf2', pdf2)
       pdf3 && formData.append('pdf3', pdf3)
@@ -596,7 +598,7 @@ export const CreateReqForm = () => {
           <label htmlFor="">Titulo:</label>
           <input 
           type="text" 
-          value={data.data.title} 
+          value={data.title} 
           disabled 
           />
         </div>
@@ -613,7 +615,7 @@ export const CreateReqForm = () => {
               height: 'auto',
             }}
             className='textarea-Res '
-            value={data.data.description} 
+            value={data.description} 
             disabled
             />
             </div>
@@ -626,7 +628,7 @@ export const CreateReqForm = () => {
             <textarea style={{
               height: 'auto',
             }}
-            value={data.data.rectorComment}
+            value={data.rectorComment}
             className='textarea-Res'
             disabled
             />
