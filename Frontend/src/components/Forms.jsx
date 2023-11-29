@@ -287,6 +287,7 @@ export const CreateReqForm = () => {
         errors,
       },
       reset,
+      setError,
       setValue,
       watch
     } = useForm()
@@ -300,6 +301,11 @@ export const CreateReqForm = () => {
     const onSend = () => {
       const title = watch('title')
       const description = watch('description')
+      if (title === '' || description === '') {
+        setError('title', '')
+        setError('description', '')
+        return
+      }
       sendInNewReq({
         title,
         description,
@@ -329,7 +335,9 @@ export const CreateReqForm = () => {
           </div>
           {
             errors.title && (
-              <div className="error">Se necita un titulo </div>
+              <div style={{
+                color: 'red'
+              }}  className="error">Se necesita un titulo </div>
             )
           }
           <br />
@@ -342,7 +350,9 @@ export const CreateReqForm = () => {
           ></textarea>
           {
             errors.description && (
-              <div className="error">Se necita una descripción</div>
+              <div style={{
+                color: 'red'
+              }} className="error">Se necesita una descripción</div>
             )
           }
           <div>
