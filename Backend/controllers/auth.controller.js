@@ -5,53 +5,43 @@ import jwt from "jsonwebtoken"
 import { SECRET_KEY } from "../config.js"
 
 export const register = async (req, res) => {
+  // Test THIS
   const {
-    firstName,
-    lastName,
-    roll,
-    departament,
-    job,
-    departamentId,
-    user,
-    id,
+    nombre,
+    apellido,
+    trabajo,
+    email,
+    userName,
     password,
+    departamento,
+    rolUsuario,
   } = req.body
+  const paswordHash = await bcrypt.hash(password, 10)
 
-  try {
-    const userFound = await User.findOne({ id })
-    if (userFound)
-      return res.status(400).json(["El Empleado se encuentra registrado"])
-
-    if (password.length < 8)
-      return res.status(400).json(["Contraseña No menor a 8 caracteres"])
-
-    const paswordHash = await bcrypt.hash(password, 10)
-
-    const newUser = new User({
-      firstName,
-      lastName,
-      roll,
-      departament,
-      job,
-      departamentId,
-      user,
-      id,
+  fetch("http://localhost:8080/api/usuario/guardar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: {
+      nombre,
+      apellido,
+      trabajo,
+      email,
+      userName,
+      departamento,
+      rolUsuario,
       password: paswordHash,
+    },
+  })
+    .then(() => {
+      res.status(200).json({ message: "Usuario creado" })
     })
-    await newUser.save()
-
-    //por ahora no veo logico, darle un token a un usuario, recien registrado
-
-    /* const token = await crateAccessToken({idDB: userSaved._id, employeeId: userSaved.id, departamentId: userSaved.departamentId, fullName: userSaved.firstName + ' ' + userSaved.lastName})
-        res.cookie('token',token) */
-
-    res.json({
-      status: 200,
-      message: "Usuario registrado correctamente",
-    })
-  } catch (error) {
-    res.status(500).json([error.message])
-  }
+    .catch(
+      (error) =>
+        (error.status === 302) ===
+        res.status(302).json({ message: "El usuario ya existe" })
+    )
 }
 export const login = async (req, res) => {
   const { user, password } = req.body
