@@ -7,12 +7,12 @@ import {
   deleteUsuario,
   getAllUsers,
   getUser,
+  getUserByUserName,
   registerUsuario,
   updateUsuario,
 } from "../api/user.api.js"
 
 export const register = async (req, res) => {
-  // Test THIS
   const {
     nombre,
     apellido,
@@ -48,28 +48,47 @@ export const register = async (req, res) => {
     })
 }
 export const login = async (req, res) => {
-  const { user, password } = req.body
-
-  try {
-    const userFound = await User.findOne({ user })
-    if (!userFound) return res.status(400).json(["El usuario no existe"])
-
-    const isMatch = await bcrypt.compare(password, userFound.password)
-    if (!isMatch) return res.status(400).json(["La contraseña es incorrecta"])
-
-    const token = await crateAccessToken({
-      idDB: userFound._id,
-      employeeId: userFound.id,
-      departamentId: userFound.departamentId,
-      fullName: userFound.firstName + " " + userFound.lastName,
-      roll: userFound.roll,
+  const { username, password } = req.body
+  getUserByUserName(username)
+    .then((response) => {
+      console.log(response)
+      if (!response.data)
+        return res
+          .status(400)
+          .json({ message: "El usuario no existe", response })
+      const userFound = response.data
+      bcrypt.compare(password, userFound.password).then((isMatch) => {
+        if (!isMatch)
+          return res
+            .status(400)
+            .json({ message: "La contraseña es incorrecta" })
+        crateAccessToken(response.data).then((token) => {
+          res.cookie("token", token)
+          res.json(userFound)
+        })
+      })
     })
+    .catch((error) => res.status(500).json({ message: error }))
+  // try {
+  // const userFound = await User.findOne({ user })
+  // if (!userFound) return res.status(400).json(["El usuario no existe"])
 
-    res.cookie("token", token)
-    res.json(userFound)
-  } catch (error) {
-    res.status(500).json([error.message])
-  }
+  // const isMatch = await bcrypt.compare(password, userFound.password)
+  // if (!isMatch) return res.status(400).json(["La contraseña es incorrecta"])
+
+  //   const token = await crateAccessToken({
+  //     idDB: userFound._id,
+  //     employeeId: userFound.id,
+  //     departamentId: userFound.departamentId,
+  //     fullName: userFound.firstName + " " + userFound.lastName,
+  //     roll: userFound.roll,
+  //   })
+
+  //   res.cookie("token", token)
+  //   res.json(userFound)
+  // } catch (error) {
+  //   res.status(500).json([error.message])
+  // }
 }
 export const logout = (req, res) => {
   res.cookie("token", "", {
