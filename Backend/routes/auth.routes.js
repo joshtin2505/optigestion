@@ -14,9 +14,12 @@ import { authAdminRoll } from "../middlewares/validateRoll.js"
 const router = Router()
 
 router.post("/reg-secret", register)
+router.get("/all", getUsers)
 router.post("/register", authRequired, authAdminRoll, register)
 router.get("/users", authRequired, getUsers)
+router.put("/updateOne/:id", updateUser)
 router.put("/update/:id", authRequired, authAdminRoll, updateUser)
+router.delete("/deleteOne/:id", deleteUser)
 router.delete("/delete/:id", authRequired, authAdminRoll, deleteUser)
 
 router.post("/login", login)
