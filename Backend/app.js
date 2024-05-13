@@ -1,25 +1,25 @@
 import express from "express"
 import morgan from "morgan"
 import authRoutes from "./routes/auth.routes.js"
-import operativeRoutes from "./routes/request.routes.js"
+import requirementsRoutes from "./routes/request.routes.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 
 const app = express()
 
-
 // Middlewares
-app.use(cors({
+app.use(
+  cors({
     credentials: true,
-    origin: 'http://localhost:5173'
-}))
+    origin: "http://localhost:5173",
+  })
+)
 
-app.use(morgan('dev'))
+app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookieParser())
 
-app.use('/api',authRoutes)
-app.use('/api',operativeRoutes)
-
+app.use("/api/user", authRoutes)
+app.use("/api/req", requirementsRoutes)
 
 export default app
