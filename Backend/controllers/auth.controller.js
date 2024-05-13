@@ -3,6 +3,13 @@ import bcrypt from "bcryptjs"
 import crateAccessToken from "../libs/jwt.js"
 import jwt from "jsonwebtoken"
 import { SECRET_KEY } from "../config.js"
+import {
+  deleteUsuario,
+  getAllUsers,
+  getUser,
+  registerUsuario,
+  updateUsuario,
+} from "../api/user.api.js"
 
 export const register = async (req, res) => {
   // Test THIS
@@ -12,36 +19,33 @@ export const register = async (req, res) => {
     trabajo,
     email,
     userName,
-    password,
     departamento,
     rolUsuario,
+    password,
   } = req.body
   const paswordHash = await bcrypt.hash(password, 10)
 
-  fetch("http://localhost:8080/api/usuario/guardar", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: {
-      nombre,
-      apellido,
-      trabajo,
-      email,
-      userName,
-      departamento,
-      rolUsuario,
-      password: paswordHash,
-    },
+  registerUsuario({
+    nombre,
+    apellido,
+    trabajo,
+    email,
+    userName,
+    departamento,
+    rolUsuario,
+    password: paswordHash,
   })
     .then(() => {
       res.status(200).json({ message: "Usuario creado" })
     })
-    .catch(
-      (error) =>
-        (error.status === 302) ===
-        res.status(302).json({ message: "El usuario ya existe" })
-    )
+    .catch((error) => {
+      console.log(error)
+      error.status === 302
+        ? res.status(302).json({ message: "El usuario ya existe", error })
+        : res
+            .status(400)
+            .json({ message: "No se pudo crear el usuario", error })
+    })
 }
 export const login = async (req, res) => {
   const { user, password } = req.body
@@ -74,64 +78,63 @@ export const logout = (req, res) => {
   res.status(200).json(["Sesión cerrada"])
 }
 export const profile = async (req, res) => {
-  const userFound = await User.findById(req.user.idDB)
-  if (!userFound)
-    return res.status(400).json({
-      message: "El usuario no encontrado",
+  getUser(req.user.idDB)
+    .then((response) => {
+      if (!response.data)
+        return res.status(400).json({
+          message: "El usuario no encontrado",
+        })
+      return res.json({
+        user: response.data.userName,
+        firstName: response.data.nombre,
+        lastName: response.data.apellido,
+        job: response.data.trabajo,
+        departament: response.data.departamento.titulo,
+        roll: response.data.rolUsuario.rol,
+      })
     })
-
-  return res.json({
-    id: userFound.id,
-    user: userFound.user,
-    password: userFound.password,
-    firstName: userFound.firstName,
-    lastName: userFound.lastName,
-    job: userFound.job,
-    departament: userFound.departament,
-    roll: userFound.roll,
-  })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 export const updateUser = async (req, res) => {
-  try {
-    const userToUpdate = req.body
-
-    if (req.body.password) {
-      const paswordHash = await bcrypt.hash(req.body.password, 10)
-      userToUpdate.password = paswordHash
-    }
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      userToUpdate,
-      { new: true }
-    )
-    if (!updatedUser)
-      return res
+  const userToUpdate = req.body
+  userToUpdate.password
+    ? (userToUpdate.password = await bcrypt.hash(userToUpdate.password, 10))
+    : null
+  updateUsuario(req.params.id, { ...userToUpdate })
+    .then((response) => {
+      !response.data
+        ? res.status(400).json({ message: "No se pudo Actualizar el usuario" })
+        : res.status(200).json({ message: "Updated" })
+    })
+    .catch((error) => {
+      res
         .status(400)
-        .json({ message: "No se pudo Actualizar el usuario" })
-    res.status(200).json({ message: "Updated" })
-  } catch (error) {
-    console.log(error)
-  }
+        .json({ message: "No se pudo Actualizar el usuario", error })
+    })
 }
 export const deleteUser = async (req, res) => {
-  try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id)
-    if (!deletedUser)
-      return res.status(200).json({ message: "No se pudo eliminar el usuario" })
-    return res.status(200).json({ message: "Usuario eliminado" })
-  } catch (error) {
-    console.log(error)
-  }
+  deleteUsuario(req.params.id)
+    .then((response) => {
+      !response.data
+        ? res.status(200).json({ message: "No se pudo eliminar el usuario" })
+        : res.status(200).json({ message: "Usuario eliminado" })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 export const getUsers = async (req, res) => {
-  try {
-    const users = await User.find()
-    if (!users || users.length === 0)
-      return res.json({ message: "No se encontraron usuarios" })
-    return res.json(users)
-  } catch (error) {
-    console.log(error)
-  }
+  getAllUsers()
+    .then((response) => {
+      if (!response.data || response.data.length === 0)
+        return res.json({ message: "No se encontraron usuarios" })
+      return res.json(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies
