@@ -62,14 +62,15 @@ export const login = async (req, res) => {
             .status(400)
             .json({ message: "La contraseña es incorrecta" })
         crateAccessToken({
-          idDB: userFound.id_usuario,
-          employeeId: userFound.id_usuario,
+          idDB: userFound.id_Usuario, //pendiente a eliminar
+          employeeId: userFound.id_Usuario, //pendiente a eliminar
+          id: userFound.id_Usuario,
           departamentId: userFound.departamento.id,
           fullName: userFound.nombre + " " + userFound.apellido,
           roll: userFound.rolUsuario.id_rol, // int
         }).then((token) => {
           res.cookie("token", token)
-          res.json(userFound)
+          res.json({ message: "Sesión iniciada" })
         })
       })
     })
