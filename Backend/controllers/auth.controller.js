@@ -18,7 +18,7 @@ export const register = async (req, res) => {
     apellido,
     trabajo,
     email,
-    userName,
+    username,
     departamento,
     rolUsuario,
     password,
@@ -30,7 +30,7 @@ export const register = async (req, res) => {
     apellido,
     trabajo,
     email,
-    userName,
+    username,
     departamento,
     rolUsuario,
     password: paswordHash,
@@ -51,7 +51,6 @@ export const login = async (req, res) => {
   const { username, password } = req.body
   getUserByUserName(username)
     .then((response) => {
-      console.log(response)
       if (!response.data)
         return res
           .status(400)
@@ -62,33 +61,25 @@ export const login = async (req, res) => {
           return res
             .status(400)
             .json({ message: "La contraseña es incorrecta" })
-        crateAccessToken(response.data).then((token) => {
+        crateAccessToken({
+          idDB: userFound.id_usuario,
+          employeeId: userFound.id_usuario,
+          departamentId: userFound.departamento.id,
+          fullName: userFound.nombre + " " + userFound.apellido,
+          roll: userFound.rolUsuario.id_rol, // int
+        }).then((token) => {
           res.cookie("token", token)
           res.json(userFound)
         })
       })
     })
-    .catch((error) => res.status(500).json({ message: error }))
-  // try {
-  // const userFound = await User.findOne({ user })
-  // if (!userFound) return res.status(400).json(["El usuario no existe"])
-
-  // const isMatch = await bcrypt.compare(password, userFound.password)
-  // if (!isMatch) return res.status(400).json(["La contraseña es incorrecta"])
-
-  //   const token = await crateAccessToken({
-  //     idDB: userFound._id,
-  //     employeeId: userFound.id,
-  //     departamentId: userFound.departamentId,
-  //     fullName: userFound.firstName + " " + userFound.lastName,
-  //     roll: userFound.roll,
-  //   })
-
-  //   res.cookie("token", token)
-  //   res.json(userFound)
-  // } catch (error) {
-  //   res.status(500).json([error.message])
-  // }
+    .catch((error) => {
+      error.response.status === 404
+        ? res.status(404).json({ message: "No se encontró el usuario" })
+        : res
+            .status(error.response.status)
+            .json({ message: "No se pudo iniciar sesión" })
+    })
 }
 export const logout = (req, res) => {
   res.cookie("token", "", {
@@ -104,12 +95,12 @@ export const profile = async (req, res) => {
           message: "El usuario no encontrado",
         })
       return res.json({
-        user: response.data.userName,
+        user: response.data.username,
         firstName: response.data.nombre,
         lastName: response.data.apellido,
         job: response.data.trabajo,
         departament: response.data.departamento.titulo,
-        roll: response.data.rolUsuario.rol,
+        roll: response.data.rolUsuario,
       })
     })
     .catch((error) => {
