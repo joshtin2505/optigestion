@@ -96,12 +96,13 @@ export const profile = async (req, res) => {
           message: "El usuario no encontrado",
         })
       return res.json({
-        user: response.data.username,
-        firstName: response.data.nombre,
-        lastName: response.data.apellido,
-        job: response.data.trabajo,
-        departament: response.data.departamento.titulo,
-        roll: response.data.rolUsuario,
+        username: response.data.username,
+        nombre: response.data.nombre,
+        apellido: response.data.apellido,
+        trabajo: response.data.trabajo,
+        departamento: response.data.departamento.titulo,
+        rol: response.data.rolUsuario.rol,
+        email: response.data.email,
       })
     })
     .catch((error) => {
