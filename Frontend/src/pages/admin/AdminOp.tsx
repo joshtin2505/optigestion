@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react"
 import React from "react"
 import type { Usuario } from "../../types.d.ts"
+import { departament, role } from "../../api/extras.js"
 // Renderiza todo el dashboard de el Administrador
 function AdminOp() {
   return (
@@ -33,6 +34,12 @@ function AdminOp() {
 // Registro de usuarios
 function CreateUser() {
   const [isOpen, setIsOpen] = useState(false)
+  const [roles, setRoles] = useState([])
+  const [departaments, setDepartaments] = useState([])
+  useEffect(() => {
+    role().then((res) => setRoles(res.data))
+    departament().then((res) => setDepartaments(res.data))
+  }, [])
   return (
     <div className="reg-true-cont">
       <section className="reg-container">
@@ -56,14 +63,7 @@ function CreateUser() {
           />
         )}
         <div className={`body ${isOpen ? "show" : "hidden"}`}>
-          <CreateUserForm />
-          <aside>
-            <h3>Roll</h3>
-            <p className="roles">0 = Admin</p>
-            <p className="roles"> 1 = Rector</p>
-            <p className="roles"> 2 = logistico</p>
-            <p className="roles"> 3 = Operativo</p>
-          </aside>
+          <CreateUserForm roles={roles} departaments={departaments} />
         </div>
       </section>
     </div>
@@ -132,8 +132,6 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
     <>
       <li className={`user-card uc-${index}`}>
         <section className="user-infoCont">
-          <span className="user-info user-id">{id_Usuario}</span>
-          <span className="user-div">|</span>
           <span className="user-info user-name">{`${nombre} ${apellido}`}</span>
           <span className="user-div">|</span>
           <span className="user-info user-job">{user.trabajo}</span>
