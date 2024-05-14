@@ -30,7 +30,7 @@ function Login() {
         </div>
         <form  onSubmit={onSubmit}>
             <label htmlFor="usuario">Usuario</label>
-            <input {...register("user", {required: true})} className="userIn" type="text" />
+            <input {...register("username", {required: true})} className="userIn" type="text" />
             {
             errors.user && (
               <p style={{"color": "#dc2626", "fontWeight": "600"}}>usuario requerido</p>
