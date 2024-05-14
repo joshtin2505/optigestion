@@ -19,6 +19,8 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react"
+import React from "react"
+import type { Usuario } from "../../types.d.ts"
 // Renderiza todo el dashboard de el Administrador
 function AdminOp() {
   return (
@@ -106,7 +108,7 @@ function Users() {
           </section>
           <ul className="users-card-container">
             {users.map((user, index) => {
-              return <List key={index} user={user} index={index} />
+              return <UserCard key={index} user={user} index={index} />
             })}
           </ul>
         </div>
@@ -114,16 +116,16 @@ function Users() {
     </>
   )
 }
-const List = ({ user, index }) => {
+const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
   const { userDelete, setNewRender } = useAuth()
   const [openUpdateForm, setOpenUpdateForm] = useState("hide")
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { id_Usuario, nombre, apellido, rolUsuario } = user
-  const {rol} = rolUsuario
+  const { rol } = rolUsuario
   console.log(user)
-  const tituloDepartamento = user.departamento.titulo 
-  console.log(tituloDepartamento)
+  const tituloDepartamento = user.departamento.titulo
+  console.log(rol)
   return (
     <>
       <li className={`user-card uc-${index}`}>
@@ -136,10 +138,14 @@ const List = ({ user, index }) => {
           <span className="user-div">|</span>
           <span className="user-info user-nick">{user.username}</span>
           <span className="user-div">|</span>
-          <span className="user-info user-departament">{tituloDepartamento}</span> {/* TODO: fix this null*/}
+          <span className="user-info user-departament">
+            {tituloDepartamento}
+          </span>{" "}
+          {/* TODO: fix this null*/}
           <span className="user-div">-</span>
           <span className="user-div">|</span>
-          <span className="user-info user-departament">{rol ? 'no null' : 'null'}</span>{/* TODO: fix this null*/}
+          <span className="user-info user-departament">{rol}</span>
+          {/* TODO: fix this null*/}
         </section>
         <section className="admin-op-container">
           <div
