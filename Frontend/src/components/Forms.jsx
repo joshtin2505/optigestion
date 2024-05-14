@@ -427,7 +427,7 @@ export const CreateReqForm = () => {
     const onSend = () => {
       sendSavedReq(data.data._id)
     }
-    const handleChange = (e) => {
+    const handleChange = () => {
       const title = watch('title')
       const description = watch('description')
       setInValues({
@@ -701,7 +701,7 @@ export const CreateReqForm = () => {
                 <ModalHeader>{title}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody >
-                <iframe className='pdf' src={url} frameborder="0"></iframe>
+                <iframe className='pdf' src={url}/>
                 </ModalBody>
               </ModalContent>
             </Modal>
