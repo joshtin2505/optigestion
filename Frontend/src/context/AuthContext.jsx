@@ -21,7 +21,7 @@ export const AuthContext = createContext()
 export const AuthContextProvider = ({children}) => {
     const [response, setResponse] = useState(null)
     const [isAutenticated, setIsAuthenticated] = useState(false)
-    const [isAllowed, setIsAllowed] = useState(false)
+    const [isAllowed, setIsAllowed] = useState(null)
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(true)
     const [closedSession, setClosedSession] = useState(false)
@@ -104,7 +104,6 @@ export const AuthContextProvider = ({children}) => {
                         setLoading(false)
                         return
                     }
-                    console.log(res.data.user.rolUsuario.id_rol)
                     if(res.data.user.rolUsuario.id_rol === 0 ) setIsAllowed(0)
                     else if(res.data.user.rolUsuario.id_rol === 1) setIsAllowed(1)
                     else if(res.data.user.rolUsuario.id_rol === 2) setIsAllowed(2)
