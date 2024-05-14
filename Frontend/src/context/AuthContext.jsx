@@ -1,7 +1,6 @@
 import { 
     createContext, 
     useState, 
-    useContext, 
     useEffect 
 } from "react"
 import { 
@@ -17,13 +16,7 @@ import {
 import Cookies from 'js-cookie'
 export const AuthContext = createContext()
 
-export const useAuth = () => {
-    const context = useContext(AuthContext)
-    if (! context) {
-        throw new Error('useAuth must be used within AuthContextProvider')
-    }
-    return context
-}
+
 
 export const AuthContextProvider = ({children}) => {
     const [response, setResponse] = useState(null)
@@ -91,7 +84,7 @@ export const AuthContextProvider = ({children}) => {
         try {
             const res = await profile()
             if (!res) throw new Error('Error!!! - No response')
-            setResponse(res.data) 
+            return res // aqui hay un fenomeno raro
         } catch (error) {
             setErrors(error.response.data)
         }
@@ -111,10 +104,11 @@ export const AuthContextProvider = ({children}) => {
                         setLoading(false)
                         return
                     }
-                    if(res.data.roll === 0 ) setIsAllowed(0)
-                    else if(res.data.roll === 1) setIsAllowed(1)
-                    else if(res.data.roll === 2) setIsAllowed(2)
-                    else if(res.data.roll === 3) setIsAllowed(3)
+                    console.log(res.data.user.rolUsuario.id_rol)
+                    if(res.data.user.rolUsuario.id_rol === 0 ) setIsAllowed(0)
+                    else if(res.data.user.rolUsuario.id_rol === 1) setIsAllowed(1)
+                    else if(res.data.user.rolUsuario.id_rol === 2) setIsAllowed(2)
+                    else if(res.data.user.rolUsuario.id_rol === 3) setIsAllowed(3)
                     setIsAuthenticated(true)
                     setResponse(res.data)
                     setLoading(false)
