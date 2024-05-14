@@ -17,7 +17,7 @@ import {
 import { Link } from 'react-router-dom'
 import {useState} from 'react'
 import { BsCloudUpload, BsDownload } from 'react-icons/bs'
-import { useAuth } from '../context/AuthContext.jsx'
+import useAuth from '../hooks/useAuth.js'
 import '../assets/css/Approved.css'
 import '../assets/css/ToQuote.css'
 import '../assets/css/ViewPdf.css'
