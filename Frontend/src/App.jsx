@@ -18,7 +18,6 @@ import Cotizar from './pages/logistic/Cotizar.jsx'
 import Comprar from './pages/logistic/Comprar.jsx'
 function App() {
   const {isAllowed} = useAuth()
-
   return (
       <ReqProvider>
         <ChakraProvider>
