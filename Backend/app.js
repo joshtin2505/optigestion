@@ -19,7 +19,7 @@ app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookieParser())
 
-app.use("/api/user", authRoutes)
+app.use("/api/auth", authRoutes)
 app.use("/api/req", requirementsRoutes)
 
 export default app
