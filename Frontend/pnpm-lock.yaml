@@ -41,10 +41,10 @@ dependencies:
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.15
+    specifier: ^18.2.37
     version: 18.2.37
   '@types/react-dom':
-    specifier: ^18.2.7
+    specifier: ^18.2.15
     version: 18.2.15
   '@vitejs/plugin-react-swc':
     specifier: ^3.3.2
@@ -64,6 +64,9 @@ devDependencies:
   standard:
     specifier: ^17.1.0
     version: 17.1.0
+  typescript:
+    specifier: ^5.4.5
+    version: 5.4.5
   vite:
     specifier: ^4.4.5
     version: 4.5.0
@@ -4311,6 +4314,12 @@ packages:
       has-proto: 1.0.3
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
+    dev: true
+
+  /typescript@5.4.5:
+    resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
     dev: true
 
   /unbox-primitive@1.0.2:
