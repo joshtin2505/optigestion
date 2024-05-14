@@ -72,7 +72,7 @@ function CreateUser() {
 // Muestra usuarios
 function Users() {
   const { getUsers, newRender, setNewRender } = useAuth()
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState<Usuario[] | []>([])
   const [refresh, setRefresh] = useState(false)
   useEffect(() => {
     const fetchUsers = async () => {
@@ -107,9 +107,13 @@ function Users() {
             </button>
           </section>
           <ul className="users-card-container">
-            {users.map((user, index) => {
-              return <UserCard key={index} user={user} index={index} />
-            })}
+            {users.length > 0 ? (
+              users.map((user: Usuario, index: number) => {
+                return <UserCard key={index} user={user} index={index} />
+              })
+            ) : (
+              <h1>No hay usuarios</h1>
+            )}
           </ul>
         </div>
       </section>
@@ -121,11 +125,9 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
   const [openUpdateForm, setOpenUpdateForm] = useState("hide")
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { id_Usuario, nombre, apellido, rolUsuario } = user
+  const { id_Usuario, nombre, apellido, rolUsuario, departamento } = user
   const { rol } = rolUsuario
-  console.log(user)
-  const tituloDepartamento = user.departamento.titulo
-  console.log(rol)
+  const { titulo } = departamento
   return (
     <>
       <li className={`user-card uc-${index}`}>
@@ -138,14 +140,10 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
           <span className="user-div">|</span>
           <span className="user-info user-nick">{user.username}</span>
           <span className="user-div">|</span>
-          <span className="user-info user-departament">
-            {tituloDepartamento}
-          </span>{" "}
-          {/* TODO: fix this null*/}
+          <span className="user-info user-departament">{titulo}</span>{" "}
           <span className="user-div">-</span>
           <span className="user-div">|</span>
           <span className="user-info user-departament">{rol}</span>
-          {/* TODO: fix this null*/}
         </section>
         <section className="admin-op-container">
           <div
