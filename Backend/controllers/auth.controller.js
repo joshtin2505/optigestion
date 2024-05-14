@@ -1,4 +1,3 @@
-import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import crateAccessToken from "../libs/jwt.js"
 import jwt from "jsonwebtoken"
@@ -49,6 +48,7 @@ export const register = async (req, res) => {
 }
 export const login = async (req, res) => {
   const { username, password } = req.body
+  console.log(username, password)
   getUserByUserName(username)
     .then((response) => {
       if (!response.data)
@@ -153,8 +153,8 @@ export const verifyToken = async (req, res) => {
   jwt.verify(token, SECRET_KEY, async (err, user) => {
     if (err) return res.status(err).json(["No autorizado"])
 
-    const userFound = await User.findById(user.idDB)
+    const userFound = await getUser(user.id)
     if (!userFound) return res.status(401).json(["No autorizado"])
-    return res.json(userFound)
+    return res.json({ message: "Autorizado", user: userFound.data })
   })
 }
