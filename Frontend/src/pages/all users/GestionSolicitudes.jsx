@@ -6,10 +6,11 @@ import AdminOp from '../admin/AdminOp.jsx'
 
 function GestionSolicitudes() {
   const {response} = useAuth()
+  const rol = response.user.rolUsuario.id_rol
   return (
     <>
       <NavBar type={1}/>
-      <RollDashboardToRoll roll={response.roll}/>
+      <RollDashboardToRoll roll={rol}/>
     </>
 
   )
