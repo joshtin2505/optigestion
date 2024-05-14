@@ -3,7 +3,7 @@ import '../../assets/css/CreateUser.css'
 import '../../assets/css/ViewUsers.css'
 import { BsArrowClockwise, BsArrowDownSquare, BsArrowUpSquare, BsPencilSquare, BsTrash } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
-import { useAuth } from '../../context/AuthContext.jsx'
+import useAuth from '../../hooks/useAuth.js'
 import {
   Modal,
   ModalOverlay,

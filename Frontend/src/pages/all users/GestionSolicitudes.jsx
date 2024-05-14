@@ -1,7 +1,7 @@
 import NavBar from '../../components/Nav.jsx'
 import OptionCards from '../../components/OptionCards.jsx'
 import '../../assets/css/optionCards.css'
-import { useAuth } from '../../context/AuthContext.jsx'
+import useAuth from '../../hooks/useAuth.js'
 import AdminOp from '../admin/AdminOp.jsx'
 
 function GestionSolicitudes() {
