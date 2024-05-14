@@ -2,7 +2,7 @@ import NavBar from '../../components/Nav.jsx'
 import OptionCards from '../../components/OptionCards.jsx'
 import '../../assets/css/optionCards.css'
 import useAuth from '../../hooks/useAuth.js'
-import AdminOp from '../admin/AdminOp.jsx'
+import AdminOp from '../admin/AdminOp.tsx'
 
 function GestionSolicitudes() {
   const {response} = useAuth()
