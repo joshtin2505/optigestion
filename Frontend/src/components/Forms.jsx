@@ -12,7 +12,8 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  ModalCloseButton
+  ModalCloseButton,
+  Select,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import {useState} from 'react'
@@ -22,7 +23,7 @@ import '../assets/css/Approved.css'
 import '../assets/css/ToQuote.css'
 import '../assets/css/ViewPdf.css'
 
-export const CreateUserForm = () => {
+export const CreateUserForm = ({roles, departaments}) => {
   const [modalName, setModalName] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {register, 
@@ -63,17 +64,24 @@ export const CreateUserForm = () => {
     <div className="third">
       <input className='RU-input' type="text" {...register('job', {required: true})} placeholder='Puesto'/>
 
-      <input className='RU-input' type="number" {...register('id', {required: true})} placeholder='ID de Empleado'/>
-
-      <input className='RU-input' type="number" max='3' min='0' {...register('roll', {required: true})} placeholder='Roll'/>
+      <Select className='select RU-input' bg="#6b6b6b69" color="white" border="none" borderRadius="2px" placeholder='-- Estatus --' {...register('activo', {required: true})}>
+        <option value={1}>Activo</option>
+        <option value={0}>Inactivo</option>
+      </Select>
+ 
+      <Select className='select' bg="#6b6b6b69" color="white" border="none" borderRadius="2px" placeholder='---- Role ----'  {...register('roll', {required: true})}>
+        {roles && roles.map(({id_rol, rol}, index) => {
+          return <option key={index} value={id_rol}>{rol}</option>
+        })}
+      </Select>
       {
         errors.job && (
           <p style={{"color": "#dc2626", "fontWeight": "600"}}>Puesto requerido</p>
         )
       }
                 {
-        errors.id && (
-          <p style={{"color": "#dc2626", "fontWeight": "600"}}>ID de Empleado requerido</p>
+        errors.activo && (
+          <p style={{"color": "#dc2626", "fontWeight": "600"}}>Estatus de Actividad requerido</p>
         )
       }
       {
@@ -83,20 +91,16 @@ export const CreateUserForm = () => {
         }
     </div>
     <hr />
-    <div className="dual">
-      <input className='RU-input' type="text" {...register('departament', {required: true})} placeholder='Departamento'/>
+      <Select className='select RU-input' bg="#6b6b6b69" color="white" border="none" borderRadius="2px" placeholder='---- Departamento ----' {...register('departament', {required: true})}>
+        {departaments && departaments.map(({id, titulo}, index) => {
+          return <option key={index} value={id}>{titulo}</option>
+        })}
+      </Select>
       {
         errors.departament && (
           <p style={{"color": "#dc2626", "fontWeight": "600"}}>departamento requerido</p>
           )
         }
-        <input className='RU-input' type="number" {...register('departamentId', {required: true})} placeholder='ID de Departamento'/>
-      {
-        errors.departamentId && (
-          <p style={{"color": "#dc2626", "fontWeight": "600"}}>ID de Departamento requerido</p>
-        )
-      }
-    </div>
     <hr />
     <div className="dual">
       <input className='RU-input' type="text" {...register('user', {required: true})} placeholder='Usuario'/>
