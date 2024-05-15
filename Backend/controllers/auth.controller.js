@@ -21,6 +21,7 @@ export const register = async (req, res) => {
     departamento,
     rolUsuario,
     password,
+    activo,
   } = req.body
   const paswordHash = await bcrypt.hash(password, 10)
 
@@ -33,6 +34,7 @@ export const register = async (req, res) => {
     departamento,
     rolUsuario,
     password: paswordHash,
+    activo,
   })
     .then(() => {
       res.status(200).json({ message: "Usuario creado" })
@@ -111,10 +113,17 @@ export const profile = async (req, res) => {
 }
 export const updateUser = async (req, res) => {
   const userToUpdate = req.body
-  userToUpdate.password
-    ? (userToUpdate.password = await bcrypt.hash(userToUpdate.password, 10))
+
+  const refinedUser = {}
+  for (const key in userToUpdate) {
+    if (userToUpdate[key] !== null) refinedUser[key] = userToUpdate[key]
+  }
+  console.log(userToUpdate, refinedUser)
+
+  refinedUser.password
+    ? (refinedUser.password = await bcrypt.hash(refinedUser.password, 10))
     : null
-  updateUsuario(req.params.id, { ...userToUpdate })
+  updateUsuario(req.params.id, { ...refinedUser })
     .then((response) => {
       !response.data
         ? res.status(400).json({ message: "No se pudo Actualizar el usuario" })
