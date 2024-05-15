@@ -1,113 +1,126 @@
-.reg-true-cont{
-    margin-top: 40px;
-    padding: 0 20px;
+.reg-true-cont {
+  margin-top: 40px;
+  padding: 0 20px;
 }
 .reg-container {
-    display: grid;
-    gap: 8px;
-    border-radius: 2px;
-    place-items: center;
-    width: 100%;
-    backdrop-filter: blur(10px);
-    background: #6b6b6b33;
-    position: relative;
-    padding: 10px 0;
+  display: grid;
+  gap: 8px;
+  border-radius: 2px;
+  place-items: center;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  background: #6b6b6b33;
+  position: relative;
+  padding: 10px 0;
 }
 .reg-container .body {
-    width: 100%;
-    justify-content: center;
-    gap: 40px;
+  width: 100%;
+  justify-content: center;
+  gap: 40px;
 }
 
-.body aside{
-    width: 15%;
-    background: #8787872e;
-    border-radius: 2px;
-    padding: 10px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 .reg-container .reg-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-    padding: 10px;
-    border-radius: 2px;
-    backdrop-filter: overlay(10px) ;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-    width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 2px;
+  backdrop-filter: overlay(10px);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  width: 500px;
 }
 .reg-form input {
-    background: #6b6b6b69;
-    border: none;
-    border-radius: 2px;
-    font-size: medium;
-    width: calc(100% - 8px);
-    padding: 4px;
-    color: rgba(255, 255, 255, 0.816);
+  background: #6b6b6b69;
+  height: 40px !important;
+  border: none;
+  border-radius: 2px;
+  font-size: medium;
+  width: calc(100% - 8px);
+  padding: 4px;
+  color: rgba(255, 255, 255, 0.816);
 }
-.reg-form input::placeholder{
-    color: #ffffff;
+.dual {
+  width: 100%;
+  gap: 12px;
 }
-.reg-form input:focus{
-    color: #ffffff;
-    transition: all 0.15s ease-in-out;
-    background: linear-gradient(273deg, #1287D6 24.2%, #1287D680 107.05%);
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+.dual div {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
 }
-.reg-form .btn-container{
-    width: 100%;
-    display: flex;
-    justify-content: center;
+.dual input,
+.dual select {
+  width: 100%;
 }
-.btn-container button {
-    width: 80%;
-    padding: 4px 2px;
-    margin-top: 10px;
-    border-radius: 4px;
-    background: linear-gradient(273deg, #ED4B4B 24.2%, rgba(237, 75, 75, 0.50) 107.05%);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-.btn-container button:hover{
-    transition: all 0.15s ease-in-out;
-    background: linear-gradient(273deg, #1287D6 24.2%, #1287D680 107.05%);
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-    
+.dual .chakra-select__wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
-.unSuccsess{
-    color: red;
-    font-weight: 600;
+.reg-form .third select {
+  width: 150px;
 }
-.dual{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
+.reg-form .dual select {
+  width: 230px;
 }
-.dual input:nth-child(3){
-    order: -1;
+.reg-form input::placeholder {
+  color: #ffffff;
 }
+.reg-form input:focus {
+  color: #ffffff;
+  transition: all 0.15s ease-in-out;
+  background: linear-gradient(273deg, #1287d6 24.2%, #1287d680 107.05%);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.reg-form .btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.btn-container button {
+  width: 80%;
+  padding: 4px 2px;
+  margin-top: 10px;
+  border-radius: 4px;
+  background: linear-gradient(
+    273deg,
+    #ed4b4b 24.2%,
+    rgba(237, 75, 75, 0.5) 107.05%
+  );
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.btn-container button:hover {
+  transition: all 0.15s ease-in-out;
+  background: linear-gradient(273deg, #1287d6 24.2%, #1287d680 107.05%);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.unSuccsess {
+  color: red;
+  font-weight: 600;
+}
+.dual {
+  display: flex;
+  width: 100%;
+}
+
 .third {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    grid-template-rows: repeat(2, auto); 
-    gap: 4px;
-  }
-.open-reg{
-    position: absolute;
-    top: 15px;
-    right: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 4px;
 }
-.hidden{
-    display: none;
-    
+.open-reg {
+  position: absolute;
+  top: 15px;
+  right: 15px;
 }
-.show{
-    display: flex;
+.hidden {
+  display: none;
+}
+.show {
+  display: flex;
 }
