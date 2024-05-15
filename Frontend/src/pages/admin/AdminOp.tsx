@@ -125,6 +125,13 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
   const [openUpdateForm, setOpenUpdateForm] = useState("hide")
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const [roles, setRoles] = useState([])
+  const [departaments, setDepartaments] = useState([])
+  useEffect(() => {
+    role().then((res) => setRoles(res.data))
+    departament().then((res) => setDepartaments(res.data))
+  }, [])
+
   const { id_Usuario, nombre, apellido, rolUsuario, departamento } = user
   const { rol } = rolUsuario
   const { titulo } = departamento
@@ -152,9 +159,17 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
           >
             <BsPencilSquare />
           </div>
-          <div className="admin-op" onClick={() => onOpen()}>
+          <button
+            className="admin-op"
+            onClick={() => onOpen()}
+            disabled
+            style={{
+              opacity: 0.5,
+              cursor: "not-allowed",
+            }}
+          >
             <BsTrash />
-          </div>
+          </button>
         </section>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -170,7 +185,7 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
               <button
                 className="AO-delBtn AO-btn-del"
                 onClick={() => {
-                  userDelete(user.id_Usuario)
+                  userDelete(id_Usuario)
                   setNewRender((oldRender) => !oldRender)
                   onClose()
                 }}
@@ -184,7 +199,11 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
       <section className={"updateCont " + openUpdateForm}>
         <div className="updateUserCont">
           <h3>Update User</h3>
-          <UpdateUserForm idDB={user.id_Usuario} user={user} />
+          <UpdateUserForm
+            user={user}
+            departaments={departaments}
+            roles={roles}
+          />
         </div>
       </section>
     </>
