@@ -43,8 +43,10 @@ function ViewResRequest({res, title, type}) {
   const search = watch('search')
   const filteredResponse = res?.filter((req) => {
     return (
-      req.title.toLowerCase().includes(search.toLowerCase()) ||
-      req.description.toLowerCase().includes(search.toLowerCase())
+      req?.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.descripcion.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.descripcion.toLowerCase().includes(search.toLowerCase())
     )
   })
 
@@ -64,9 +66,9 @@ function ViewResRequest({res, title, type}) {
             {
               filteredResponse && 
               filteredResponse.map(req => {
-                const fecha = new Date(req.date)
+                const fecha = new Date(req.fecha_creacion)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return <List key={req._id} type={type} req={req} concatDate={concatDate}/>
+                return <List key={req.id_requerimeinto} type={type} req={req} concatDate={concatDate}/>
               })
             }
             {/* Si no hay Solicitudes */}
@@ -98,9 +100,9 @@ const List = ({req, concatDate, type}) => {
         <div className="Br-card-txt">
           <p>{concatDate}</p>
           <p>|</p>
-          <p className='card-title'>{req.title}</p>
+          <p className='card-title'>{req.titulo}</p>
           <span>-</span>
-          <p className='card-description'>{req.description}</p>
+          <p className='card-description'>{req.descripcion}</p>
         </div>
         <div className="Br-options">
           <BsEye onClick={() =>{
