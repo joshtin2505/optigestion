@@ -71,6 +71,7 @@ export const login = async (req, res) => {
           fullName: userFound.nombre + " " + userFound.apellido,
           roll: userFound.rolUsuario.id_rol, // int
         }).then((token) => {
+          console.log(token)
           res.cookie("token", token)
           res.json({ message: "Sesión iniciada" })
         })
