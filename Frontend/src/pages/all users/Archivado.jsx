@@ -17,7 +17,7 @@ function Archivado() {
   useEffect(() => {
     const fetchReq = async () => {
       const res = await getAllFileReq()
-      setResponse(res)
+      setResponse(res.data)
     }
 
     fetchReq()
@@ -26,7 +26,7 @@ function Archivado() {
     e.preventDefault()
   }
 
-  const filteredResponse = response.filter((req) => {
+  const filteredResponse = response?.filter((req) => {
     return (
       req.title.toLowerCase().includes(search.toLowerCase()) ||
       req.description.toLowerCase().includes(search.toLowerCase())
