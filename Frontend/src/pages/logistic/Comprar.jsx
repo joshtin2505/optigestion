@@ -32,45 +32,18 @@ function Comprar() {
 function ViewToBuyRequest({res, title}) {
   const {register, setValue, watch} = useForm()
 
-  const List = ({req, concatDate}) => {
-    const [openReq, setOpenReq] = useState(false)
 
-    return (
-      <section className='Br-card-real' >
-        <div  className='BrCard' >
-          <div className="Br-card-txt">
-            <p>{concatDate}</p>
-            <p>|</p>
-            <p className='card-title'>{req.title}</p>
-            <span>-</span>
-            <p className='card-description'>{req.description}</p>
-          </div>
-          <div className="Br-options">
-            <BsEye onClick={() =>{
-              setOpenReq(!openReq)
-              }} className='Br-icon' fill='#6b6b6b' size={18}/>
-            
-            </div>
-        </div>
-        <div className='BR-ed-cont'>
-          {
-            openReq && (
-              <ViewToBuyResForm data={req}/>
-              )
-            }
-            </div>
-      </section>
-    )
-  }
 
   function handleSubmit(e){
     e.preventDefault()
   }
   const search = watch('search')
-  const filteredResponse = res.filter((req) => {
+  const filteredResponse = res?.filter((req) => {
     return (
-      req.title.toLowerCase().includes(search.toLowerCase()) ||
-      req.description.toLowerCase().includes(search.toLowerCase())
+      req?.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.descripcion.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.descripcion.toLowerCase().includes(search.toLowerCase())
     )
   })
 
@@ -113,6 +86,37 @@ function ViewToBuyRequest({res, title}) {
       </div>
     </>
 
+  )
+}
+
+const List = ({req, concatDate}) => {
+  const [openReq, setOpenReq] = useState(false)
+
+  return (
+    <section className='Br-card-real' >
+      <div  className='BrCard' >
+        <div className="Br-card-txt">
+          <p>{concatDate}</p>
+          <p>|</p>
+          <p className='card-title'>{req.titulo}</p>
+          <span>-</span>
+          <p className='card-description'>{req.descripcion}</p>
+        </div>
+        <div className="Br-options">
+          <BsEye onClick={() =>{
+            setOpenReq(!openReq)
+            }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          
+          </div>
+      </div>
+      <div className='BR-ed-cont'>
+        {
+          openReq && (
+            <ViewToBuyResForm data={req}/>
+            )
+          }
+          </div>
+    </section>
   )
 }
 
