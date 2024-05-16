@@ -17,16 +17,15 @@ function Papelera() {
   useEffect(() => {
     const fetchReq = async () => {
       const res = await getAllTrashReq()
-      setResponse(res)
+      setResponse(res.data)
     }
-
     fetchReq()
   },[updateComponent])
   function handleSubmit(e){
     e.preventDefault()
   }
 
-  const filteredResponse = response.filter((req) => {
+  const filteredResponse = response?.filter((req) => {
     return (
       req.title.toLowerCase().includes(search.toLowerCase()) ||
       req.description.toLowerCase().includes(search.toLowerCase())
