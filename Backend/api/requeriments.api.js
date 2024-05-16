@@ -1,7 +1,7 @@
 import axios from "./axios.js"
 
 const addRequest = async (data) => axios.post("/requerimentos", data)
-const deleteRequest = async (id) => axios.delete("/requerimentos/" + id)
+const deleteRequeriment = async (id) => axios.delete("/requerimentos/" + id)
 const updateRequeriment = async (data) =>
   axios.put("/requerimentos/" + data.id, data)
 const getRequerimentById = async (id) => axios.get("/requerimentos/" + id)
@@ -9,7 +9,7 @@ const getAllRequirements = async () => axios.get("/requerimentos")
 
 export {
   addRequest,
-  deleteRequest,
+  deleteRequeriment,
   updateRequeriment,
   getRequerimentById,
   getAllRequirements,
