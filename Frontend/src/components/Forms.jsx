@@ -235,13 +235,13 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
   const { updateUser, setNewRender } = useAuth()
 
   const onSubmit = handleSubmit(async (values) => {
-    const departamento = !values.departamento
-      ? user.departamento
-      : values.departamento
+    const departamento = !values.departamento.id
+      ? user.departamento.id
+      : values.departamento.id
     const nombre = !values.nombre ? user.nombre : values.nombre
     const apellido = !values.apellido ? user.apellido : values.apellido
     const trabajo = !values.trabajo ? user.trabajo : values.trabajo
-    const rolUsuario = !values.rolUsuario ? Number(user.rolUsuario) : Number(values.rolUsuario)
+    const rolUsuario = !values.rolUsuario.id_rol ? Number(user.rolUsuario.id_rol) : Number(values.rolUsuario.id_rol)
     const username = !values.username ? user.username : values.username
     const activo = !values.activo ? user.activo : values.activo
     const email = !values.email ? user.email : values.email
@@ -785,17 +785,18 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const [pdf1, pdf2, pdf3] = pdfs
-    if (pdf1 || pdf2 || pdf3) {
+    if (pdf1 && pdf2 && pdf3) {
       const formData = new FormData()
 
-      setUpdateComponent((prevValue) => prevValue + 1)
-
+      
       formData.append("id",data.id_requerimeinto)
-      pdf1 && formData.append("pdf1", pdf1)
-      pdf2 && formData.append("pdf2", pdf2)
-      pdf3 && formData.append("pdf3", pdf3)
-
+      formData.append("pdf1", pdf1)
+      formData.append("pdf2", pdf2)
+      formData.append("pdf3", pdf3)
+      
       LogisticRes(formData)
+
+      setUpdateComponent((prevValue) => prevValue + 1)
     }
   }
 
@@ -876,6 +877,7 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
                       handleFileChange(index, files)
                     }
                     name={`pdf${index + 1}`}
+                    required
                   />
                   <BsCloudUpload fill="#ececec" size={50} />
                   <p className="TQ-pdf-name">{fileNames[index]}</p>
@@ -897,9 +899,9 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
     </>
   )
 }
-export const ViewToBuyResForm = (data) => {
+export const ViewToBuyResForm = ({data}) => {
   function Quote({ req }) {
-    const request = req.data
+    const request = req
     const {
       isOpen: isOpen1,
       onOpen: onOpen1,
@@ -943,6 +945,7 @@ export const ViewToBuyResForm = (data) => {
           <h1>Cotizacones</h1>
           <hr />
           <section className="A-middle-section">
+            {/* --- */}
             {[1, 2, 3].map((index) => {
               const value =
                 index === 1
@@ -984,6 +987,7 @@ export const ViewToBuyResForm = (data) => {
                     </button>
                     <a
                       href={url}
+                      rel="noreferrer"
                       download={`cotizacion_${nameValue}`}
                       target="_blank"
                       className="A-btn-download"
@@ -994,22 +998,22 @@ export const ViewToBuyResForm = (data) => {
                 </div>
               )
             })}
+            {/* --- */}
           </section>
           {/*  */}
           <section className="A-down-section">
             <h5 className="A-operative-comments-txt">Comentarios: </h5>
             <textarea
               className="A-operative-comments-in"
-              value={request.toBuyComments}
+              value={request.comentario_compra}
               disabled
             />
             <div className="A-chose-cont">
               <h6 className="A-chose-title">Comprar</h6>
-              <h6 className="A-chose-title">Opcion {request.choise}</h6>
+              <h6 className="A-chose-title">Opcion {request.opcion_elegida}</h6>
             </div>
           </section>
           {/*  */}
-          <div className="A-btnCont" />
         </form>
       </>
     )
@@ -1019,7 +1023,7 @@ export const ViewToBuyResForm = (data) => {
       <section className="form-Update formTwo">
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={data.data.title} disabled />
+          <input type="text" value={data.titulo} disabled />
         </div>
         <br />
         <section className="A-content">
@@ -1038,7 +1042,7 @@ export const ViewToBuyResForm = (data) => {
                 height: "auto",
               }}
               className="textarea-Res "
-              value={data.data.description}
+              value={data.descripcion}
               disabled
             />
           </div>
@@ -1056,7 +1060,7 @@ export const ViewToBuyResForm = (data) => {
               style={{
                 height: "auto",
               }}
-              value={data.data.rectorComment}
+              value={data.comentario_rector}
               className="textarea-Res"
               disabled
             />
