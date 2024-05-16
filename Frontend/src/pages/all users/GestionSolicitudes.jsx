@@ -6,7 +6,7 @@ import AdminOp from '../admin/AdminOp.tsx'
 
 function GestionSolicitudes() {
   const {response} = useAuth()
-  const rol = response.user.rolUsuario.id_rol
+  const rol = response?.user?.rolUsuario?.id_rol
   return (
     <>
       <NavBar type={1}/>
