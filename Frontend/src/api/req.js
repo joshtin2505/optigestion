@@ -1,42 +1,46 @@
 import axios from "./axios.js"
 
-export const addRequest = async (data) => axios.post('/solicitud', data)
-export const deleteRequest = async (id) => axios.delete('/solicitud/' + id)
-export const updateRequest = async (data) => axios.put('/solicitud/' + data.id, data)
-export const getRequest = async (id) => axios.get('/solicitud/' + id)
-export const getRequirements = async () => axios.get('/solicitud/')
+export const addRequest = async (data) => axios.post("/req/base/", data)
+export const deleteRequest = async (id) => axios.delete("/req/base/" + id)
+export const updateRequest = async (data) =>
+  axios.put("/req/base/" + data.id, data)
+export const getRequest = async (id) => axios.get("/req/base/" + id)
+export const getRequirements = async () => axios.get("/req/base/")
 
 // Enviados
-export const sendSavedRequest = async (id) => axios.put('/solicitud-send/' + id)
-export const sendNewRequest = async (data) => axios.post('/solicitud-send', data)
-export const getSentRequirements = async () => axios.get('/solicitud-sent/' )
-
+export const sendSavedRequest = async (id) => axios.put("/req/send/" + id)
+export const sendNewRequest = async (data) => axios.post("/req/send", data)
+export const getSentRequirements = async () => axios.get("/req/sent/")
 
 // Borrador
-export const getDraftRequirements = async () => axios.get('/solicitud-draft/')
+export const getDraftRequirements = async () => axios.get("/req/draft/")
 
 // Papelera
-export const toTrashRequest = async (id) => axios.put('/solicitud-trash/' + id)
-export const getTrashRequirements = async () => axios.get('/solicitud-trash/' )
+export const toTrashRequest = async (id) => axios.put("/req/trash/" + id)
+export const getTrashRequirements = async () => axios.get("/req/trash/")
 
 // Archivo
-export const toFileRequest = async (id) => axios.put('/solicitud-file/' + id)
-export const getFileRequirements = async () => axios.get('/solicitud-files/' )
+export const toFileRequest = async (id) => axios.put("/req/file/" + id)
+export const getFileRequirements = async () => axios.get("/req/files/")
 
 // elegir
-export const choseQuote = async (data) => axios.put('/solicitud-electQuote/' + data.id, data)
+export const choseQuote = async (data) =>
+  axios.put("/req/electQuote/" + data.id, data)
 
+// Rector
+export const getAllSentRequirements = async () => axios.get("/req/allSent/")
 
-// Rector 
-export const getAllSentRequirements = async () => axios.get('/solicitud-allSent/' )
-
-export const rectorResponse = async (data) => axios.put('/solicitud-res-YorN/' + data.id, data)
+export const rectorResponse = async (data) =>
+  axios.put("/req/res-YorN/" + data.id, data)
 
 //Respondidos
-export const getApprovedRequirements = async () => axios.get('/solicitud-approved/')
-export const getRejectedRequirements = async () => axios.get('/solicitud-rejected/')
+export const getApprovedRequirements = async () => axios.get("/req/approved/")
+export const getRejectedRequirements = async () => axios.get("/req/rejected/")
 
 // Logistico
-export const getAllToQuoteRequirements = async () => axios.get('/solicitud-toQuote/')
-export const getAllToBuyRequirements = async () => axios.get('/solicitud-toBuy/')
-export const logisticResponse = async (data) => await axios.put('/solicitud-res-prices/', data, {headers: {'Content-Type': 'multipart/form-data'}})
+export const getAllToQuoteRequirements = async () => axios.get("/req/toQuote/")
+export const getAllToBuyRequirements = async () => axios.get("/req/toBuy/")
+export const logisticResponse = async (data) =>
+  await axios.put("/req/res-prices/", data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  })
