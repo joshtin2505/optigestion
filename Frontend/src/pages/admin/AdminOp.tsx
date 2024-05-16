@@ -134,19 +134,21 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
 
   const { id_Usuario, nombre, apellido, rolUsuario, departamento } = user
   const rol = rolUsuario?.rol ? rolUsuario?.rol : ""
-  const { titulo } = departamento
   return (
     <>
       <li className={`user-card uc-${index}`}>
         <section className="user-infoCont">
           <span className="user-info user-name">{`${nombre} ${apellido}`}</span>
           <span className="user-div">|</span>
-          <span className="user-info user-job">{user.trabajo}</span>
+          <span className="user-info user-nick">{user?.username}</span>
           <span className="user-div">|</span>
-          <span className="user-info user-nick">{user.username}</span>
+          <span className="user-info user-nick">{user?.email}</span>
           <span className="user-div">|</span>
-          <span className="user-info user-departament">{titulo}</span>{" "}
-          <span className="user-div">-</span>
+          <span className="user-info user-job">{user?.trabajo}</span>
+          <span className="user-div">|</span>
+          <span className="user-info user-departament">
+            {departamento?.titulo}
+          </span>
           <span className="user-div">|</span>
           <span className="user-info user-departament">{rol}</span>
         </section>
