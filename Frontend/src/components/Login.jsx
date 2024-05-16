@@ -12,7 +12,6 @@ function Login() {
       } = useForm()
 
       const {singIn, errors: signInErr, isAutenticated} = useAuth()
-
       const navigate = useNavigate()
 
 
@@ -52,11 +51,10 @@ function Login() {
             </div>
         </form>
         {
-          signInErr.map((err, i)=> (
-            <div className='unSuccsess' key={i}>
-              {err}
+          signInErr &&
+            <div className='unSuccsess'>
+              {signInErr.message}
             </div>
-          ))
         }
     </div>
   )
