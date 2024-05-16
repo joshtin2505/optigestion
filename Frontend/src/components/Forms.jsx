@@ -238,12 +238,14 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
     const departamento = !values.departamento
       ? user.departamento
       : values.departamento
-
     const nombre = !values.nombre ? user.nombre : values.nombre
     const apellido = !values.apellido ? user.apellido : values.apellido
     const trabajo = !values.trabajo ? user.trabajo : values.trabajo
     const rolUsuario = !values.rolUsuario ? Number(user.rolUsuario) : Number(values.rolUsuario)
     const username = !values.username ? user.username : values.username
+    const activo = !values.activo ? user.activo : values.activo
+    const email = !values.email ? user.email : values.email
+
     if (values.password) {
       const res = await updateUser(user.id_Usuario, {
         departamento,
@@ -252,6 +254,8 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
         trabajo,
         rolUsuario,
         username,
+        activo,
+        email,
         password: values.password,
       })
       if (res.data.message) setModalName(res.data.message)
@@ -265,8 +269,10 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
         trabajo,
         rolUsuario,
         username,
+        activo,
+        email,
       })
-      if (res.data.message) setModalName(res.data.message)
+      if (res?.data?.message) setModalName(res.data.message)
       setNewRender(true)
       res.status == 200 ? onOpen() : null
     }
@@ -455,16 +461,16 @@ export const CreateReqForm = () => {
     onOpen()
   })
   const onSend = () => {
-    const title = watch("title")
-    const description = watch("description")
-    if (title === "" || description === "") {
-      setError("title", "")
-      setError("description", "")
+    const titulo = watch("titulo")
+    const descripcion = watch("descripcion")
+    if (titulo === "" || descripcion === "") {
+      setError("titulo", "")
+      setError("descripcion", "")
       return
     }
     sendInNewReq({
-      title,
-      description,
+      titulo,
+      descripcion,
     })
     reset()
     setSendSuccess(true)
@@ -484,15 +490,15 @@ export const CreateReqForm = () => {
             <label htmlFor="">Titulo:</label>
             <input
               type="text"
-              {...register("title", {
+              {...register("titulo", {
                 required: true,
                 min: 5,
               })}
-              onChange={(e) => setValue("title", e.target.value)}
+              onChange={(e) => setValue("titulo", e.target.value)}
               autoFocus
             />
           </div>
-          {errors.title && (
+          {errors.titulo && (
             <div
               style={{
                 color: "red",
@@ -506,12 +512,12 @@ export const CreateReqForm = () => {
           <label htmlFor="">Descripcion:</label>
           <br />
           <textarea
-            {...register("description", {
+            {...register("descripcion", {
               required: true,
             })}
-            onChange={(e) => setValue("description", e.target.value)}
+            onChange={(e) => setValue("descripcion", e.target.value)}
           ></textarea>
-          {errors.description && (
+          {errors.descripcion && (
             <div
               style={{
                 color: "red",
@@ -1360,19 +1366,19 @@ export const ViewRejectedResForm = (data) => {
     </>
   )
 }
-export const ViewReqForm = (data) => {
+export const ViewReqForm = ({data}) => {
   return (
     <>
       <form className="form-view formTwo">
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input disabled value={data.data.title} />
+          <input disabled value={data.titulo} />
           <label htmlFor="">Estado:</label>
         </div>
         <br />
         <label htmlFor="">Descripcion:</label>
         <br />
-        <textarea disabled value={data.data.description}></textarea>
+        <textarea disabled value={data.descripcion}></textarea>
       </form>
     </>
   )
