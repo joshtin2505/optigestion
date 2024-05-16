@@ -1,5 +1,6 @@
 import {
   addRequest,
+  deleteRequeriment,
   getAllRequirements,
   getRequerimentById,
   updateRequeriment,
@@ -21,7 +22,6 @@ export const getRequirements = async (req, res) => {
       res.json(reqUser)
     })
     .catch((error) => {
-      console.log(error)
       res.status(400).json({ message: "No se pudo obtener los requerimientos" })
     })
 }
@@ -41,7 +41,6 @@ export const getRequest = async (req, res) => {
       res.json(response.data)
     })
     .catch((error) => {
-      console.log(error)
       res.status(400).json({ message: "No se pudo obtener el requerimiento" })
     })
 }
@@ -51,36 +50,23 @@ export const createRequest = async (req, res) => {
   addRequest({
     titulo,
     descripcion,
-    estado,
+    estado: 1,
     usuario: req.user.id,
-    tipoRequerimiento,
+    tipoRequerimiento: 0, // Actualizar la ui para que no tenga que quemarce este dato
   })
     .then((response) => {
-      console.log("Register")
       res.json({
         message: "Requerimiento creado",
         data: response.data,
       })
     })
     .catch((error) => {
-      console.log(error)
-      console.log("--------------------\n", {
-        titulo,
-        descripcion,
-        estado,
-        usuario: req.user.id,
-        tipoRequerimiento,
-      })
       res.status(400).json({ message: "No se pudo crear el requerimiento" })
     })
 }
 // Actualizar un req ya creado - No se puede actualizar una ya en proceso(enviado, aprovado, cotizado) ✅
 export const updateRequest = async (req, res) => {
   const id = req.params.id
-  console.log({
-    ...req.body,
-    id,
-  })
   updateRequeriment({
     ...req.body,
     id,
@@ -97,7 +83,6 @@ export const updateRequest = async (req, res) => {
           .status(404)
           .json({ message: "No se encontró el requerimiento" })
       }
-      console.log(error)
       res
         .status(400)
         .json({ message: "No se pudo actualizar el requerimiento" })
@@ -105,269 +90,352 @@ export const updateRequest = async (req, res) => {
 }
 // Eleimiar un req | solo si no esta ya en proceso ✅
 export const deleteRequest = async (req, res) => {
-  try {
-    const request = await Request.findByIdAndDelete(req.params.id)
-    if (!request)
-      return res
-        .status(404)
-        .json({ message: "No se encontro el requerimiento" })
-    res.sendStatus(204)
-  } catch (error) {
-    console.log(error)
-  }
+  deleteRequeriment(req.params.id)
+    .then((response) => {
+      res.json({ message: "Requerimiento eliminado", data: response.data })
+    })
+    .catch((error) => {
+      if (error.response.status === 404) {
+        return res.status(404).json({
+          message: "No se encontró el requerimiento",
+          data: error.response.data,
+        })
+      }
+      res.status(400).json({
+        message: "No se pudo eliminar el requerimiento",
+        data: error.response.data,
+      })
+    })
 }
 
 // <------------------------------------------------------>
 // Advanced Methods of the requirements
 
-// Enciados ✅
+// Enviados ✅
 // Enviar si ya esta guardado
 export const sendSavedRequest = async (req, res) => {
-  try {
-    const requestSent = await Request.findByIdAndUpdate(
-      req.params.id,
-      { state: 3 },
-      { new: true }
-    )
-    if (!requestSent)
-      return res
-        .status(404)
-        .json({ message: "No se pudo enviar el requerimiento" })
-    return res.json(requestSent)
-  } catch (error) {
-    console.log(error)
-  }
+  const id = req.params.id
+  updateRequeriment({
+    ...req.body,
+    estado: 3,
+    id,
+  })
+    .then((response) => {
+      res.json({
+        message: "Requerimiento Enviado",
+        data: response.data,
+      })
+    })
+    .catch((error) => {
+      if (error.response.status === 404) {
+        return res
+          .status(404)
+          .json({ message: "No se encontró el requerimiento" })
+      }
+      res
+        .status(400)
+        .json({ message: "No se pudo actualizar el requerimiento" })
+    })
 }
 //  Enviar si no esta guardado
 export const sendNewRequest = async (req, res) => {
-  try {
-    //
-    const { title, date, description, operativeComments } = req.body
-
-    const newRequest = new Request({
-      title,
-      date,
-      description,
-      state: 3,
-      employeeId: req.user.employeeId,
-      employeeFullName: req.user.fullName,
-      departamentId: req.user.departamentId,
-      operativeComments,
+  const { titulo, descripcion } = req.body
+  addRequest({
+    titulo,
+    descripcion,
+    estado: 3,
+    usuario: req.user.id,
+    tipoRequerimiento: 0,
+  })
+    .then((response) => {
+      res.json({
+        message: "Requerimiento creado",
+        data: response.data,
+      })
     })
-
-    try {
-      const requestSent = await newRequest.save()
-      if (!requestSent)
-        return res
-          .status(404)
-          .json({ message: "No se pudo enviar el requerimiento" })
-      return res.json(requestSent)
-    } catch (error) {
-      console.log(error)
-    }
-    //
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo crear el requerimiento" })
+    })
 }
 export const getSent = async (req, res) => {
-  try {
-    const files = await Request.find({
-      state: 3,
-      employeeId: req.user.employeeId,
+  getAllRequirements()
+    .then((response) => {
+      const reqSendUser = response.data
+        ? response.data.map((requeriment) => {
+            if (
+              requeriment.usuario.id_Usuario === req.user.id &&
+              requeriment.estado.id === 3
+            ) {
+              return requeriment
+            }
+          })
+        : []
+      if (reqSendUser.length === 0)
+        return res
+          .status(200)
+          .json({ message: "No hay requerimientos", data: reqSendUser })
+      res.json({ data: reqSendUser })
     })
-    if (!files)
-      return res.status(200).json({ message: "No hay requerimientos" })
-    res.json(files)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 
 // Arcivado ✅
 export const fileRequest = async (req, res) => {
-  try {
-    const getState = await Request.findById(req.params.id)
-    if (!getState)
-      return res
-        .status(404)
-        .json({ message: "No se encontro el requerimiento" })
+  const { id } = req.params
 
-    if (getState.state === 1) {
-      const requestFile = await Request.findByIdAndUpdate(
-        req.params.id,
-        { state: 2 },
-        { new: true }
-      )
-      if (!requestFile)
-        return res
-          .status(404)
-          .json({ message: "No se pudo Archivar", state: requestFile.state })
-      return res.json({
-        message: " se pudo Archivar",
-        state: requestFile.state,
-      })
-    } else if (getState.state === 2) {
-      const requestFile = await Request.findByIdAndUpdate(
-        req.params.id,
-        { state: 1 },
-        { new: true }
-      )
-      if (!requestFile)
-        return res
-          .status(404)
-          .json({ message: "No se pudo desArchivar", state: requestFile.state })
-      return res.json({
-        message: "se pudo desArchivar",
-        state: requestFile.state,
-      })
-    }
-    return res.json({
-      message:
-        "No se puede archivar este requerimiento ya que es estatus: " +
-        getState.state,
+  const requeriment = await getRequerimentById(id)
+  if (requeriment.data.estado.id === 2) {
+    updateRequeriment({
+      estado: 1,
+      id,
     })
-  } catch (error) {
-    console.log(error)
+      .then((response) => {
+        res.json({
+          message: "Requerimiento desarchivado",
+          data: response.data,
+        })
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          return res
+            .status(404)
+            .json({ message: "No se encontró el requerimiento" })
+        }
+        res
+          .status(400)
+          .json({ message: "No se pudo actualizar el requerimiento" })
+      })
+  } else if (requeriment.data.estado.id === 1) {
+    updateRequeriment({
+      estado: 2,
+      id,
+    })
+      .then((response) => {
+        res.json({
+          message: "Requerimiento archivado",
+          data: response.data,
+        })
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          return res
+            .status(404)
+            .json({ message: "No se encontró el requerimiento" })
+        }
+        res
+          .status(400)
+          .json({ message: "No se pudo actualizar el requerimiento" })
+      })
+  } else {
+    res.status(400).json({ message: "No se pudo Archivar el requerimiento" })
   }
 }
 export const getFiles = async (req, res) => {
-  try {
-    const files = await Request.find({
-      state: 2,
-      employeeId: req.user.employeeId,
+  getAllRequirements()
+    .then((response) => {
+      const reqFileUser =
+        response.data.length > 0
+          ? response.data.map((requeriment) => {
+              if (
+                requeriment.usuario.id_Usuario === req.user.id &&
+                requeriment.estado.id === 2
+              ) {
+                return requeriment
+              }
+            })
+          : []
+      if (reqFileUser.length === 0)
+        return res
+          .status(200)
+          .json({ message: "No hay requerimientos", data: reqFileUser })
+      res.json({ data: reqFileUser })
     })
-    if (!files)
-      return res.status(200).json({ message: "No hay requerimientos" })
-    res.json(files)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 
 // Papelera ✅
 export const trashRequest = async (req, res) => {
-  try {
-    const getState = await Request.findById(req.params.id)
-    if (!getState)
-      return res
-        .status(404)
-        .json({ message: "No se encontro el requerimiento" })
+  const { id } = req.params
 
-    if (getState.state === 1) {
-      const requestFile = await Request.findByIdAndUpdate(
-        req.params.id,
-        { state: 0 },
-        { new: true }
-      )
-      if (!requestFile)
-        return res.status(404).json({
-          message: "No se pudo mover a la Papelera",
-          state: requestFile.state,
-        })
-      return res.json({
-        message: "se pudo Mover a la Papelera",
-        state: requestFile.state,
-      })
-    } else if (getState.state === 2) {
-      const requestFile = await Request.findByIdAndUpdate(
-        req.params.id,
-        { state: 0 },
-        { new: true }
-      )
-      if (!requestFile)
-        return res.status(404).json({
-          message: "No se pudo mover a la Papelera",
-          state: requestFile.state,
-        })
-      return res.json({
-        message: "se pudo Mover a la Papelera",
-        state: requestFile.state,
-      })
-    } else if (getState.state === 0) {
-      const requestFile = await Request.findByIdAndUpdate(
-        req.params.id,
-        { state: 1 },
-        { new: true }
-      )
-      if (!requestFile)
-        return res
-          .status(404)
-          .json({ message: "No se pudo Restaurar", state: requestFile.state })
-      return res.json({
-        message: "se pudo Restaurar",
-        state: requestFile.state,
-      })
-    }
-    return res.json({
-      message:
-        "No se puede mover a la papelera este requerimiento ya que esta en proceso: " +
-        getState.state,
+  const requeriment = await getRequerimentById(id)
+  if (requeriment.data.estado.id === 2) {
+    updateRequeriment({
+      estado: 0,
+      id,
     })
-  } catch (error) {
-    console.log(error)
+      .then((response) => {
+        res.json({
+          message: "Requerimiento En papelera",
+          data: response.data,
+        })
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          return res.status(404).json({
+            message: "No se encontró el requerimiento",
+            data: error.response.data,
+          })
+        }
+        res.status(400).json({
+          message: "No se pudo actualizar el requerimiento",
+          data: error.response.data,
+        })
+      })
+  } else if (requeriment.data.estado.id === 1) {
+    updateRequeriment({
+      estado: 0,
+      id,
+    })
+      .then((response) => {
+        res.json({
+          message: "Requerimiento en papelera",
+          data: response.data,
+        })
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          return res.status(404).json({
+            message: "No se encontró el requerimiento",
+            data: error.response.data,
+          })
+        }
+        res.status(400).json({
+          message: "No se pudo actualizar el requerimiento",
+          data: error.response.data,
+        })
+      })
+  } else if (requeriment.data.estado.id === 0) {
+    updateRequeriment({
+      estado: 1,
+      id,
+    })
+      .then((response) => {
+        res.json({
+          message: "Requerimiento Restaurado",
+          data: response.data,
+        })
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          return res.status(404).json({
+            message: "No se encontró el requerimiento",
+            data: error.response.data,
+          })
+        }
+        res
+          .status(400)
+          .json({ message: "No se pudo restaurar el requerimiento" })
+      })
+  } else {
+    res
+      .status(400)
+      .json({ message: "No se pudo Archivar el requerimiento", data: null })
   }
 }
 export const getTrash = async (req, res) => {
-  try {
-    const files = await Request.find({
-      state: 0,
-      employeeId: req.user.employeeId,
+  getAllRequirements()
+    .then((response) => {
+      const reqFileUser =
+        response.data.length > 0
+          ? response.data.map((requeriment) => {
+              if (
+                requeriment.usuario.id_Usuario === req.user.id &&
+                requeriment.estado.id === 0
+              ) {
+                return requeriment
+              }
+            })
+          : []
+      if (reqFileUser.length === 0)
+        return res
+          .status(200)
+          .json({ message: "No hay requerimientos", data: reqFileUser })
+      res.json({ data: reqFileUser })
     })
-    if (!files)
-      return res.status(200).json({ message: "No hay requerimientos" })
-    res.json(files)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 
 // Borrador ✅
 export const getDraft = async (req, res) => {
-  try {
-    const files = await Request.find({
-      state: 1,
-      employeeId: req.user.employeeId,
+  getAllRequirements()
+    .then((response) => {
+      const reqDraftUser =
+        response?.data?.length > 0
+          ? response?.data?.map((requeriment) => {
+              if (
+                requeriment.usuario.id_Usuario === req.user.id &&
+                requeriment.estado.id === 1
+              ) {
+                return requeriment
+              }
+            })
+          : []
+      if (reqDraftUser.length === 0)
+        return res
+          .status(200)
+          .json({ message: "No hay requerimientos", data: reqDraftUser })
+      res.json({ data: reqDraftUser })
     })
-    if (!files)
-      return res.status(200).json({ message: "No hay requerimientos" })
-    res.json(files)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 
 // Respondidos ✅
 export const getAllAprovedRequirements = async (req, res) => {
-  try {
-    const requirements = await Request.find({
-      state: { $in: [4, 6] },
-      employeeId: req.user.employeeId,
+  getAllRequirements()
+    .then((response) => {
+      const reqFileUser =
+        response.data.length > 0
+          ? response.data.map((requeriment) => {
+              if (
+                requeriment.usuario.id_Usuario === req.user.id &&
+                (requeriment.estado.id === 5 || requeriment.estado.id === 6)
+              ) {
+                return requeriment
+              }
+            })
+          : []
+      if (reqFileUser.length === 0)
+        return res
+          .status(200)
+          .json({ message: "No hay requerimientos", data: reqFileUser })
+      res.json({ data: reqFileUser })
     })
-    if (!requirements || requirements.length === 0)
-      return res
-        .status(200)
-        .json({ message: "No hay requerimientos para cotizar" })
-    res.json(requirements)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 
 export const getAllRejectedRequirements = async (req, res) => {
-  try {
-    const requirements = await Request.find({
-      state: 5,
-      employeeId: req.user.employeeId,
+  getAllRequirements()
+    .then((response) => {
+      const reqFileUser =
+        response.data.length > 0
+          ? response.data.map((requeriment) => {
+              if (
+                requeriment.usuario.id_Usuario === req.user.id &&
+                requeriment.estado.id === 5
+              ) {
+                return requeriment
+              }
+            })
+          : []
+      if (reqFileUser.length === 0)
+        return res
+          .status(200)
+          .json({ message: "No hay requerimientos", data: reqFileUser })
+      res.json(reqFileUser)
     })
-    if (!requirements || requirements.length === 0)
-      return res
-        .status(200)
-        .json({ message: "No hay requerimientos rechazados" })
-    res.json(requirements)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 
 // Elegir
@@ -385,90 +453,73 @@ export const chosenQuote = async (req, res) => {
     if (!requestSent)
       return res.status(404).json({ message: "No se pudo enviar la eleccion" })
     return res.json(requestSent)
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 }
 
 // <------------------------------------------------------>
 // Rector Methods of the requirements ✅
 export const getAllSentRequirements = async (req, res) => {
-  try {
-    const requirements = await Request.find({
-      state: 3,
+  getAllRequirements()
+    .then((response) => {
+      const reqFileUser = response.data.map((requeriment) => {
+        if (requeriment.estado.id === 3) {
+          return requeriment
+        }
+      })
+      if (reqFileUser.length === 0)
+        return res.status(200).json({ message: "No hay requerimientos" })
+      res.json(reqFileUser)
     })
-    if (!requirements)
-      return res
-        .status(200)
-        .json({ message: "No hay requerimientos para aprovar" })
-    res.json(requirements)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 export const rectorResponse = async (req, res) => {
-  try {
-    const requirements = await Request.find({
-      state: 3,
-      _id: req.params.id,
+  const { id, comentaio_rector, estado } = req.body
+
+  updateRequeriment({
+    comentaio_rector,
+    estado,
+    id,
+  })
+    .then((response) => {
+      res.json({
+        message: "Requerimiento actualizado",
+        data: response.data,
+      })
     })
-    if (!requirements)
-      return res
-        .status(404)
-        .json({ message: "No se encontró el requerimiento" })
-
-    const response = Number(req.body.res)
-
-    if (response === 1) {
-      const requestApprove = await Request.findByIdAndUpdate(
-        req.params.id,
-        { state: 4, rectorComment: req.body.rectorComment },
-        { new: true }
-      )
-      if (!requestApprove)
-        return res
-          .status(404)
-          .json({ message: "No se pudo aprobar el requerimiento" })
-      return res.json({
-        message: "Requerimiento aprobado",
-        state: requestApprove.state,
-        rectorComment: requestApprove.rectorComment,
+    .catch((error) => {
+      if (error.response.status === 404) {
+        console.log(error.response.data)
+        return res.status(404).json({
+          message: "No se encontró el requerimiento",
+          data: error.response,
+        })
+      }
+      res.status(400).json({
+        message: "No se pudo actualizar el requerimiento",
+        data: error.response.data,
       })
-    }
-    if (response === 0) {
-      const requestReject = await Request.findByIdAndUpdate(
-        req.params.id,
-        { state: 5, rectorComment: req.body.rectorComment },
-        { new: true }
-      )
-      if (!requestReject)
-        return res
-          .status(404)
-          .json({ message: "No se pudo rechazar el requerimiento" })
-      return res.json({
-        message: "Requerimiento rechazado",
-        state: requestReject.state,
-        rectorComment: requestReject.rectorComment,
-      })
-    }
-  } catch (error) {
-    console.log(error)
-  }
+    })
 }
 
 // <------------------------------------------------------>
 // Logistic Methodsof the requiremendts
 export const getAllToQuoteRequirements = async (req, res) => {
-  try {
-    const requirements = await Request.find({
-      state: 4,
+  getAllRequirements()
+    .then((response) => {
+      const reqFileUser = response.data.map((requeriment) => {
+        if (requeriment.estado.id === 4) {
+          return requeriment
+        }
+      })
+      if (reqFileUser.length === 0)
+        return res.status(200).json({ message: "No hay requerimientos" })
+      res.json(reqFileUser)
     })
-    if (requirements.length === 0)
-      return res.status(200).json({ message: "No hay requerimientos" })
-    res.json(requirements)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
 export const logisticResponse = async (req, res) => {
   try {
@@ -506,19 +557,21 @@ export const logisticResponse = async (req, res) => {
         .status(404)
         .json({ message: "No se pudo enviar la cotización" })
     return res.json(requestQuote)
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 }
 export const getAllToBuyRequirements = async (req, res) => {
-  try {
-    const requirements = await Request.find({
-      state: 7,
+  getAllRequirements()
+    .then((response) => {
+      const reqFileUser = response.data.map((requeriment) => {
+        if (requeriment.estado.id === 7) {
+          return requeriment
+        }
+      })
+      if (reqFileUser.length === 0)
+        return res.status(200).json({ message: "No hay requerimientos" })
+      res.json(reqFileUser)
     })
-    if (requirements.length === 0)
-      return res.status(200).json({ message: "No hay requerimientos" })
-    res.json(requirements)
-  } catch (error) {
-    console.log(error)
-  }
+    .catch((error) => {
+      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
 }
