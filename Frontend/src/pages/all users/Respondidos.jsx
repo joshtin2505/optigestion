@@ -15,9 +15,9 @@ function Respondidos() {
   useEffect(() => {
     const fetchReq = async () => {
       const resA = await getApprovedReq()
-        if (Array.isArray(resA)) setApprovedResponse(resA)
+        if (Array.isArray(resA.data)) setApprovedResponse(resA.data)
       const resR = await getRejectedReq()
-        if (Array.isArray(resR)) setRejectedResponse(resR)
+        if (Array.isArray(resR.data)) setRejectedResponse(resR.data)
     }
     fetchReq()
   },[res])
@@ -41,7 +41,7 @@ function ViewResRequest({res, title, type}) {
     e.preventDefault()
   }
   const search = watch('search')
-  const filteredResponse = res.filter((req) => {
+  const filteredResponse = res?.filter((req) => {
     return (
       req.title.toLowerCase().includes(search.toLowerCase()) ||
       req.description.toLowerCase().includes(search.toLowerCase())
