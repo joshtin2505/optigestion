@@ -18,7 +18,7 @@ function Borrador() {
   useEffect(() => {
     const fetchReq = async () => {
       const res = await getAllDraftReq()
-      setResponse(res)
+      setResponse(res.data)
     }
 
     fetchReq()
@@ -28,7 +28,7 @@ function Borrador() {
     e.preventDefault()
   }
   const search = watch('search')
-  const filteredResponse = response.filter((req) => {
+  const filteredResponse = response?.filter((req) => {
     return (
       req.title.toLowerCase().includes(search.toLowerCase()) ||
       req.description.toLowerCase().includes(search.toLowerCase())
@@ -62,7 +62,7 @@ function Borrador() {
               })
             }
             {
-              filteredResponse.length === 0  &&
+              filteredResponse?.length === 0  &&
               <div className='BrCard'>
                 <div className="Br-card-txt" style={{
                   "display": "flex",
