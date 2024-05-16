@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react'
-import Nav from '../../components/Nav.jsx'
-import { useReq } from '../../context/ReqContext.jsx'
-import '../../assets/css/Draft.css'
-import {BsSearch, BsTrash, BsFolder,BsPen} from 'react-icons/bs'
-import {useForm} from 'react-hook-form'
-import {UpdateReqForm} from '../../components/Forms.jsx'
-import '../../assets/css/Extra.css'
- 
+import { useEffect, useState } from "react"
+import Nav from "../../components/Nav.jsx"
+import { useReq } from "../../context/ReqContext.jsx"
+import "../../assets/css/Draft.css"
+import { BsSearch, BsTrash, BsFolder, BsPen } from "react-icons/bs"
+import { useForm } from "react-hook-form"
+import { UpdateReqForm } from "../../components/Forms.jsx"
+import "../../assets/css/Extra.css"
 
 function Borrador() {
   const [updateComponent, setUpdateComponent] = useState(0)
-  const {getAllDraftReq, response: DBres} = useReq()
-  const {register, setValue, watch} = useForm()
-  const [response ,setResponse] = useState([])
-
+  const { getAllDraftReq, response: DBres } = useReq()
+  const { register, setValue, watch } = useForm()
+  const [response, setResponse] = useState([])
 
   useEffect(() => {
     const fetchReq = async () => {
@@ -22,57 +20,77 @@ function Borrador() {
     }
 
     fetchReq()
-  },[updateComponent, DBres])
+  }, [updateComponent, DBres])
 
-  function handleSubmit(e){
+  function handleSubmit(e) {
     e.preventDefault()
   }
-  const search = watch('search')
+  const search = watch("search")
   const filteredResponse = response?.filter((req) => {
     return (
-      req.title.toLowerCase().includes(search.toLowerCase()) ||
-      req.description.toLowerCase().includes(search.toLowerCase())
+      req?.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.descripcion.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.titulo
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.descripcion
+        .toLowerCase()
+        .includes(search.toLowerCase())
     )
   })
 
-
-
   return (
-<div className='back'>
-      <Nav type={1}/>
+    <div className="back">
+      <Nav type={1} />
       <div className="Br-real-cont">
-        <form onSubmit={handleSubmit} action="" className='search-form'>
-          <BsSearch className='search-icon' fill='#6b6b6b' size={25}/>
-          <input type="text" {...register('search')} autoFocus   onChange={(e) => setValue('search', e.target.value)} className='search-in'/>
+        <form onSubmit={handleSubmit} action="" className="search-form">
+          <BsSearch className="search-icon" fill="#6b6b6b" size={25} />
+          <input
+            type="text"
+            {...register("search")}
+            autoFocus
+            onChange={(e) => setValue("search", e.target.value)}
+            className="search-in"
+          />
         </form>
-        <section className='Br-box-cont'>
+        <section className="Br-box-cont">
           <div className="head">
-
-              <h1 className='Br-title'>Borrador</h1>
-
+            <h1 className="Br-title">Borrador</h1>
           </div>
           <hr />
-          <div className='Br-cards-cont'>
-            {
-              filteredResponse && 
-              filteredResponse.map(req => {
-                const fecha = new Date(req.date)
-                const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return <List key={req._id} setUpdateComponent={setUpdateComponent} req={req} concatDate={concatDate}/>
-              })
-            }
-            {
-              filteredResponse?.length === 0  &&
-              <div className='BrCard'>
-                <div className="Br-card-txt" style={{
-                  "display": "flex",
-                  "justifyContent": "center",
-                  "fontWeight": "bold",
-                }}>
+          <div className="Br-cards-cont">
+            {filteredResponse &&
+              filteredResponse.map((req) => {
+                const fecha = new Date(req.fecha_creacion)
+                const concatDate =
+                  fecha.getDate() +
+                  "/" +
+                  (fecha.getMonth() + 1) +
+                  "/" +
+                  fecha.getFullYear()
+                return (
+                  <List
+                    key={req.id_requerimeinto}
+                    setUpdateComponent={setUpdateComponent}
+                    req={req}
+                    concatDate={concatDate}
+                  />
+                )
+              })}
+            {filteredResponse?.length === 0 && (
+              <div className="BrCard">
+                <div
+                  className="Br-card-txt"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                  }}
+                >
                   <p>No hay Solicitudes</p>
                 </div>
               </div>
-            }
+            )}
           </div>
         </section>
       </div>
@@ -80,53 +98,61 @@ function Borrador() {
   )
 }
 
-const List = ({req, concatDate, setUpdateComponent}) => {
+const List = ({ req, concatDate, setUpdateComponent }) => {
   const [openReq, setOpenReq] = useState(false)
-  const {trashReq, fileReq } = useReq()
-
+  const { trashReq, fileReq } = useReq()
 
   const toTrash = (id) => {
     trashReq(id)
-    setUpdateComponent(prevValue => prevValue + 1)
+    setUpdateComponent((prevValue) => prevValue + 1)
   }
   const toFile = (id) => {
     fileReq(id)
-    setUpdateComponent(prevValue => prevValue + 1)
+    setUpdateComponent((prevValue) => prevValue + 1)
   }
 
   return (
-    <section className='Br-card-real' >
-      <div  className='BrCard' >
-
+    <section className="Br-card-real">
+      <div className="BrCard">
         <div className="Br-card-txt">
           <p>{concatDate}</p>
           <p>|</p>
-          <p className='card-title'>{req.title}</p>
+          <p className="card-title">{req.titulo}</p>
           <span>-</span>
-          <p className='card-description'>{req.description}</p>
+          <p className="card-description">{req.descripcion}</p>
         </div>
         <div className="Br-options">
-          <BsPen onClick={() =>{
-            setOpenReq(!openReq)
-            }} className='Br-icon' fill='#6b6b6b' size={18}/>
-          <BsTrash onClick={() =>{
-            toTrash(req._id)
-          }} className='Br-icon' fill='#6b6b6b' size={18}/>
-          <BsFolder onClick={() =>{
-            toFile(req._id)
-          }} className='Br-icon' fill='#6b6b6b' size={18}/>
-          </div>
+          <BsPen
+            onClick={() => {
+              setOpenReq(!openReq)
+            }}
+            className="Br-icon"
+            fill="#6b6b6b"
+            size={18}
+          />
+          <BsTrash
+            onClick={() => {
+              toTrash(req.id_requerimeinto)
+            }}
+            className="Br-icon"
+            fill="#6b6b6b"
+            size={18}
+          />
+          <BsFolder
+            onClick={() => {
+              toFile(req.id_requerimeinto)
+            }}
+            className="Br-icon"
+            fill="#6b6b6b"
+            size={18}
+          />
+        </div>
       </div>
-      <div className='bR-ed-cont'>
-        {
-          openReq && (
-            <UpdateReqForm data={req}/>
-            )
-          }
-          </div>
+      <div className="bR-ed-cont">
+        {openReq && <UpdateReqForm data={req} />}
+      </div>
     </section>
   )
 }
-
 
 export default Borrador
