@@ -133,7 +133,7 @@ const UserCard = ({ user, index }: { user: Usuario; index: number }) => {
   }, [])
 
   const { id_Usuario, nombre, apellido, rolUsuario, departamento } = user
-  const { rol } = rolUsuario
+  const rol = rolUsuario?.rol ? rolUsuario?.rol : ""
   const { titulo } = departamento
   return (
     <>
