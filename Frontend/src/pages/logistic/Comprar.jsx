@@ -90,9 +90,9 @@ function ViewToBuyRequest({res, title}) {
             {
               filteredResponse && 
               filteredResponse.map(req => {
-                const fecha = new Date(req.date)
+                const fecha = new Date(req.fecha_creacion)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return <List key={req._id} req={req} concatDate={concatDate}/>
+                return <List key={req.id_requerimeinto} req={req} concatDate={concatDate}/>
               })
             }
             {/* Si no hay Solicitudes */}
