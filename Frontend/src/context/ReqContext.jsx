@@ -161,10 +161,9 @@ function ReqProvider({children}) {
         try {
             const res = await toTrashRequest(id)
             if (!res) throw new Error('No response')
-            console.log(id)
             setResponse(res.data) 
         } catch (error) {
-            setErrors(error.response.data)
+            setErrors(error.response?.data)
         }
     }
     const fileReq = async (id) =>{
