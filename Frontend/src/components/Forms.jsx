@@ -277,7 +277,6 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
       res.status == 200 ? onOpen() : null
     }
   })
-  console.log()
   return (
     <form
       action=""
@@ -586,11 +585,11 @@ export const CreateReqForm = () => {
     </>
   )
 }
-export const UpdateReqForm = (data) => {
+export const UpdateReqForm = ({data}) => {
   const { updateReq, sendSavedReq } = useReq()
   const [inValues, setInValues] = useState({
-    title: data.data.title,
-    description: data.data.description,
+    titulo: data.titulo,
+    descripcion: data.descripcion,
   })
   const {
     register,
@@ -601,17 +600,17 @@ export const UpdateReqForm = (data) => {
   } = useForm()
 
   const onSubmit = handleSubmit((values) => {
-    updateReq({ id: data.data._id, ...values })
+    updateReq({ id:data.id_requerimeinto, ...values })
   })
   const onSend = () => {
-    sendSavedReq(data.data._id)
+    sendSavedReq(data.id_requerimeinto)
   }
   const handleChange = () => {
-    const title = watch("title")
-    const description = watch("description")
+    const titulo = watch("titulo")
+    const descripcion = watch("descripcion")
     setInValues({
-      title,
-      description,
+      titulo,
+      descripcion,
     })
   }
   return (
@@ -625,29 +624,29 @@ export const UpdateReqForm = (data) => {
           <label htmlFor="">Titulo:</label>
           <input
             type="text"
-            onChange={(e) => setValue("title", e.target.value)}
-            value={inValues.title}
-            {...register("title", {
+            onChange={(e) => setValue("titulo", e.target.value)}
+            value={inValues.titulo}
+            {...register("titulo", {
               required: true,
               min: 5,
             })}
             autoFocus
           />
         </div>
-        {errors.title && <div className="error">Se necita un titulo </div>}
+        {errors.titulo && <div className="error">Se necita un titulo </div>}
         <br />
         <label htmlFor="">Descripcion:</label>
         <br />
         <textarea
           onChange={(e) => {
-            setValue("description", e.target.value)
+            setValue("descripcion", e.target.value)
           }}
-          value={inValues.description}
-          {...register("description", {
+          value={inValues.descripcion}
+          {...register("descripcion", {
             required: true,
           })}
         ></textarea>
-        {errors.description && (
+        {errors.descripcion && (
           <div className="error">Se necita una descripción</div>
         )}
         <div>
@@ -664,27 +663,27 @@ export const UpdateReqForm = (data) => {
     </>
   )
 }
-export const ResReqForm = (data) => {
+export const ResReqForm = ({data}) => {
   const { sendRectorRes } = useReq()
   const [inValues, setInValues] = useState()
   const { setValue, watch } = useForm()
 
   const onApprove = () => {
-    sendRectorRes({ id: data.data._id, rectorComment: inValues, res: 1 })
+    sendRectorRes({ id:data.id_requerimeinto, comentaio_rector: inValues, estado: 4 })
   }
   const onReject = () => {
-    sendRectorRes({ id: data.data._id, rectorComment: inValues, res: 0 })
+    sendRectorRes({ id:data.id_requerimeinto, comentaio_rector: inValues, estado: 5 })
   }
-  const handleChange = (e) => {
-    const rectorComment = watch("rectorComment")
-    setInValues(rectorComment)
+  const handleChange = () => {
+    const comentaio_rector = watch("comentaio_rector")
+    setInValues(comentaio_rector)
   }
   return (
     <>
       <form className="form-Update formTwo" onChange={handleChange}>
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={data.data.title} disabled />
+          <input type="text" value={data.titulo} disabled />
         </div>
 
         <br />
@@ -711,7 +710,7 @@ export const ResReqForm = (data) => {
               height: "auto",
             }}
             className="textarea-Res "
-            value={data.data.description}
+            value={data.descripcion}
             disabled
           />
         </div>
@@ -739,7 +738,7 @@ export const ResReqForm = (data) => {
             }}
             className="textarea-Res "
             onChange={(e) => {
-              setValue("rectorComment", e.target.value)
+              setValue("comentaio_rector", e.target.value)
             }}
             autoFocus
           />
@@ -791,7 +790,7 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
 
       setUpdateComponent((prevValue) => prevValue + 1)
 
-      formData.append("id", data._id)
+      formData.append("id",data.id_requerimeinto)
       pdf1 && formData.append("pdf1", pdf1)
       pdf2 && formData.append("pdf2", pdf2)
       pdf3 && formData.append("pdf3", pdf3)
@@ -809,7 +808,7 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
       >
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={data.title} disabled />
+          <input type="text" value={data.titulo} disabled />
         </div>
 
         <br />
@@ -829,11 +828,11 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
                 height: "auto",
               }}
               className="textarea-Res "
-              value={data.description}
+              value={data.descripcion}
               disabled
             />
           </div>
-          <div className="TQ-RectorComments-cont">
+          <div className="TQ-comentaio_rectors-cont">
             <label
               style={{
                 width: "auto",
@@ -847,7 +846,7 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
               style={{
                 height: "auto",
               }}
-              value={data.rectorComment}
+              value={data.comentaio_rector}
               className="textarea-Res"
               disabled
             />
@@ -1069,11 +1068,11 @@ export const ViewToBuyResForm = (data) => {
     </>
   )
 }
-export const ViewApprovedResForm = (data) => {
+export const ViewApprovedResForm = ({data}) => {
   const { setChosenQuote } = useReq()
 
   function Quote({ req }) {
-    const request = req.data
+    const request = req
     const {
       isOpen: isOpen1,
       onOpen: onOpen1,
@@ -1118,7 +1117,7 @@ export const ViewApprovedResForm = (data) => {
       formState: { errors },
     } = useForm()
     const onSubmit = handleSubmit((values) => {
-      setChosenQuote({ id: request._id, ...values })
+      setChosenQuote({ id: request.id_requerimeinto, ...values })
     })
     return (
       <>
@@ -1170,6 +1169,8 @@ export const ViewApprovedResForm = (data) => {
                       download={`cotizacion_${nameValue}`}
                       target="_blank"
                       className="A-btn-download"
+                      rel="noreferrer"
+
                     >
                       <BsDownload size={20} fill="#fff" />
                     </a>
@@ -1245,7 +1246,7 @@ export const ViewApprovedResForm = (data) => {
       <section className="form-Update formTwo">
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={data.data.title} disabled />
+          <input type="text" value={data.titulo} disabled />
         </div>
         <br />
         <section className="A-content">
@@ -1264,7 +1265,7 @@ export const ViewApprovedResForm = (data) => {
                 height: "auto",
               }}
               className="textarea-Res "
-              value={data.data.description}
+              value={data.descripcion}
               disabled
             />
           </div>
@@ -1282,14 +1283,14 @@ export const ViewApprovedResForm = (data) => {
               style={{
                 height: "auto",
               }}
-              value={data.data.rectorComment}
+              value={data.comentario_rector}
               className="textarea-Res"
               disabled
             />
           </div>
         </section>
         {/*  */}
-        {data.data.state === 6 ? (
+        {data.estado === 6 ? (
           <Quote req={data} />
         ) : (
           <strong>No hay cotizaciones</strong>
