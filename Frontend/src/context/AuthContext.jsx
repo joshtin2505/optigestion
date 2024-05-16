@@ -60,7 +60,7 @@ export const AuthContextProvider = ({ children }) => {
       setIsAuthenticated(true)
       setResponse(res.data)
     } catch (err) {
-      setErrors(err.response.data)
+      setErrors(err?.response?.data)
     }
   }
   const logOut = async () => {
