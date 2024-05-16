@@ -12,36 +12,7 @@ function RectorRes() {
   const {register, setValue, watch} = useForm()
   const [response ,setResponse] = useState([])
 
-  const List = ({req, concatDate}) => {
-    const [openReq, setOpenReq] = useState(false)
 
-    return (
-      <section className='Br-card-real' >
-        <div  className='BrCard' >
-          <div className="Br-card-txt">
-            <p>{concatDate}</p>
-            <p>|</p>
-            <p className='card-title'>{req.title}</p>
-            <span>-</span>
-            <p className='card-description'>{req.description}</p>
-          </div>
-          <div className="Br-options">
-            <BsEye onClick={() =>{
-              setOpenReq(!openReq)
-              }} className='Br-icon' fill='#6b6b6b' size={18}/>
-            
-            </div>
-        </div>
-        <div className='BR-ed-cont'>
-          {
-            openReq && (
-              <ResReqForm data={req}/>
-              )
-            }
-            </div>
-      </section>
-    )
-  }
 
   useEffect(() => {
     const fetchReq = async () => {
@@ -57,8 +28,10 @@ function RectorRes() {
   const search = watch('search')
   const filteredResponse = response.filter((req) => {
     return (
-      req.title.toLowerCase().includes(search.toLowerCase()) ||
-      req.description.toLowerCase().includes(search.toLowerCase())
+      req?.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.descripcion.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.descripcion.toLowerCase().includes(search.toLowerCase())
     )
   })
 
@@ -79,9 +52,9 @@ function RectorRes() {
             {
               filteredResponse && 
               filteredResponse.map(req => {
-                const fecha = new Date(req.date)
+                const fecha = new Date(req.fecha_creacion)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
-                return <List key={req._id} req={req} concatDate={concatDate}/>
+                return <List key={req.id_requerimeinto} req={req} concatDate={concatDate}/>
               })
             }
             {
@@ -103,6 +76,35 @@ function RectorRes() {
   )
 }
 
+const List = ({req, concatDate}) => {
+  const [openReq, setOpenReq] = useState(false)
 
+  return (
+    <section className='Br-card-real' >
+      <div  className='BrCard' >
+        <div className="Br-card-txt">
+          <p>{concatDate}</p>
+          <p>|</p>
+          <p className='card-title'>{req.titulo}</p>
+          <span>-</span>
+          <p className='card-description'>{req.descripcion}</p>
+        </div>
+        <div className="Br-options">
+          <BsEye onClick={() =>{
+            setOpenReq(!openReq)
+            }} className='Br-icon' fill='#6b6b6b' size={18}/>
+          
+          </div>
+      </div>
+      <div className='BR-ed-cont'>
+        {
+          openReq && (
+            <ResReqForm data={req}/>
+            )
+          }
+          </div>
+    </section>
+  )
+}
 
 export default RectorRes
