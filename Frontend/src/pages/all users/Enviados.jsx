@@ -28,10 +28,10 @@ function Enviados() {
   const search = watch('search')
   const filteredResponse = response?.filter((req) => {
     return (
-      req.titulo.toLowerCase().includes(search.toLowerCase()) ||
-      req.descripcion.toLowerCase().includes(search.toLowerCase()) ||
-      req.tipoRequerimiento.titulo.toLowerCase().includes(search.toLowerCase()) ||
-      req.tipoRequerimiento.descripcion.toLowerCase().includes(search.toLowerCase())
+      req?.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.descripcion.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.descripcion.toLowerCase().includes(search.toLowerCase())
     )
   })
 
