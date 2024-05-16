@@ -27,8 +27,10 @@ function Papelera() {
 
   const filteredResponse = response?.filter((req) => {
     return (
-      req.title.toLowerCase().includes(search.toLowerCase()) ||
-      req.description.toLowerCase().includes(search.toLowerCase())
+      req?.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.descripcion.toLowerCase().includes(search.toLowerCase())||
+      req?.tipoRequerimiento.titulo.toLowerCase().includes(search.toLowerCase()) ||
+      req?.tipoRequerimiento.descripcion.toLowerCase().includes(search.toLowerCase())
     )
   })
   const toDelete = (id) => {
@@ -59,24 +61,24 @@ function Papelera() {
             {
               filteredResponse && 
               filteredResponse.map(req => {
-                const fecha = new Date(req.date)
+                const fecha = new Date(req.fecha_creacion)
                 const concatDate = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() 
                 return (
-                  <div className='TrCard' key={req._id} >
+                  <div className='TrCard' key={req.id_requerimeinto} >
 
                     <div className="Tr-card-txt">
                       <p>{concatDate}</p>
                       <p>|</p>
-                      <p>{req.title}</p>
+                      <p>{req.titulo}</p>
                       <span className='card-title'>-</span>
-                      <p className='card-description'>{req.description}</p>
+                      <p className='card-description'>{req.descripcion}</p>
                     </div>
                     <div className="Tr-options">
                       <BsArrowClockwise onClick={() =>{
-                         toRestore(req._id)
+                         toRestore(req.id_requerimeinto)
                       }} className='Tr-icon' fill='#6b6b6b' size={18}/>
                       <BsTrash onClick={() =>{
-                         toDelete(req._id)
+                         toDelete(req.id_requerimeinto)
                       }} className='Tr-icon' fill='#6b6b6b' size={18}/>
                     </div>
                   </div>
