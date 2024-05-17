@@ -543,6 +543,9 @@ export const logisticResponse = async (req, res) => {
     })
     .catch((error) => {
       console.log(error)
+      if (error.response.status === 413) {
+        return res.status(404).json({ message: "Limite de peso exedido" })
+      }
     })
 }
 
