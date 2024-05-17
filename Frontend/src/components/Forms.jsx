@@ -789,7 +789,7 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
       const formData = new FormData()
 
       
-      formData.append("id",data.id_requerimeinto)
+      // formData.append("id",data.id_requerimeinto)
       formData.append("pdf1", pdf1)
       formData.append("pdf2", pdf2)
       formData.append("pdf3", pdf3)
