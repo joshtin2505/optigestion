@@ -1,3 +1,4 @@
+import axios from "../api/axios.js"
 import {
   addRequest,
   deleteRequeriment,
@@ -522,43 +523,29 @@ export const getAllToQuoteRequirements = async (req, res) => {
     })
 }
 export const logisticResponse = async (req, res) => {
-  try {
-    const requirements = await Request.find({
-      state: 4,
-      _id: req.body.id,
-    })
-    if (!requirements)
-      return res
-        .status(404)
-        .json({ message: "No se encontró el requerimiento" })
+  // Listo para terminar de implemntar logica
+  const files = [req.files.pdf1[0], req.files.pdf2[0], req.files.pdf3[0]]
 
-    const firstPrices = req.files.pdf1[0].buffer
-    const firstPricesName = req.files.pdf1[0].originalname
-    const secondPrices = req.files.pdf2[0].buffer
-    const secondPricesName = req.files.pdf2[0].originalname
-    const thirdPrices = req.files.pdf3[0].buffer
-    const thirdPricesName = req.files.pdf3[0].originalname
+  const formData = new FormData()
+  files.forEach((file) => {
+    const blob = new Blob([file.buffer], { type: file.mimetype })
+    formData.append(`file`, blob, file.originalname)
+  })
 
-    const requestQuote = await Request.findByIdAndUpdate(
-      req.body.id,
-      {
-        state: 6,
-        firstPrices,
-        firstPricesName,
-        secondPrices,
-        secondPricesName,
-        thirdPrices,
-        thirdPricesName,
+  axios
+    .post("/usuario/pdftest", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
-      { new: true }
-    )
-    if (!requestQuote)
-      return res
-        .status(404)
-        .json({ message: "No se pudo enviar la cotización" })
-    return res.json(requestQuote)
-  } catch (error) {}
+    })
+    .then((response) => {
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
+
 export const getAllToBuyRequirements = async (req, res) => {
   getAllRequirements()
     .then((response) => {
