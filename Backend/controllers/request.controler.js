@@ -4,6 +4,7 @@ import {
   deleteRequeriment,
   getAllRequirements,
   getRequerimentById,
+  logisticRes,
   updateRequeriment,
 } from "../api/requeriments.api.js"
 import Request from "../models/request.models.js"
@@ -407,6 +408,7 @@ export const getAllAprovedRequirements = async (req, res) => {
         return res
           .status(200)
           .json({ message: "No hay requerimientos", data: reqFileUser })
+      console.log(reqFileUser)
       res.json({ data: reqFileUser })
     })
     .catch((error) => {
@@ -523,7 +525,6 @@ export const getAllToQuoteRequirements = async (req, res) => {
     })
 }
 export const logisticResponse = async (req, res) => {
-  // Listo para terminar de implemntar logica
   const files = [req.files.pdf1[0], req.files.pdf2[0], req.files.pdf3[0]]
 
   const formData = new FormData()
@@ -532,17 +533,12 @@ export const logisticResponse = async (req, res) => {
     formData.append(`file`, blob, file.originalname)
   })
 
-  axios
-    .post("/usuario/pdftest", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+  logisticRes(req.body.id, formData)
     .then((response) => {
       console.log(response.data)
     })
     .catch((error) => {
-      console.log(error)
+      // console.log(error)
       if (error.response.status === 413) {
         return res.status(404).json({ message: "Limite de peso exedido" })
       }
