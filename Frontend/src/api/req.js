@@ -41,6 +41,8 @@ export const getRejectedRequirements = async () => axios.get("/req/rejected/")
 export const getAllToQuoteRequirements = async () => axios.get("/req/toQuote/")
 export const getAllToBuyRequirements = async () => axios.get("/req/toBuy/")
 export const logisticResponse = async (data) =>
-  await axios.put("/req/res-prices/", data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
+  await axios.put("/req/res-prices/", data)
+// export const logisticResponse = async (data) =>
+//   await axios.put("/req/res-prices/", data, {
+//     headers: { "Content-Type": "multipart/form-data" },
+//   })
