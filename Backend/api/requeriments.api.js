@@ -15,6 +15,7 @@ const logisticRes = async (id, data) =>
   })
 const getLogisticQuote = async (id) =>
   await axios.get("/requerimentos/cotizados/" + id)
+const getLogisticToBuy = async (id) => await axios.get("/requerimentos/comprar")
 
 export {
   addRequest,
@@ -24,4 +25,5 @@ export {
   getAllRequirements,
   logisticRes,
   getLogisticQuote,
+  getLogisticToBuy,
 }
