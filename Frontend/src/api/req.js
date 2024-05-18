@@ -24,8 +24,8 @@ export const toFileRequest = async (id) => axios.put("/req/file/" + id)
 export const getFileRequirements = async () => axios.get("/req/files/")
 
 // elegir
-export const choseQuote = async (data) =>
-  axios.put("/req/electQuote/" + data.id, data)
+export const choseQuote = async (id, data) =>
+  axios.put("/req/electQuote/" + id, data)
 
 // Rector
 export const getAllSentRequirements = async () => axios.get("/req/allSent/")
@@ -46,3 +46,4 @@ export const logisticResponse = async (data) =>
 //   await axios.put("/req/res-prices/", data, {
 //     headers: { "Content-Type": "multipart/form-data" },
 //   })
+export const getQuotedRequeriments = async () => axios.get("/req/electQuote/")
