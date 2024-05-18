@@ -13,6 +13,8 @@ const logisticRes = async (id, data) =>
       "Content-Type": "multipart/form-data",
     },
   })
+const getLogisticQuote = async (id) =>
+  await axios.get("/requerimentos/cotizados/" + id)
 
 export {
   addRequest,
@@ -21,4 +23,5 @@ export {
   getRequerimentById,
   getAllRequirements,
   logisticRes,
+  getLogisticQuote,
 }
