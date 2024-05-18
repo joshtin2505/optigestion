@@ -901,22 +901,11 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
   )
 }
 export const ViewToBuyResForm = ({ data }) => {
-  const { getQuotedReq } = useReq()
-  const [requeriment, setRequeriment] = useState(data)
 
-  useEffect(() => {
-    async function fetchQuotedReq() {
-      const reqs = await getQuotedReq()
-      console.log("reqs")
-      reqs.map((req) => {
-        if (req.id_requerimeinto === data.id_requerimeinto) {
-          setRequeriment(req)
-        }
-      })
-    }
-    fetchQuotedReq()
-  }, [])
   function Quote({ req }) {
+    const { cotizacion } = req
+    const [[pdf1, pdf1Name], [pdf2, pdf2Name], [pdf3, pdf3Name]] = cotizacion
+
     const request = req
     const {
       isOpen: isOpen1,
@@ -963,21 +952,19 @@ export const ViewToBuyResForm = ({ data }) => {
           <section className="A-middle-section">
             {/* --- */}
             {[1, 2, 3].map((index) => {
-              const value =
-                index === 1
-                  ? request.cotizacion[0][0]
-                  : index === 2
-                  ? request.cotizacion[1][0]
-                  : request.cotizacion[2][0]
+              const value = index === 1 ? pdf1 : index === 2 ? pdf2 : pdf3
               const nameValue =
-                index === 1
-                  ? request.cotizacion[0][1]
-                  : index === 2
-                  ? request.cotizacion[1][1]
-                  : request.cotizacion[2][1]
+                index === 1 ? pdf1Name : index === 2 ? pdf2Name : pdf3Name
 
-              const toBuffer = Uint8Array.from(value.data).buffer
-              const blob = new Blob([toBuffer], { type: "application/pdf" })
+              const byteCharacters = atob(value)
+              const byteNumbers = new Array(byteCharacters.length)
+
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i)
+              }
+              
+              const pdfBytes = new Uint8Array(byteNumbers)
+              const blob = new Blob([pdfBytes], { type: "application/pdf" })
               const url = window.URL.createObjectURL(blob)
               const PdfViewerProps = {
                 url,
@@ -1040,7 +1027,7 @@ export const ViewToBuyResForm = ({ data }) => {
       <section className="form-Update formTwo">
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={requeriment.titulo} disabled />
+          <input type="text" value={data.titulo} disabled />
         </div>
         <br />
         <section className="A-content">
@@ -1059,7 +1046,7 @@ export const ViewToBuyResForm = ({ data }) => {
                 height: "auto",
               }}
               className="textarea-Res "
-              value={requeriment.descripcion}
+              value={data.descripcion}
               disabled
             />
           </div>
@@ -1077,14 +1064,14 @@ export const ViewToBuyResForm = ({ data }) => {
               style={{
                 height: "auto",
               }}
-              value={requeriment.comentario_rector}
+              value={data.comentario_rector}
               className="textarea-Res"
               disabled
             />
           </div>
         </section>
         {/*  */}
-        {requeriment.estado.id === 6 && <Quote req={requeriment} />}
+        {data.estado.id === 7 && <Quote req={data} />}
       </section>
     </>
   )
@@ -1345,13 +1332,13 @@ export const ViewApprovedResForm = ({ data }) => {
     </>
   )
 }
-export const ViewRejectedResForm = (data) => {
+export const ViewRejectedResForm = ({data}) => {
   return (
     <>
       <form className="form-Update formTwo">
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={data.data.title} disabled />
+          <input type="text" value={data.titulo} disabled />
         </div>
 
         <br />
@@ -1378,7 +1365,7 @@ export const ViewRejectedResForm = (data) => {
               height: "auto",
             }}
             className="textarea-Res "
-            value={data.data.description}
+            value={data.descripcion}
             disabled
           />
         </div>
@@ -1406,7 +1393,7 @@ export const ViewRejectedResForm = (data) => {
             }}
             className="textarea-Res "
             disabled
-            value={data.data.rectorComment}
+            value={data.comentario_rector}
           />
         </div>
       </form>
