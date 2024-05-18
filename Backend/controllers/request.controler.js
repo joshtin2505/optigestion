@@ -4,6 +4,7 @@ import {
   deleteRequeriment,
   getAllRequirements,
   getLogisticQuote,
+  getLogisticToBuy,
   getRequerimentById,
   logisticRes,
   updateRequeriment,
@@ -399,7 +400,7 @@ export const getAllAprovedRequirements = async (req, res) => {
           ? response.data.map((requeriment) => {
               if (
                 requeriment.usuario.id_Usuario === req.user.id &&
-                (requeriment.estado.id === 5 || requeriment.estado.id === 6)
+                (requeriment.estado.id === 4 || requeriment.estado.id === 6)
               ) {
                 return requeriment
               }
@@ -409,8 +410,7 @@ export const getAllAprovedRequirements = async (req, res) => {
         return res
           .status(200)
           .json({ message: "No hay requerimientos", data: reqFileUser })
-      console.log(reqFileUser)
-      res.json({ data: reqFileUser })
+      res.json(reqFileUser)
     })
     .catch((error) => {
       res.status(400).json({ message: "No se pudo obtener los requerimientos" })
@@ -444,20 +444,31 @@ export const getAllRejectedRequirements = async (req, res) => {
 
 // Elegir
 export const chosenQuote = async (req, res) => {
-  try {
-    const requestSent = await Request.findByIdAndUpdate(
-      req.params.id,
-      {
-        state: 7,
-        choice: req.body.choise,
-        toBuyComments: req.body.toBuyComments,
-      },
-      { new: true }
-    )
-    if (!requestSent)
-      return res.status(404).json({ message: "No se pudo enviar la eleccion" })
-    return res.json(requestSent)
-  } catch (error) {}
+  const { id } = req.params
+  console.log(id, req.body)
+  updateRequeriment({
+    estado: 7,
+    id,
+    ...req.body,
+  })
+    .then((response) => {
+      res.json({
+        message: "cotización elegida",
+        data: response.data,
+      })
+    })
+    .catch((error) => {
+      if (error.response.status === 404) {
+        return res.status(404).json({
+          message: "No se encontró el requerimiento",
+          data: error.response.data,
+        })
+      }
+      res.status(400).json({
+        message: "No se pudo actualizar el requerimiento",
+        data: error.response.data,
+      })
+    })
 }
 
 // <------------------------------------------------------>
@@ -547,19 +558,15 @@ export const logisticResponse = async (req, res) => {
 }
 
 export const getAllToBuyRequirements = async (req, res) => {
-  getAllRequirements()
+  getLogisticToBuy()
     .then((response) => {
-      const reqFileUser = response.data.map((requeriment) => {
-        if (requeriment.estado.id === 7) {
-          return requeriment
-        }
-      })
-      if (reqFileUser.length === 0)
-        return res.status(200).json({ message: "No hay requerimientos" })
-      res.json(reqFileUser)
+      res.json(response.data)
     })
     .catch((error) => {
-      res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+      res.status(400).json({
+        message: "No se pudo obtener los requerimientos",
+        data: error.response.data,
+      })
     })
 }
 
