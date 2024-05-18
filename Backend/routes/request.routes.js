@@ -27,6 +27,7 @@ import {
   getAllToQuoteRequirements,
   chosenQuote,
   getAllToBuyRequirements,
+  getQuotedRequeriments,
 } from "../controllers/request.controler.js"
 
 const router = Router()
@@ -65,6 +66,7 @@ router.get("/rejected", authRequired, getAllRejectedRequirements)
 
 // Elegir
 router.put("/electQuote/:id", authRequired, chosenQuote)
+router.get("/electQuote/", authRequired, getQuotedRequeriments)
 
 // ------------------------------->
 
