@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 import { useReq } from "../context/ReqContext.jsx"
+import { Document, Page } from "react-pdf"
 import {
   Modal,
   ModalOverlay,
@@ -16,7 +17,7 @@ import {
   Select,
 } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BsCloudUpload, BsDownload } from "react-icons/bs"
 import useAuth from "../hooks/useAuth.js"
 import "../assets/css/Approved.css"
@@ -241,7 +242,9 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
     const nombre = !values.nombre ? user.nombre : values.nombre
     const apellido = !values.apellido ? user.apellido : values.apellido
     const trabajo = !values.trabajo ? user.trabajo : values.trabajo
-    const rolUsuario = !values.rolUsuario.id_rol ? Number(user.rolUsuario.id_rol) : Number(values.rolUsuario.id_rol)
+    const rolUsuario = !values.rolUsuario.id_rol
+      ? Number(user.rolUsuario.id_rol)
+      : Number(values.rolUsuario.id_rol)
     const username = !values.username ? user.username : values.username
     const activo = !values.activo ? user.activo : values.activo
     const email = !values.email ? user.email : values.email
@@ -278,12 +281,7 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
     }
   })
   return (
-    <form
-      action=""
-      className="upd-form"
-      onSubmit={onSubmit}
-      noValidate
-    >
+    <form action="" className="upd-form" onSubmit={onSubmit} noValidate>
       <div className="dual">
         <input
           className="RU-input"
@@ -344,11 +342,7 @@ export const UpdateUserForm = ({ user, roles, departaments }) => {
       <hr />
       <div className="dual">
         <div className="">
-          <input
-            type="email"
-            {...register("email")}
-            placeholder="Email"
-          />
+          <input type="email" {...register("email")} placeholder="Email" />
           {errors.email && (
             <p style={{ color: "#dc2626", fontWeight: "600" }}>
               Email requerido
@@ -585,7 +579,7 @@ export const CreateReqForm = () => {
     </>
   )
 }
-export const UpdateReqForm = ({data}) => {
+export const UpdateReqForm = ({ data }) => {
   const { updateReq, sendSavedReq } = useReq()
   const [inValues, setInValues] = useState({
     titulo: data.titulo,
@@ -600,7 +594,7 @@ export const UpdateReqForm = ({data}) => {
   } = useForm()
 
   const onSubmit = handleSubmit((values) => {
-    updateReq({ id:data.id_requerimeinto, ...values })
+    updateReq({ id: data.id_requerimeinto, ...values })
   })
   const onSend = () => {
     sendSavedReq(data.id_requerimeinto)
@@ -663,16 +657,24 @@ export const UpdateReqForm = ({data}) => {
     </>
   )
 }
-export const ResReqForm = ({data}) => {
+export const ResReqForm = ({ data }) => {
   const { sendRectorRes } = useReq()
   const [inValues, setInValues] = useState()
   const { setValue, watch } = useForm()
 
   const onApprove = () => {
-    sendRectorRes({ id:data.id_requerimeinto, comentaio_rector: inValues, estado: 4 })
+    sendRectorRes({
+      id: data.id_requerimeinto,
+      comentaio_rector: inValues,
+      estado: 4,
+    })
   }
   const onReject = () => {
-    sendRectorRes({ id:data.id_requerimeinto, comentaio_rector: inValues, estado: 5 })
+    sendRectorRes({
+      id: data.id_requerimeinto,
+      comentaio_rector: inValues,
+      estado: 5,
+    })
   }
   const handleChange = () => {
     const comentaio_rector = watch("comentaio_rector")
@@ -788,12 +790,11 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
     if (pdf1 && pdf2 && pdf3) {
       const formData = new FormData()
 
-      
-      formData.append("id",data.id_requerimeinto)
+      formData.append("id", data.id_requerimeinto)
       formData.append("pdf1", pdf1)
       formData.append("pdf2", pdf2)
       formData.append("pdf3", pdf3)
-      
+
       LogisticRes(formData)
 
       setUpdateComponent((prevValue) => prevValue + 1)
@@ -899,7 +900,22 @@ export const ToQuoteResForm = ({ data, setUpdateComponent }) => {
     </>
   )
 }
-export const ViewToBuyResForm = ({data}) => {
+export const ViewToBuyResForm = ({ data }) => {
+  const { getQuotedReq } = useReq()
+  const [requeriment, setRequeriment] = useState(data)
+
+  useEffect(() => {
+    async function fetchQuotedReq() {
+      const reqs = await getQuotedReq()
+      console.log("reqs")
+      reqs.map((req) => {
+        if (req.id_requerimeinto === data.id_requerimeinto) {
+          setRequeriment(req)
+        }
+      })
+    }
+    fetchQuotedReq()
+  }, [])
   function Quote({ req }) {
     const request = req
     const {
@@ -949,16 +965,17 @@ export const ViewToBuyResForm = ({data}) => {
             {[1, 2, 3].map((index) => {
               const value =
                 index === 1
-                  ? request.firstPrices
+                  ? request.cotizacion[0][0]
                   : index === 2
-                  ? request.secondPrices
-                  : request.thirdPrices
+                  ? request.cotizacion[1][0]
+                  : request.cotizacion[2][0]
               const nameValue =
                 index === 1
-                  ? request.firstPricesName
+                  ? request.cotizacion[0][1]
                   : index === 2
-                  ? request.secondPricesName
-                  : request.thirdPricesName
+                  ? request.cotizacion[1][1]
+                  : request.cotizacion[2][1]
+
               const toBuffer = Uint8Array.from(value.data).buffer
               const blob = new Blob([toBuffer], { type: "application/pdf" })
               const url = window.URL.createObjectURL(blob)
@@ -1023,7 +1040,7 @@ export const ViewToBuyResForm = ({data}) => {
       <section className="form-Update formTwo">
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={data.titulo} disabled />
+          <input type="text" value={requeriment.titulo} disabled />
         </div>
         <br />
         <section className="A-content">
@@ -1042,7 +1059,7 @@ export const ViewToBuyResForm = ({data}) => {
                 height: "auto",
               }}
               className="textarea-Res "
-              value={data.descripcion}
+              value={requeriment.descripcion}
               disabled
             />
           </div>
@@ -1060,23 +1077,44 @@ export const ViewToBuyResForm = ({data}) => {
               style={{
                 height: "auto",
               }}
-              value={data.comentario_rector}
+              value={requeriment.comentario_rector}
               className="textarea-Res"
               disabled
             />
           </div>
         </section>
         {/*  */}
-        <Quote req={data} />
+        {requeriment.estado.id === 6 && <Quote req={requeriment} />}
       </section>
     </>
   )
 }
-export const ViewApprovedResForm = ({data}) => {
-  const { setChosenQuote } = useReq()
+export const ViewApprovedResForm = ({ data }) => {
+  const { setChosenQuote, getQuotedReq } = useReq()
+  const [requeriment, setRequeriment] = useState(data)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchQuotedReq() {
+      getQuotedReq()
+        .then((reqs) => {
+          if (reqs) setLoading(false)
+          reqs.map((req) => {
+            if (req.id_requerimeinto === data.id_requerimeinto) {
+              setRequeriment(req)
+            }
+          })
+        })
+        .catch(() => setLoading(false))
+    }
+    fetchQuotedReq()
+  }, [])
 
   function Quote({ req }) {
     const request = req
+    const { cotizacion } = request
+    const [[pdf1, pdf1Name], [pdf2, pdf2Name], [pdf3, pdf3Name]] = cotizacion
+
     const {
       isOpen: isOpen1,
       onOpen: onOpen1,
@@ -1108,7 +1146,7 @@ export const ViewApprovedResForm = ({data}) => {
               <ModalHeader>{title}</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <iframe className="pdf" src={url} frameborder="0"></iframe>
+                <iframe className="pdf" src={url} frameBorder="0"></iframe>
               </ModalBody>
             </ModalContent>
           </Modal>
@@ -1121,7 +1159,7 @@ export const ViewApprovedResForm = ({data}) => {
       formState: { errors },
     } = useForm()
     const onSubmit = handleSubmit((values) => {
-      setChosenQuote({ id: request.id_requerimeinto, ...values })
+      setChosenQuote( request.id_requerimeinto, { ...values })
     })
     return (
       <>
@@ -1130,20 +1168,19 @@ export const ViewApprovedResForm = ({data}) => {
           <hr />
           <section className="A-middle-section">
             {[1, 2, 3].map((index) => {
-              const value =
-                index === 1
-                  ? request.firstPrices
-                  : index === 2
-                  ? request.secondPrices
-                  : request.thirdPrices
+              const value = index === 1 ? pdf1 : index === 2 ? pdf2 : pdf3
               const nameValue =
-                index === 1
-                  ? request.firstPricesName
-                  : index === 2
-                  ? request.secondPricesName
-                  : request.thirdPricesName
-              const toBuffer = Uint8Array.from(value.data).buffer
-              const blob = new Blob([toBuffer], { type: "application/pdf" })
+                index === 1 ? pdf1Name : index === 2 ? pdf2Name : pdf3Name
+
+              const byteCharacters = atob(value)
+              const byteNumbers = new Array(byteCharacters.length)
+
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i)
+              }
+              
+              const pdfBytes = new Uint8Array(byteNumbers)
+              const blob = new Blob([pdfBytes], { type: "application/pdf" })
               const url = window.URL.createObjectURL(blob)
               const PdfViewerProps = {
                 url,
@@ -1170,11 +1207,10 @@ export const ViewApprovedResForm = ({data}) => {
                     </button>
                     <a
                       href={url}
+                      rel="noreferrer"
                       download={`cotizacion_${nameValue}`}
                       target="_blank"
                       className="A-btn-download"
-                      rel="noreferrer"
-
                     >
                       <BsDownload size={20} fill="#fff" />
                     </a>
@@ -1188,7 +1224,7 @@ export const ViewApprovedResForm = ({data}) => {
             <h5 className="A-operative-comments-txt">Comentarios: </h5>
             <textarea
               className="A-operative-comments-in"
-              {...register("toBuyComments")}
+              {...register("comentario_compra")}
             />
             <div className="A-chose-cont">
               <h6 className="A-chose-title">Elige</h6>
@@ -1197,7 +1233,7 @@ export const ViewApprovedResForm = ({data}) => {
                   <input
                     className="A-radio-chose"
                     type="radio"
-                    {...register("choise", { required: true })}
+                    {...register("opcion_elegida", { required: true })}
                     value="1"
                   />
                 </div>
@@ -1208,7 +1244,7 @@ export const ViewApprovedResForm = ({data}) => {
                   <input
                     className="A-radio-chose"
                     type="radio"
-                    {...register("choise", { required: true })}
+                    {...register("opcion_elegida", { required: true })}
                     value="2"
                   />
                 </div>
@@ -1219,13 +1255,13 @@ export const ViewApprovedResForm = ({data}) => {
                   <input
                     className="A-radio-chose"
                     type="radio"
-                    {...register("choise", { required: true })}
+                    {...register("opcion_elegida", { required: true })}
                     value="3"
                   />
                 </div>
                 <span className="A-chose-opt-txt">Opcion 3</span>
               </div>
-              {errors.choise && (
+              {errors.opcion_elegida && (
                 <span className="Q-err">Elige una cotizacion</span>
               )}
             </div>
@@ -1250,7 +1286,7 @@ export const ViewApprovedResForm = ({data}) => {
       <section className="form-Update formTwo">
         <div className="head">
           <label htmlFor="">Titulo:</label>
-          <input type="text" value={data.titulo} disabled />
+          <input type="text" value={requeriment.titulo} disabled />
         </div>
         <br />
         <section className="A-content">
@@ -1269,7 +1305,7 @@ export const ViewApprovedResForm = ({data}) => {
                 height: "auto",
               }}
               className="textarea-Res "
-              value={data.descripcion}
+              value={requeriment.descripcion}
               disabled
             />
           </div>
@@ -1287,15 +1323,21 @@ export const ViewApprovedResForm = ({data}) => {
               style={{
                 height: "auto",
               }}
-              value={data.comentario_rector}
+              value={requeriment.comentario_rector}
               className="textarea-Res"
               disabled
             />
           </div>
         </section>
         {/*  */}
-        {data.estado === 6 ? (
-          <Quote req={data} />
+        {requeriment.estado.id === 6 ? (
+          <div>
+            {loading ? (
+              <strong>Loading...</strong>
+            ) : (
+              <Quote req={requeriment} />
+            )}
+          </div>
         ) : (
           <strong>No hay cotizaciones</strong>
         )}
@@ -1371,7 +1413,7 @@ export const ViewRejectedResForm = (data) => {
     </>
   )
 }
-export const ViewReqForm = ({data}) => {
+export const ViewReqForm = ({ data }) => {
   return (
     <>
       <form className="form-view formTwo">
