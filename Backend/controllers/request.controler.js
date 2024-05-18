@@ -3,6 +3,7 @@ import {
   addRequest,
   deleteRequeriment,
   getAllRequirements,
+  getLogisticQuote,
   getRequerimentById,
   logisticRes,
   updateRequeriment,
@@ -559,5 +560,19 @@ export const getAllToBuyRequirements = async (req, res) => {
     })
     .catch((error) => {
       res.status(400).json({ message: "No se pudo obtener los requerimientos" })
+    })
+}
+
+// <--------- Quoted Req ----------->
+export const getQuotedRequeriments = async (req, res) => {
+  getLogisticQuote(req.user.id)
+    .then((response) => {
+      res.json(response.data)
+    })
+    .catch((error) => {
+      res.status(400).json({
+        message: "No se pudo obtener los requerimientos",
+        data: error.response.data,
+      })
     })
 }
