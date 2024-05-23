@@ -1,5 +1,6 @@
-# OptiGestion
-## APP de gestion de compras
+# OptiGestion - app de gestion de compras
+
+<img src="https://github.com/joshtin2505/optigestion/blob/master/mocks/image%201.png"/>
 
 ## Perndientes
 - **Logistico**
