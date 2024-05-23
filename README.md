@@ -1,4 +1,5 @@
 # OptiGestion
+## APP de gestion de compras
 
 ## Perndientes
 - **Logistico**
